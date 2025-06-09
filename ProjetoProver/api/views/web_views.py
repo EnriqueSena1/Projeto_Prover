@@ -8,7 +8,14 @@ def tela_login(request):
     return render(request, 'index.html')
 
 def test1(request):
-    return render(request, 'admin/test1.html')
+    user_id = request.user.id  
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if user:
+        return render(request, 'user/test2.html', {'usuario': user})
+    else:
+        return redirect('login')
+    
 
 def test2(request):
     user_id = request.user.id  
@@ -21,4 +28,11 @@ def test2(request):
     
 
 def test3(request):
-    return render(request, 'vendedor/test3.html')
+    user_id = request.user.id  
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if user:
+        return render(request, 'user/test2.html', {'usuario': user})
+    else:
+        return redirect('login')
+    
