@@ -6,11 +6,10 @@ from .views.web_views import *
 # ViewSets com Router
 router = DefaultRouter()
 router.register('usuarios', CustomUserViewSet)
-router.register('clientes', ClienteViewSet)
 router.register('produtos', ProdutoViewSet)
 router.register('carrinhos', CarrinhoViewSet)
 router.register('compras', CompraViewSet)
-router.register('itens-compras', ItensCompraViewSet)
+router.register('itensCompras', ItensCompraViewSet)
 
 
 urlpatterns = [
@@ -23,5 +22,15 @@ urlpatterns = [
 
     # vai para o login
     path('', tela_login, name="login"),
+    path('api/login/', LoginView.as_view(), name='api_login'),
+
+    path('HomeUser/', test2, name="home_user"),
+    path('HomeAdm/', test1, name="home_adm"),
+    path('HomeVend/', test3, name="home_vend"),
+
+    path('api/UsuarioLogado/', GetDadosUsuarioLogado.as_view(), name='dados_usuario_logado'),
+
+
+
 ]
 
