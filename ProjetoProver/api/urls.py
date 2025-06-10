@@ -24,11 +24,16 @@ urlpatterns = [
     path('', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),
 
-    path('HomeUser/', test2, name="home_user"),
-    path('HomeAdm/', test1, name="home_adm"),
-    path('HomeVend/', test3, name="home_vend"),
+    # path('HomeUser/', test2, name="home_user"),
+    # path('HomeAdm/', test1, name="home_adm"),
+    # path('HomeVend/', test3, name="home_vend"),
 
     path('api/UsuarioLogado/', GetDadosUsuarioLogado.as_view(), name='dados_usuario_logado'),
+
+    #Carrinho
+
+    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend")
+
 
 
 
