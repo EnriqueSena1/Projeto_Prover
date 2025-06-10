@@ -1,0 +1,20 @@
+.menuCentral {
+    background-color: #8b1a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    padding-right: 10vw;
+    padding-left: 10vw;
+}
+
+.menu {
+    background-color: #8b1a2a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+    padding-right: 10vw;
+    padding-left: 10vw;
+
+}
