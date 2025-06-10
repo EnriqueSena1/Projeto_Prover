@@ -1,0 +1,470 @@
+
+/* Dialog nativo - SEMPRE CENTRALIZADO E TAMANHO FIXO */
+.popup-dialog {
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    width: 1000px;
+    overflow: visible;
+}
+
+.popup-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -50%) translateY(-50px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Container principal do popup */
+.popup-container {
+    background: linear-gradient(135deg, #8B2635 0%, #A73548 50%, #C44569 100%);
+    border-radius: 20px;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header do popup */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.popup-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.close-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+
+}
+
+
+/* Formulário */
+.popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Grupos de formulário */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group.full-width {
+    width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Labels */
+.form-label {
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+/* Inputs */
+.form-input {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 16px;
+    color: #333;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: #999;
+    opacity: 0.8;
+}
+
+.form-input:focus {
+    background: white;
+    border-color: #FFB347;
+    box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.2);
+    transform: translateY(-1px);
+}
+
+.form-input.error {
+    border-color: #FF6B6B;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Mensagens de erro */
+.error-message {
+    color: #FFB3B3;
+    font-size: 12px;
+    margin-top: 4px;
+    min-height: 16px;
+    font-weight: 500;
+}
+
+/* Container de upload */
+.upload-container {
+    position: relative;
+}
+
+.upload-input {
+    display: none;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 120px;
+    text-align: center;
+}
+
+.upload-label:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.upload-icon {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+}
+
+.upload-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upload-main-text {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.upload-sub-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* Preview da imagem */
+.upload-preview {
+    margin-top: 10px;
+    position: relative;
+}
+
+.preview-image {
+    width: 100%;
+    max-width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #FF6B6B;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.remove-image:hover {
+    background: #FF5252;
+    transform: scale(1.1);
+}
+
+/* Ações do formulário */
+.form-actions {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.submit-button {
+    background: #FFB347;
+    border: none;
+    border-radius: 25px;
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.submit-button:hover {
+    background:  rgba(255, 140, 66, 0.4);
+}
+
+
+
+/* Responsividade MANTENDO SEMPRE CENTRALIZADO */
+@media (max-width: 768px) {
+    .popup-dialog {
+        width: 550px;
+        
+    }
+    
+    .popup-header {
+        padding: 20px 25px 15px;
+    }
+    
+    .popup-title {
+        font-size: 20px;
+    }
+    
+    .popup-form {
+        padding: 25px 20px;
+        gap: 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .form-input {
+        padding: 12px 14px;
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+    
+    .upload-label {
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .upload-main-text {
+        font-size: 13px;
+    }
+    
+    .submit-button {
+        padding: 14px 30px;
+        font-size: 15px;
+        min-width: 180px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .page-header p {
+        font-size: 1rem;
+    }
+    
+    .open-dialog-button {
+        padding: 16px 30px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .popup-dialog {
+        width: 400px; /* Menor em mobile, mas ainda centralizado */
+        
+    }
+    
+    .popup-header {
+        padding: 15px 20px;
+    }
+    
+    .popup-title {
+        font-size: 18px;
+    }
+    
+    .popup-form {
+        padding: 20px 15px;
+        gap: 15px;
+    }
+    
+    .close-button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .open-dialog-button {
+        padding: 14px 25px;
+        font-size: 15px;
+    }
+    
+    .form-input {
+        padding: 10px 12px;
+        font-size: 16px;
+    }
+    
+    .upload-label {
+        padding: 12px;
+        min-height: 80px;
+    }
+    
+    .upload-main-text {
+        font-size: 12px;
+    }
+    
+    .upload-sub-text {
+        font-size: 11px;
+    }
+}
+
+/* Telas muito pequenas */
+@media (max-width: 360px) {
+    .popup-dialog {
+        width: 320px;
+        
+    }
+    
+    .popup-form {
+        padding: 15px 12px;
+        gap: 12px;
+    }
+    
+    .popup-header {
+        padding: 12px 15px;
+    }
+    
+    .popup-title {
+        font-size: 16px;
+    }
+}
+
+/* Animações adicionais */
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label {
+    transform: translateY(-2px);
+}
+
+/* Scrollbar personalizada para o dialog */
+.popup-form::-webkit-scrollbar {
+    width: 6px;
+}
+
+.popup-form::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.popup-form::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.popup-form::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Estados de loading */
+.submit-button.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.submit-button.loading::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Garantir que o dialog nunca ocupe a tela inteira */
+@media (min-width: 769px) {
+    .popup-dialog {
+        width: 1000;
+        
+    }
+}
+
+/* Ajustes para telas muito grandes */
+@media (min-width: 1200px) {
+    .popup-dialog {
+        width: 1000px;
+        
+        
+    }
+    
+    .popup-form {
+        padding: 20px;
+        gap: 20px;
+    }
+}
+
