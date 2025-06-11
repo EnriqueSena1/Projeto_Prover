@@ -1,5 +1,5 @@
+{% extends "base.html" %}
 {% load static%}
-
 {%block content%}
 
 <!DOCTYPE html>
@@ -8,10 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Mercado Maranata</title>
-    <link rel="stylesheet" 
-    href="{%static 'css/styles.css'%}">
 </head>
 <body>
+    {% include "componentes/menus/menuUser.html" %}
     <h1>USUARIO: {{ usuario.first_name }}</h1>
 </body>
 </html>
