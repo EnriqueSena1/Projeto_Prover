@@ -63,40 +63,47 @@ class User(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        senha = request.data.get('senha')
-        first_name = request.data.get('first_name')
-        cpf = request.data.get('cpf')
-        is_adm = request.data.get('is_adm', False)
+         # Dados obrigatórios
+        nome = request.data.get('nome')# ← usado como first_name
         email = request.data.get('email')
+        senha = request.data.get('senha')
+
+        # Dados opcionais
+        is_adm = request.data.get('is_adm', False)
         tipo = request.data.get('tipo', 'cliente')
         saldo = request.data.get('saldo', 0.00)
+        imagem = request.FILES.get('img')  # Se vier imagem
 
-        if not senha or not cpf or not email:
-            return Response({"error": "Campos obrigatórios: senha, cpf, email"}, status=status.HTTP_400_BAD_REQUEST)
+        # Validação básica
+        if not email or not senha or not nome:
+            return Response(
+                {"error": "Campos obrigatórios: nome, email, senha"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        username = email.lower()  # ← e-mail vira username
+        username = email.lower()
 
-        # Verificações básicas para evitar duplicação
+        # Evita duplicidade
         if CustomUser.objects.filter(username=username).exists():
-            return Response({"error": "Email já está em uso como username."}, status=400)
-        if CustomUser.objects.filter(cpf=cpf).exists():
-            return Response({"error": "CPF já cadastrado."}, status=400)
+            return Response({"error": "Email já está em uso."}, status=400)
 
+        # Criação do usuário
         usuario = CustomUser.objects.create(
             username=username,
             password=make_password(senha),
-            first_name=first_name,
-            cpf=cpf,
-            is_adm=is_adm,
             email=email,
+            first_name=nome,
+            is_adm=is_adm,
             tipo=tipo,
             saldo=saldo,
+            img=imagem,
             is_active=True
         )
-
-        return Response({"message": "Usuário criado com sucesso!", "id": usuario.id}, status=status.HTTP_201_CREATED)
-
-
+        
+        return Response(
+            {"message": "Usuário criado com sucesso!", "id": usuario.id},
+            status=status.HTTP_201_CREATED
+        )
 
 
     def put(self, request, id):
@@ -104,34 +111,67 @@ class User(APIView):
         data = request.data.copy()
         operacao = data.get("operacao")
 
+            # Operações específicas de saldo
         if operacao in ['adicionar', 'remover']:
             try:
-                saldo = int(data.get("saldo", 0))
+                valor_saldo = float(data.get("saldo", 0))
             except (TypeError, ValueError):
-                return Response({"erro": "Saldo inválido."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"erro": "Valor de saldo inválido."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Se os campos existirem no modelo CustomUser
-            if hasattr(usuario, 'pontuacao') and hasattr(usuario, 'saldo'):
-                if operacao == 'adicionar':
-                    usuario.pontuacao += saldo
-                    usuario.saldo += saldo
-                elif operacao == 'remover':
-                    if usuario.saldo < saldo:
-                        return Response({"erro": "Saldo insuficiente."}, status=status.HTTP_400_BAD_REQUEST)
-                    usuario.pontuacao -= saldo
-                    usuario.saldo -= saldo
+            if operacao == 'adicionar':
+                usuario.saldo += valor_saldo
+            elif operacao == 'remover':
+                if usuario.saldo < valor_saldo:
+                    return Response({"erro": "Saldo insuficiente."}, status=status.HTTP_400_BAD_REQUEST)
+                usuario.saldo -= valor_saldo
 
-                usuario.save()
-                return Response({"message": "Operação realizada com sucesso."}, status=status.HTTP_200_OK)
-            else:
-                return Response({"erro": "Usuário não possui campos de saldo ou pontuação."}, status=status.HTTP_400_BAD_REQUEST)
+            usuario.save()
+            return Response({
+                "message": f"Saldo {operacao} com sucesso.", 
+                "novo_saldo": float(usuario.saldo)
+            }, status=status.HTTP_200_OK)
 
+           
+        if 'operacao' in data:
+            del data['operacao']
+
+            # Tratamento especial para senha
+        if 'senha' in data and data['senha']:
+            data['password'] = make_password(data['senha'])
+            del data['senha']
+
+            # Tratamento especial para nome (mapear para first_name)
+        if 'nome' in data:
+            data['first_name'] = data['nome']
+            del data['nome']
+
+            # Tratamento especial para email (atualizar username também)
+        if 'email' in data:
+            email = data['email'].lower().strip()
+                # Verificar se o email já existe em outro usuário
+            if CustomUser.objects.filter(email=email).exclude(id=id).exists():
+                return Response({"erro": "Este email já está em uso por outro usuário."}, status=status.HTTP_400_BAD_REQUEST)
+            data['email'] = email
+            data['username'] = email
+
+            # Tratamento para imagem
+        if 'img' in request.FILES:
+            data['img'] = request.FILES['img']
+
+            # Usar o serializer para validação e atualização
         serializer = CustomUserSerializer(usuario, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Usuário atualizado com sucesso."}, status=status.HTTP_200_OK)
+            return Response({
+                "message": "Usuário atualizado com sucesso.",
+                "usuario": serializer.data
+            }, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "erro": "Dados inválidos.",
+            "detalhes": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def delete(self, request, id):
         usuario = get_object_or_404(CustomUser, pk=id)
