@@ -23,6 +23,8 @@
 
             <!-- Formulário de Cadastro -->
             <form class="popup-form" id="cadastroForm">
+                {% comment %} valor de controle {% endcomment %}
+                <input type="hidden" id="clienteId" name="clienteId" value="">
                 {% csrf_token %}
                 <!-- Nome do Cliente -->
                 <div class="form-group full-width">
