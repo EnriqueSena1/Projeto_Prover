@@ -47,7 +47,7 @@
 /* carrinho-compra */
 
 .resumo-container {
-    width: 300px;
+    width: 350px;
     background-color: #86001b; /* bordô escuro */
     border-radius: 20px;
     padding: 20px;
@@ -58,15 +58,16 @@
     margin-top: 0;
     font-size: 20px;
     margin-bottom: 10px;
+    font-size: 20px;
   }
 
   .resumo-container input {
-    width: 90%;
+    width: 95%;
     padding: 8px;
     border-radius: 8px;
     border: none;
     margin-bottom: 15px;
-    font-size: 14px;
+    font-size: 20px;
     color: #666;
   }
 
@@ -74,7 +75,7 @@
     display: flex;
     justify-content: space-between;
     margin: 6px 0;
-    font-size: 14px;
+    font-size: 20px;
   }
 
   .linha {
@@ -88,7 +89,7 @@
     color: white;
     border: none;
     padding: 12px;
-    font-size: 16px;
+    font-size: 22px;
     border-radius: 30px;
     cursor: pointer;
     margin-top: 10px;
