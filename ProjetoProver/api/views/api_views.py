@@ -63,40 +63,47 @@ class User(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        senha = request.data.get('senha')
-        first_name = request.data.get('first_name')
-        cpf = request.data.get('cpf')
-        is_adm = request.data.get('is_adm', False)
+         # Dados obrigatórios
+        nome = request.data.get('nome')# ← usado como first_name
         email = request.data.get('email')
+        senha = request.data.get('senha')
+
+        # Dados opcionais
+        is_adm = request.data.get('is_adm', False)
         tipo = request.data.get('tipo', 'cliente')
         saldo = request.data.get('saldo', 0.00)
+        imagem = request.FILES.get('img')  # Se vier imagem
 
-        if not senha or not cpf or not email:
-            return Response({"error": "Campos obrigatórios: senha, cpf, email"}, status=status.HTTP_400_BAD_REQUEST)
+        # Validação básica
+        if not email or not senha or not nome:
+            return Response(
+                {"error": "Campos obrigatórios: nome, email, senha"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        username = email.lower()  # ← e-mail vira username
+        username = email.lower()
 
-        # Verificações básicas para evitar duplicação
+        # Evita duplicidade
         if CustomUser.objects.filter(username=username).exists():
-            return Response({"error": "Email já está em uso como username."}, status=400)
-        if CustomUser.objects.filter(cpf=cpf).exists():
-            return Response({"error": "CPF já cadastrado."}, status=400)
+            return Response({"error": "Email já está em uso."}, status=400)
 
+        # Criação do usuário
         usuario = CustomUser.objects.create(
             username=username,
             password=make_password(senha),
-            first_name=first_name,
-            cpf=cpf,
-            is_adm=is_adm,
             email=email,
+            first_name=nome,
+            is_adm=is_adm,
             tipo=tipo,
             saldo=saldo,
+            img=imagem if imagem else None,
             is_active=True
         )
-
-        return Response({"message": "Usuário criado com sucesso!", "id": usuario.id}, status=status.HTTP_201_CREATED)
-
-
+        
+        return Response(
+            {"message": "Usuário criado com sucesso!", "id": usuario.id},
+            status=status.HTTP_201_CREATED
+        )
 
 
     def put(self, request, id):

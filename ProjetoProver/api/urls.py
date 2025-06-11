@@ -16,12 +16,15 @@ urlpatterns = [
     # Rotas automáticas dos ViewSets
     path('api/', include(router.urls)),
 
+    # Rota para tela inicial de login
+    path('', tela_inicial, name="inicio"),
+
     # APIView personalizada para usuários com lógica extra
     path('api/user/', User.as_view(), name='usuarios'),
     path('api/user/<int:id>/', User.as_view(), name='usuarioDetalhe'),
 
     # vai para o login
-    path('', tela_login, name="login"),
+    path('login/', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),
 
     path('HomeUser/', test2, name="home_user"),
@@ -39,4 +42,3 @@ urlpatterns = [
 
 
 ]
-

@@ -1,10 +1,12 @@
-
 /* Dialog nativo - SEMPRE CENTRALIZADO E TAMANHO FIXO */
 .popup-dialog {
     border: none;
     border-radius: 20px;
     background: transparent;
-    width: 1000px;
+    /* Alterado para responsividade */
+    width: 90%; /* Ocupa 90% da largura da tela */
+    max-width: 1000px; /* Mas não excede 1000px */
+    margin: auto; /* Centraliza o dialog */
     overflow: visible;
 }
 
@@ -14,25 +16,6 @@
     animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translate(-50%, -50%) translateY(-50px) scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, -50%) translateY(0) scale(1);
-        opacity: 1;
-    }
-}
 
 /* Container principal do popup */
 .popup-container {
@@ -51,7 +34,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 25px 30px 0px;
+    padding: 20px 25px 0px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
 }
@@ -82,7 +65,7 @@
 .popup-form {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     overflow-y: auto;
     flex: 1;
 }
@@ -101,7 +84,7 @@
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 15px;
 }
 
 /* Labels */
@@ -268,8 +251,8 @@
 /* Responsividade MANTENDO SEMPRE CENTRALIZADO */
 @media (max-width: 768px) {
     .popup-dialog {
-        width: 550px;
-        
+        width: 90%; /* Ajustado para ser responsivo */
+        max-width: 550px; /* Mantém o tamanho máximo para esta breakpoint */
     }
     
     .popup-header {
@@ -282,17 +265,17 @@
     
     .popup-form {
         padding: 25px 20px;
-        gap: 20px;
+        gap: 10px;
     }
     
     .form-row {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 10px;
     }
     
     .form-input {
-        padding: 12px 14px;
-        font-size: 16px; /* Evita zoom no iOS */
+        padding: 10px 12px;
+        font-size: 16px; 
     }
     
     .upload-label {
@@ -326,8 +309,8 @@
 
 @media (max-width: 480px) {
     .popup-dialog {
-        width: 400px; /* Menor em mobile, mas ainda centralizado */
-        
+        width: 90%; /* Ajustado para ser responsivo */
+        max-width: 400px; /* Menor em mobile, mas ainda centralizado */
     }
     
     .popup-header {
@@ -379,8 +362,8 @@
 /* Telas muito pequenas */
 @media (max-width: 360px) {
     .popup-dialog {
-        width: 320px;
-        
+        width: 90%; /* Ajustado para ser responsivo */
+        max-width: 320px;
     }
     
     .popup-form {
@@ -397,11 +380,6 @@
     }
 }
 
-/* Animações adicionais */
-.form-input:focus + .form-label,
-.form-input:not(:placeholder-shown) + .form-label {
-    transform: translateY(-2px);
-}
 
 /* Scrollbar personalizada para o dialog */
 .popup-form::-webkit-scrollbar {
@@ -446,25 +424,19 @@
     }
 }
 
-/* Garantir que o dialog nunca ocupe a tela inteira */
 @media (min-width: 769px) {
-    .popup-dialog {
-        width: 1000;
-        
+    .popup-form {
+        padding: 20px;
+        gap: 20px;
     }
+    
 }
 
 /* Ajustes para telas muito grandes */
 @media (min-width: 1200px) {
-    .popup-dialog {
-        width: 1000px;
-        
-        
-    }
     
     .popup-form {
         padding: 20px;
         gap: 20px;
     }
 }
-

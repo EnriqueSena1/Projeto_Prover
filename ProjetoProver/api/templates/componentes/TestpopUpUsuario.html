@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static%}
+
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <link rel="stylesheet" href="{%static 'css/vendedorCSS/popUpCadastro.css'%}">
+</head>
+<body>
+    {% include "componentes/popUps/popUpUsuario.html" %}
+
+    <div class="main-page">
+        <button type="button" class="open-dialog-button" id="openDialogButton">
+            Cadastrar Cliente
+        </button>
+
+       {% for usuario in usuarios %}
+    <div class="usuario-card">
+        <h3>{{ usuario.first_name }} - {{ usuario.email }}</h3>
+        
+        <button type="button" class="open-dialog-button" onclick="editarCliente({{ usuario.id }})">
+            Editar Cliente
+        </button>
+
+        {% if usuario.estoque_set.all %}
+            {% for item in usuario.estoque_set.all %}
+                <div class="tabela-row-listaEstoque">
+                    <div class="tabela-cell-listaEstoque nome">
+                        <img class="icone" src="{% static 'img/produto.png' %}" alt="produto">
+                        {{ item.nome }}
+                    </div>
+                    <div class="tabela-cell-listaEstoque quantidade">{{ item.quantidade }}</div>
+                    <div class="tabela-cell-listaEstoque acoes">
+                        <button class="editar-listaEstoque" onclick="Editar({{ item.id }})">
+                            <img src="{% static 'img/iconeEditar.png' %}" alt="editar">
+                        </button>
+                        <button class="deletar-listaEstoque" onclick="inativar({{ item.id }})">
+                            <img src="{% static 'img/iconeDeletar.png' %}" alt="deletar">
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Este cliente não possui itens em estoque.</p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+    </div>
+
+
+</body>
+</html>
+
+<script src="{% static 'js/popUpJs/popUpUsuario.js' %}"></script>
+{%endblock%}

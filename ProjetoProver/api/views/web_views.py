@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 # View da página de login
 def tela_login(request):
-    return render(request, 'index.html')
+    return render(request, 'login.html')
 
 def test1(request):
     user_id = request.user.id  
@@ -40,6 +40,10 @@ def carrinho_vend(request):
      return render(request, 'vendedor/carrinho.html')
 
 def cadastroUsuario(request):
-    return  render(request, 'componentes/popUpUsuario.html')
+    usuarios = CustomUser.objects.filter(is_active=True)
+    return  render(request, 'componentes/TestpopUpUsuario.html', {"usuarios": usuarios})
+
+def tela_inicial(request):
+    return  render(request, 'index.html')
 
     
