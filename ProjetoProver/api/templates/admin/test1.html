@@ -1,0 +1,33 @@
+{% load static%}
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mercado Maranata</title>
+    <link rel="stylesheet" 
+    href="{%static 'css/styles.css'%}">
+</head>
+<body>
+    <h1>ADIMIN: {{ detalhe.first_name }}</h1>
+
+</body>
+</html>
+
+<script src="{%static 'js/script.js'%}"></script>
+
+{%endblock%}
+
+
+{% comment %} {
+  "senha": "123",
+  "cpf": "12345678911",
+  "email": "edu1@gmail.com",
+  "tipo": "cliente",
+  "saldo": "100.00",
+  "first_name": "edu",
+  "last_name": "edu"
+} {% endcomment %}

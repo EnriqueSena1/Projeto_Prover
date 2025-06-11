@@ -6,3 +6,33 @@ from django.contrib.auth.decorators import login_required
 # View da página de login
 def tela_login(request):
     return render(request, 'index.html')
+
+def test1(request):
+    user_id = request.user.id  
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if user:
+        return render(request, 'user/test2.html', {'usuario': user})
+    else:
+        return redirect('login')
+    
+
+def test2(request):
+    user_id = request.user.id  
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if user:
+        return render(request, 'user/test2.html', {'usuario': user})
+    else:
+        return redirect('login')  # Se o usuário não for encontrado, volta pro login
+    
+
+def test3(request):
+    user_id = request.user.id  
+
+    user = CustomUser.objects.filter(id=user_id).first()
+    if user:
+        return render(request, 'user/test2.html', {'usuario': user})
+    else:
+        return redirect('login')
+    
