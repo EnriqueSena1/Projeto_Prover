@@ -1,0 +1,19 @@
+.principal{
+
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin-left: 350px;
+    padding-left: 200px;
+
+}
+
+.custom-switch .form-check-input{
+    width:50px;
+    height: 28px;
+    background-color: #ccc;
+    border-radius: 34px;
+    border: none;
+    transition:  0.3s ease;
+
+}

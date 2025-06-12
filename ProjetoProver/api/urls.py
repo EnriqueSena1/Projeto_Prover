@@ -22,6 +22,27 @@ urlpatterns = [
     path('api/user/<int:id>/', User.as_view(), name='usuarioDetalhe'),
 
     # vai para o login
+<<<<<<< Updated upstream
     path('', tela_login, name="login"),
+=======
+    path('login/', tela_login, name="login"),
+    path('api/login/', LoginView.as_view(), name='api_login'),
+
+    path('HomeUser/', test2, name="home_user"),
+    path('HomeAdm/', test1, name="home_adm"),
+    path('HomeVend/', test3, name="home_vend"),
+    path('CadastroUsuario/', cadastroUsuario, name="cadastro_user"),
+    path('CadastroCliente/', cadastroCliente, name="cadastro_cliente"),
+
+    path('api/UsuarioLogado/', GetDadosUsuarioLogado.as_view(), name='dados_usuario_logado'),
+
+    #Carrinho
+
+    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend")
+
+
+
+
+>>>>>>> Stashed changes
 ]
 
