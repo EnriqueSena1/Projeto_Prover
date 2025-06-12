@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/user/<int:id>/', User.as_view(), name='usuarioDetalhe'),
 
     # vai para o login
+    path('', tela_login, name="login"),
+
     path('login/', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),
 
@@ -39,7 +41,8 @@ urlpatterns = [
 
     #Carrinho
 
-    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend")
+    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
+    path('CadastroCliente/', cadastroCliente, name="cadastro_cliente"),
 
 
 

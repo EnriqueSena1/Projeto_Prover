@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroCliente.css'%}">
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>Cadastro de Clientes</title>
+</head>
+<body>
+    {% include 'componentes/menus/menuVendedor.html' %}
+    <div class="principal">
+        <div class="detalhe">
+        
+            <div class="boxCliente">
+                <h3>Clientes</h3>
+                <button class="addCliente">
+                    <img src="{% static 'img/AdicionarCliente.png' %}" alt="Adicionar ícone">
+                    <span>Cadastrar cliente</span>
+                </button>
+            </div>
+        </div>       
+        <div class = "listaClientes">
+            <ul>
+                <li>
+                    <div class = "cliente1">
+                        <img src = "{% static 'img/Usuario.png'%}" alt="usuario">"
+                        <span>Fulano Machado</span>
+                        <button class = "edit-btn"></button>
+                        
+                    </div>
+                </li>
+        </ul>
+        </div>
+</body>
+</html>
+
+{%endblock%}

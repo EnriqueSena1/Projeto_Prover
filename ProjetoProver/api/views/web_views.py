@@ -46,5 +46,10 @@ def cadastroUsuario(request):
 def tela_inicial(request):
     return  render(request, 'index.html')
 
+def cadastroCliente(request):
+    usuarios = CustomUser.objects.filter(is_active=True)
+    return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
+    
 def estoque_adm(request):
     return render(request, 'admin/estoqueAdm.html')
+
