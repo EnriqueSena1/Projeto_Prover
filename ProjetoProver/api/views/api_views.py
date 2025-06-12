@@ -199,3 +199,8 @@ class CompraViewSet(viewsets.ModelViewSet):
 class ItensCompraViewSet(viewsets.ModelViewSet):
     queryset = ItensCompra.objects.all()
     serializer_class = ItensCompraSerializer
+
+
+class EstoqueAdmViewSet(viewsets.ModelViewSet):
+    queryset = Produto.objects.all()
+    serializer_class = ProdutoSerializer
