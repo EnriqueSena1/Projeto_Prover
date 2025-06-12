@@ -46,4 +46,7 @@ def cadastroUsuario(request):
 def tela_inicial(request):
     return  render(request, 'index.html')
 
+def relatorio(request):
+     return render(request, 'admin/relatorio.html')
+
     

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{%static 'css/AdminCSS/relatorio.css'%}">
+    {% include "componentes/menus/menuAdmin.html" %}
+
+    <div class="container_relatorio">
+        <div class="relatorio_titulo">
+            <h1>Relatório</h1>
+        </div>
+        <div class="relatorio_analise">
+            <div class="relatorio_dados">
+                <div class="relatorio_dados_components">
+                    <div class="relatorio_dados_components_titulo">Itens em estoque</div>
+                    <div class="relatorio_dados_components_result">265</div>
+                </div>
+                <div class="relatorio_dados_components">
+                    <div class="relatorio_dados_components_titulo">Valor estoque</div>
+                    <div class="relatorio_dados_components_result" style="color: green;">R$ 1.731,00</div>
+                </div>
+                <div class="relatorio_dados_components">
+                    <div class="relatorio_dados_components_titulo">Total itens doados</div>
+                    <div class="relatorio_dados_components_result">211</div>
+                </div>
+                <div class="relatorio_dados_components">
+                    <div class="relatorio_dados_components_titulo">Valor itens doados</div>
+                    <div class="relatorio_dados_components_result" style="color: green;">R$ 1.633,00</div>
+                </div>
+            </div>
+
+            <div class="relatorio_grafico">
+                <div class="relatorio_grafico_cabecalho">
+                    <div class="relatorio_grafico_cabecalho_titulo">Análise de itens</div>
+                    <div class="relatorio_grafico_cabecalho_cores">
+                        <div class="relatorio_grafico_cabecalho_cores_dado">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="10" viewBox="0 0 11 10" fill="none">
+                                <circle cx="5.18018" cy="5" r="5" fill="#7A162F"/>
+                                </svg>
+                            </div>
+                            <div class="relatorio_grafico_cabecalho_cores_dado_text">Estoque</div>
+                        </div>
+                        <div class="relatorio_grafico_cabecalho_cores_dado">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="10" viewBox="0 0 11 10" fill="none">
+                                    <circle cx="5.18018" cy="5" r="5" fill="#7A162F" fill-opacity="0.5"/>
+                                </svg>
+                            </div>
+                            <div class="relatorio_grafico_cabecalho_cores_dado_text">Doados</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="grafico"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-bundle.min.js"></script>
+    <script src="{% static 'js/AdminJS/grafico.js' %}"></script>
+
+{% endblock %}
