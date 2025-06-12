@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {% load static%}
 
 {%block content%}
@@ -6,70 +7,159 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/carrinho.css' %}">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/carrinho.css' %}">
+  <title>Document</title>
 </head>
 
 <body>
 
-    <div class="carrinho-container">
-        <div class="carrinho-img">
-          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
-        </div>
-        <div class="item-details">
-          <div><strong>ARROZ</strong></div>
-          <div style="color: #800020;"><strong>R$10</strong></div>
-          <div class="item-actions">
-            <button class="icon-button"><span class="material-icons">remove</span></button>
-            <span>1</span>
-            <button class="icon-button"><span class="material-icons">add</span></button>
+  {% include "componentes/menus/menuVendedor.html" %}
+
+  <div class="cabecalho">
+    <div>
+      <h1>Carrinho</h1>
+      <div class="ContainerTodo">
+        <div class="carrinho-scroll">
+          <div class="carrinho-container">
+            <div class="item-carrinho">
+              <img src="{% static 'imgteste/image 2.png' %}" class="produto-img" alt="Arroz" />
+              <div class="info">
+                <strong>ARROZ</strong>
+                <p>R$10</p>
+                <div class="quantidade">
+                  <button class="menos">−</button>
+                  <span>1</span>
+                  <button class="mais">+</button>
+                </div>
+              </div>
+              <span class="material-icons delete-icon">delete</span>
+            </div>
+    
+            <div class="item-carrinho">
+              <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+              <div class="info">
+                <strong>ARROZ</strong>
+                <p>R$10</p>
+                <div class="quantidade">
+                  <button class="menos">−</button>
+                  <span>1</span>
+                  <button class="mais">+</button>
+                </div>
+              </div>
+              <span class="material-icons delete-icon">delete</span>
+            </div>
+    
+            <div class="item-carrinho">
+              <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+              <div class="info">
+                <strong>ARROZ</strong>
+                <p>R$10</p>
+                <div class="quantidade">
+                  <button class="menos">−</button>
+                  <span>1</span>
+                  <button class="mais">+</button>
+                </div>
+              </div>
+              <span class="material-icons delete-icon">delete</span>
+            </div>
+    
           </div>
         </div>
-        <span class="material-icons delete-icon">delete</span>
-      </div>
 
+        <div class="resumo-container">
+          <h3>Nome do Cliente</h3>
+          <input type="text" placeholder="Fulano Junior Pereira">
+          <div class="info-row">
+            <span>Créditos restantes do cliente</span>
+            <span>R$ 120</span>
+          </div>
+          <div class="info-row">
+            <span>Créditos após a compra</span>
+            <span>R$ 100</span>
+          </div>
+          <div class="linha"></div>
+          <div class="info-row">
+            <strong>Total da compra</strong>
+            <strong>R$ 20</strong>
+          </div>
+          <button class="checkout-btn">Checkout</button>
+        </div>
+
+    </div>
+
+  </div>
+  <!-- <div class="ContainerTodo">
+    <div class="carrinho-scroll">
       <div class="carrinho-container">
-        <div class="carrinho-img">
-          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
-        </div>
-        <div class="item-details">
-          <div><strong>ARROZ</strong></div>
-          <div style="color: #800020;"><strong>R$10</strong></div>
-          <div class="item-actions">
-            <button class="icon-button"><span class="material-icons">remove</span></button>
-            <span>1</span>
-            <button class="icon-button"><span class="material-icons">add</span></button>
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" class="produto-img" alt="Arroz" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
           </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-        <span class="material-icons delete-icon">delete</span>
-      </div>
 
-      <div class="resumo-container">
-        <h3>Nome do Cliente</h3>
-        <input type="text" value="Fulano Junior Pereira" readonly>
-    
-        <div class="info-row">
-          <span>Créditos restantes do cliente</span>
-          <span>R$ 120</span>
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
+          </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-    
-        <div class="info-row">
-          <span>Créditos após a compra</span>
-          <span>R$ 100</span>
+
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
+          </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-    
-        <div class="linha"></div>
-    
-        <div class="info-row">
-          <strong>Total da compra</strong>
-          <strong>R$ 20</strong>
-        </div>
-    
-        <button class="checkout-btn">Checkout</button>
+
       </div>
+    </div> -->
+
+    <!-- <div class="resumo-container">
+      <h3>Nome do Cliente</h3>
+      <input type="text" placeholder="Fulano Junior Pereira">
+      <div class="info-row">
+        <span>Créditos restantes do cliente</span>
+        <span>R$ 120</span>
+      </div>
+      <div class="info-row">
+        <span>Créditos após a compra</span>
+        <span>R$ 100</span>
+      </div>
+      <div class="linha"></div>
+      <div class="info-row">
+        <strong>Total da compra</strong>
+        <strong>R$ 20</strong>
+      </div>
+      <button class="checkout-btn">Checkout</button>
+    </div> -->
+
+  </div>
+
 
 </body>
 
