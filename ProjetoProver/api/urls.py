@@ -26,7 +26,6 @@ urlpatterns = [
     # vai para o login
     path('login/', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),
-    path('login/', logintest, name='api_login'),
 
     path('HomeUser/', test2, name="home_user"),
     path('HomeAdm/', test1, name="home_adm"),
