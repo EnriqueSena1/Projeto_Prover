@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produto</title>
+    <style>
+        /* Dialog nativo - SEMPRE CENTRALIZADO E TAMANHO FIXO */
+        .popup-dialog {
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            /* Alterado para responsividade */
+            width: 90%; /* Ocupa 90% da largura da tela */
+            max-width: 1000px; /* Mas não excede 1000px */
+            margin: auto; /* Centraliza o dialog */
+            overflow: visible;
+        }
+
+        .popup-dialog::backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        /* Container principal do popup */
+        .popup-container {
+            background: linear-gradient(135deg, #8B2635 0%, #A73548 50%, #C44569 100%);
+            border-radius: 20px;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header do popup */
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px 0px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .popup-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .close-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* Formulário */
+        .popup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Grupos de formulário */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-column-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Labels */
+        .form-label {
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Inputs */
+        .form-input {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+            opacity: 0.8;
+        }
+
+        .form-input:focus {
+            background: white;
+            border-color: #FFB347;
+            box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: #FF6B6B;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        /* Mensagens de erro */
+        .error-message {
+            color: #FFB3B3;
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 16px;
+            font-weight: 500;
+        }
+
+        /* Container de upload */
+        .upload-container {
+            position: relative;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            text-align: center;
+        }
+
+        .upload-label:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .upload-main-text {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .upload-sub-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+        }
+
+        /* Preview da imagem */
+        .upload-preview {
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .preview-image {
+            width: 100%;
+            max-width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #FF6B6B;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .remove-image:hover {
+            background: #FF5252;
+            transform: scale(1.1);
+        }
+
+        /* Ações do formulário */
+        .form-actions {
+            margin-top: 5px;
+            display: flex;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .submit-button {
+            background: #FFB347;
+            border: none;
+            border-radius: 25px;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: rgba(255, 140, 66, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 179, 71, 0.3);
+        }
+
+        /* Botão para abrir o dialog */
+        .open-button {
+            background: #8B2635;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 50px auto;
+            display: block;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="open-button" onclick="document.getElementById(\'cadastroDialog\').showModal()">
+        Abrir Cadastro de Produto
+    </button>
+
+    <dialog class="popup-dialog" id="cadastroDialog">
+        <!-- Container do Pop-up -->
+        <div class="popup-container">
+            <!-- Header do Pop-up -->
+            <header class="popup-header">
+                <h2 class="popup-title">cadastrar produto</h2>
+                <button type="button" class="close-button" onclick="document.getElementById(\'cadastroDialog\').close()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Formulário de Cadastro -->
+            <form class="popup-form" id="cadastroForm">
+                <!-- Descrição e Validade -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="descricaoProduto" class="form-label">Descrição</label>
+                        <input 
+                            type="text" 
+                            id="descricaoProduto" 
+                            name="descricaoProduto" 
+                            class="form-input" 
+                            placeholder="Feijão carioca"
+                            required
+                        >
+                        <span class="error-message" id="errorDescricao"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validadeProduto" class="form-label">Validade</label>
+                        <input 
+                            type="date" 
+                            id="validadeProduto" 
+                            name="validadeProduto" 
+                            class="form-input" 
+                            placeholder="10/09/2025"
+                            required
+                        >
+                        <span class="error-message" id="errorValidade"></span>
+                    </div>
+                </div>
+
+                <!-- Quantidade e Preço -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantidadeProduto" class="form-label">Quantidade</label>
+                        <input 
+                            type="number" 
+                            id="quantidadeProduto" 
+                            name="quantidadeProduto" 
+                            class="form-input" 
+                            placeholder="50"
+                            required
+                        >
+                        <span class="error-message" id="errorQuantidade"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precoProduto" class="form-label">Preço</label>
+                        <input 
+                            type="text" 
+                            id="precoProduto" 
+                            name="precoProduto" 
+                            class="form-input" 
+                            placeholder="R$10"
+                            required
+                        >
+                        <span class="error-message" id="errorPreco"></span>
+                    </div>
+                </div>
+
+                <!-- Tipo embalagem, Classificação e Foto -->
+                <div class="form-row">
+                    <div class="form-column-left">
+                        <div class="form-group">
+                            <label for="tipoEmbalagem" class="form-label">Tipo embalagem</label>
+                            <input 
+                                type="text" 
+                                id="tipoEmbalagem" 
+                                name="tipoEmbalagem" 
+                                class="form-input" 
+                                placeholder="Pacotes"
+                                required
+                            >
+                            <span class="error-message" id="errorTipoEmbalagem"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classificacaoProduto" class="form-label">Classificação</label>
+                            <input 
+                                type="text" 
+                                id="classificacaoProduto" 
+                                name="classificacaoProduto" 
+                                class="form-input" 
+                                placeholder="Alimento"
+                                required
+                            >
+                            <span class="error-message" id="errorClassificacao"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group photo-upload-group">
+                        <label class="form-label">Foto</label>
+                        <div class="upload-container">
+                            <input 
+                                type="file" 
+                                id="fotoProduto" 
+                                name="fotoProduto" 
+                                class="upload-input" 
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+                            <label for="fotoProduto" class="upload-label">
+                                <div class="upload-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="upload-text">
+                                    <span class="upload-main-text">Arraste e solte o arquivo de imagem aqui para realizar upload</span>
+                                    <span class="upload-sub-text">JPEG - PNG - WEBP</span>
+                                </div>
+                            </label>
+                            <div class="upload-preview" id="uploadPreview"></div>
+                        </div>
+                        <span class="error-message" id="errorFoto"></span>
+                    </div>
+                </div>
+
+                <!-- Botão de Conclusão -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        Concluído
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+</body>
+
+<script src="popUpUsuario.js"></script>
+
+</html>
+
