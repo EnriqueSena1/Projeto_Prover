@@ -46,4 +46,5 @@ def cadastroUsuario(request):
 def tela_inicial(request):
     return  render(request, 'index.html')
 
-    
+def estoque_adm(request):
+    return render(request, 'admin/estoqueAdm.html')

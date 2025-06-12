@@ -35,6 +35,9 @@ urlpatterns = [
 
     path('api/UsuarioLogado/', GetDadosUsuarioLogado.as_view(), name='dados_usuario_logado'),
 
+    #Web e API Views ADMINISTRADOR
+    path('estoqueadm/',estoque_adm, name="estoque_adm"),
+
     #Carrinho
 
     path('CarrinhoVend/',carrinho_vend, name="carrinho_vend")
