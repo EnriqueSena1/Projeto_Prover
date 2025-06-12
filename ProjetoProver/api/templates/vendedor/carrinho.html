@@ -1,0 +1,78 @@
+{% load static%}
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/carrinho.css' %}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="carrinho-container">
+        <div class="carrinho-img">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
+        </div>
+        <div class="item-details">
+          <div><strong>ARROZ</strong></div>
+          <div style="color: #800020;"><strong>R$10</strong></div>
+          <div class="item-actions">
+            <button class="icon-button"><span class="material-icons">remove</span></button>
+            <span>1</span>
+            <button class="icon-button"><span class="material-icons">add</span></button>
+          </div>
+        </div>
+        <span class="material-icons delete-icon">delete</span>
+      </div>
+
+      <div class="carrinho-container">
+        <div class="carrinho-img">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
+        </div>
+        <div class="item-details">
+          <div><strong>ARROZ</strong></div>
+          <div style="color: #800020;"><strong>R$10</strong></div>
+          <div class="item-actions">
+            <button class="icon-button"><span class="material-icons">remove</span></button>
+            <span>1</span>
+            <button class="icon-button"><span class="material-icons">add</span></button>
+          </div>
+        </div>
+        <span class="material-icons delete-icon">delete</span>
+      </div>
+
+      <div class="resumo-container">
+        <h3>Nome do Cliente</h3>
+        <input type="text" value="Fulano Junior Pereira" readonly>
+    
+        <div class="info-row">
+          <span>Créditos restantes do cliente</span>
+          <span>R$ 120</span>
+        </div>
+    
+        <div class="info-row">
+          <span>Créditos após a compra</span>
+          <span>R$ 100</span>
+        </div>
+    
+        <div class="linha"></div>
+    
+        <div class="info-row">
+          <strong>Total da compra</strong>
+          <strong>R$ 20</strong>
+        </div>
+    
+        <button class="checkout-btn">Checkout</button>
+      </div>
+
+</body>
+
+</html>
+
+{%endblock%}

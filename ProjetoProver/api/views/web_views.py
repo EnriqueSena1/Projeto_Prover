@@ -5,9 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 # View da página de login
 def tela_login(request):
-<<<<<<< Updated upstream
-    return render(request, 'index.html')
-=======
     return render(request, 'login.html')
 
 def test1(request):
@@ -53,4 +50,6 @@ def cadastroCliente(request):
     usuarios = CustomUser.objects.filter(is_active=True)
     return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
     
->>>>>>> Stashed changes
+def estoque_adm(request):
+    return render(request, 'admin/estoqueAdm.html')
+

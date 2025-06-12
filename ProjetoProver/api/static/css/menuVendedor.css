@@ -1,0 +1,40 @@
+.menuCentral {
+    background-color: #8b1a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    padding-right: 10vw;
+    padding-left: 10vw;
+}
+
+.menu {
+    background-color: #8b1a2a;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100px;
+    padding-right: 10vw;
+    padding-left: 10vw;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.button a {
+    color: #7A162F;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration: none;
+    border-radius: 15px;
+    background: #FFF;
+    padding: 5px 25px;
+}
+

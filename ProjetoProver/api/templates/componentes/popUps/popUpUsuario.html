@@ -1,0 +1,128 @@
+{% load static%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <link rel="stylesheet" href="{%static 'css/vendedorCSS/popUpCadastro.css'%}">
+</head>
+
+<body>
+    <dialog class="popup-dialog" id="cadastroDialog">
+        <!-- Container do Pop-up -->
+        <div class="popup-container">
+            <!-- Header do Pop-up -->
+            <header class="popup-header">
+                <h2 class="popup-title">Cadastrar Cliente</h2>
+                <button type="button" class="close-button" id="closeButton">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Formulário de Cadastro -->
+            <form class="popup-form" id="cadastroForm">
+                {% comment %} valor de controle {% endcomment %}
+                <input type="hidden" id="clienteId" name="clienteId" value="">
+                {% csrf_token %}
+                <!-- Nome do Cliente -->
+                <div class="form-group full-width">
+                    <label for="nomeCliente" class="form-label">Nome do Cliente</label>
+                    <input 
+                        type="text" 
+                        id="nomeCliente" 
+                        name="nomeCliente" 
+                        class="form-input" 
+                        placeholder="Fulano Junior Pereira"
+                        required
+                    >
+                    <span class="error-message" id="errorNome"></span>
+                </div>
+
+                <!-- Email e Confirmar Email -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="emailCliente" class="form-label">Email do Cliente</label>
+                        <input 
+                            type="email" 
+                            id="emailCliente" 
+                            name="emailCliente" 
+                            class="form-input" 
+                            placeholder="fulano@gmail.com"
+                            required
+                        >
+                        <span class="error-message" id="errorEmail"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmarEmail" class="form-label">Confirmar Email</label>
+                        <input 
+                            type="email" 
+                            id="confirmarEmail" 
+                            name="confirmarEmail" 
+                            class="form-input" 
+                            placeholder="fulano@gmail.com"
+                            required
+                        >
+                        <span class="error-message" id="errorConfirmarEmail"></span>
+                    </div>
+                </div>
+
+                <!-- Senha e Upload de Foto -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="senhaCliente" class="form-label">Senha</label>
+                        <input 
+                            type="password" 
+                            id="senhaCliente" 
+                            name="senhaCliente" 
+                            class="form-input" 
+                            placeholder="••••••••"
+                            required
+                        >
+                        <span class="error-message" id="errorSenha"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Foto</label>
+                        <div class="upload-container">
+                            <input 
+                                type="file" 
+                                id="fotoCliente" 
+                                name="fotoCliente" 
+                                class="upload-input" 
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+                            <label for="fotoCliente" class="upload-label">
+                                <div class="upload-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="upload-text">
+                                    <span class="upload-main-text">Arraste e solte o arquivo de imagem aqui para realizar upload</span>
+                                    <span class="upload-sub-text">JPEG - PNG - WEBP</span>
+                                </div>
+                            </label>
+                            <div class="upload-preview" id="uploadPreview"></div>
+                        </div>
+                        <span class="error-message" id="errorFoto"></span>
+                    </div>
+                </div>
+
+                <!-- Botão de Conclusão -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        Concluído
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+</body>
+
+<script src="{% static 'js/popUpJs/popUpUsuario.js' %}"></script>

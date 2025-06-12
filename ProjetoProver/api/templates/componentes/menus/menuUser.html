@@ -1,0 +1,27 @@
+
+
+{% load static%}
+<link rel="stylesheet" href="{%static 'css/menuUser.css'%}">
+
+<div class="menu">
+    <img src="{% static 'img/logo.svg' %}" alt="logo">
+    <a class="login" href="{% url 'login' %}">Login</a>
+</div>
+
+
+<script src="{% static 'js/utils.js' %}"></script>
+
+
+
+
+<!-- Para importar para sua tela primeiro use o seguinte comando em primeiro na sua primeira linha do codigo
+
+{% comment %} {% extends "base.html" %} {% endcomment %}
+
+a seguir dentro da tag <body> importe o seguinte comando 
+    
+{% comment %} {% include "componentes/menus/menuUser.html" %} {% endcomment %}
+
+e pronto qualquer coisa gritar o Cauê
+
+-->
