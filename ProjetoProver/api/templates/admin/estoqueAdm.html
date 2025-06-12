@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/AdminCSS/estoqueAdm.css">
+    <title>Controle de Estoque</title>
+</head>
+<body>
+    {% include "componentes/menus/menuAdmin.html" %}
+    <div class="cabecalho_estoque">
+    <h1 class="titulo_estoque">Estoque</h1>
+    <button class="botao_cadastrar_produto"><img src="" alt="">Cadastrar Produto</button>
+    </div>
+    <div class="cabecalho_lista">
+        <table>
+            <thead>
+                <tr>
+                    <th>Img</th>
+                    <th>Classe</th>
+                    <th>Tipo embalagem</th>
+                    <th class="th_descricao">Descrição</th>
+                    <th>Validade</th>
+                    <th>Quantide</th>
+                    <th>Preço</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+
+        <tbody>
+            <tr>
+                <td></td>
+                <td>Alimento</td>
+                <td>Pacote</td>
+                <td>Arroz</td>
+                <td>10/09/25</td>
+                <td>500</td>
+                <td>R$10</td>
+                <td class="edit-btn">✓</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
+
+{%endblock%}
