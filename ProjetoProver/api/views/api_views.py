@@ -72,7 +72,8 @@ class User(APIView):
         is_adm = request.data.get('is_adm', False)
         tipo = request.data.get('tipo', 'cliente')
         saldo = request.data.get('saldo', 0.00)
-        imagem = request.FILES.get('img')  # Se vier imagem
+        imagem = request.FILES.get('img')  
+        loja = request.data.get('loja')  
 
         # Validação básica
         if not email or not senha or not nome:
@@ -97,7 +98,8 @@ class User(APIView):
             tipo=tipo,
             saldo=saldo,
             img=imagem,
-            is_active=True
+            is_active=True,
+            loja=loja if tipo == 'vendedor' else None  
         )
         
         return Response(
@@ -140,12 +142,12 @@ class User(APIView):
             data['password'] = make_password(data['senha'])
             del data['senha']
 
-            # Tratamento especial para nome (mapear para first_name)
+        # Tratamento especial para nome (mapear para first_name)
         if 'nome' in data:
             data['first_name'] = data['nome']
             del data['nome']
 
-            # Tratamento especial para email (atualizar username também)
+        # Tratamento especial para email (atualizar username também)
         if 'email' in data:
             email = data['email'].lower().strip()
                 # Verificar se o email já existe em outro usuário
@@ -154,11 +156,18 @@ class User(APIView):
             data['email'] = email
             data['username'] = email
 
-            # Tratamento para imagem
+        # Tratamento para imagem
         if 'img' in request.FILES:
             data['img'] = request.FILES['img']
 
-            # Usar o serializer para validação e atualização
+        # Tratamento para loja (somente se for vendedor)
+        if 'loja' in data:
+            if usuario.tipo == 'vendedor':
+                data['loja'] = data['loja']
+            else:
+                data['loja'] = None 
+
+        # Usar o serializer para validação e atualização
         serializer = CustomUserSerializer(usuario, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()

@@ -40,10 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Função para mostrar erro
     function mostrarErro(inputId, mensagem) {
         const input = document.getElementById(inputId);
-        const errorElement = document.getElementById(`error${inputId.charAt(0).toUpperCase() + inputId.slice(1).replace('Cliente', '')}`);
-        
-        input.classList.add('error');
-        errorElement.textContent = mensagem;
+        const errorId = `error${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`;
+        const errorElement = document.getElementById(errorId);
+
+        if (input) {
+            input.classList.add('error');
+        }
+
+        if (errorElement) {
+            errorElement.textContent = mensagem;
+        } 
     }
 
     // Validação de email
@@ -94,6 +100,17 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (senha.length < 6) {
             mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
             isValid = false;
+        }
+
+        const imagemInput = document.getElementById('fotoCliente');
+        const variavelControle = document.getElementById('clienteId')?.value;
+
+        if (!imagemInput.files || imagemInput.files.length === 0) {
+            if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
+                mostrarErro('foto', 'Imagem é obrigatória');
+                isValid = false;
+            }
+            // se for edição e a imagem já existe no banco, não força nova imagem
         }
 
         // Se a validação passou, enviar os dados
@@ -221,9 +238,9 @@ async function editarCliente(idUsuario){
     const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const dados = await apiRequest(`/api/user/${idUsuario}/`, 'GET', null, { 'X-CSRFToken': csrf });
 
-    let nome_cliente = document.getElementById('nomeCliente').value = dados.first_name
-    let email_cliente = document.getElementById('emailCliente').value = dados.email
-    let email_cliente_confirmado = document.getElementById("confirmarEmail").value = dados.email
+    document.getElementById('nomeCliente').value = dados.first_name
+    document.getElementById('emailCliente').value = dados.email
+    document.getElementById("confirmarEmail").value = dados.email
     
     if (dados.img) {
         const uploadBox = document.querySelector('.upload-label');

@@ -24,6 +24,8 @@
 
             <!-- Formulário de Cadastro -->
             <form class="popup-form" id="cadastroForm">
+                <input type="hidden" id="vendedorId" name="vendedorId" value="">
+                {% csrf_token %}
                 <!-- Nome do Vendedor -->
                 <div class="form-group full-width">
                     <label for="nomeCliente" class="form-label">Nome do Vendedor</label>
@@ -139,4 +141,4 @@
 
 </body>
 
-<script src="{% static 'js/popUpJs/popUpUsuario.js' %}"></script>
+<script src="{% static 'js/popUpJs/popUpVendedor.js' %}"></script>
