@@ -11,18 +11,16 @@ class CustomUser(AbstractUser):
         ('vendedor', 'Vendedor'),
         ('administrador', 'Administrador'),
     ]
-
     first_name = models.CharField(max_length=150, blank=True, null=True)  # <- adicione isto
     last_name = models.CharField(max_length=150, blank=True, null=True)   # <- adicione isto
-
-
     email = models.EmailField(unique=True)
     tipo = models.CharField(max_length=20, choices=ROLE_CHOICES, default='cliente')
     saldo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-
     is_adm = models.BooleanField(default=False)  
-
     img =  models.ImageField(upload_to='produtos/', null=True, blank=True)
+
+    # campo exclusivo para vendedores
+    loja = models.TextField(max_length=350, blank=True, null=True, verbose_name="loja")
 
     def __str__(self):
         return f"{self.email} ({self.tipo})"

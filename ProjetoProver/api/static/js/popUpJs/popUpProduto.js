@@ -89,10 +89,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // Verificação da imagem
         const imagemInput = document.getElementById('fotoProduto');
+        const variavelControle = document.getElementById('produtoId')?.value;
+
         if (!imagemInput.files || imagemInput.files.length === 0) {
-            mostrarErro('foto', 'Imagem é obrigatória');
-            isValid = false;
+            if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
+                mostrarErro('foto', 'Imagem é obrigatória');
+                isValid = false;
+            }
+            // se for edição e a imagem já existe no banco, não força nova imagem
         }
+
 
         if (isValid) {
             try {

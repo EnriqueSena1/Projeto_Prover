@@ -39,8 +39,17 @@ def test3(request):
 def carrinho_vend(request):
      return render(request, 'vendedor/carrinho.html')
 
-def cadastroUsuario(request):
-    usuarios = Produto.objects.all()
+def cadastroUsuario(request): # so pra teste rapazeada
+    usuarios = CustomUser.objects.filter(tipo='vendedor', is_active=True)
+    
+    # Filtrar apenas usuários ativos do tipo "cliente"
+    # clientes_ativos = CustomUser.objects.filter(tipo='cliente', is_active=True)
+
+    # # Filtrar apenas usuários ativos do tipo "vendedor"
+    # vendedores_ativos = CustomUser.objects.filter(tipo='vendedor', is_active=True)
+
+    # # Filtrar apenas usuários ativos do tipo "administrador"
+    # administradores_ativos = CustomUser.objects.filter(tipo='administrador', is_active=True)
     return  render(request, 'componentes/TestpopUpUsuario.html', {"usuarios": usuarios})
 
 def tela_inicial(request):
