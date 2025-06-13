@@ -40,7 +40,7 @@ def carrinho_vend(request):
      return render(request, 'vendedor/carrinho.html')
 
 def cadastroUsuario(request):
-    usuarios = CustomUser.objects.filter(is_active=True)
+    usuarios = Produto.objects.all()
     return  render(request, 'componentes/TestpopUpUsuario.html', {"usuarios": usuarios})
 
 def tela_inicial(request):

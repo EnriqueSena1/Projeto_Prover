@@ -24,6 +24,8 @@
 
             <!-- Formulário de Cadastro -->
             <form class="popup-form" id="cadastroForm">
+                <input type="hidden" id="produtoId" name="produtoId" value="">
+                {% csrf_token %}
                 <!-- Descrição e Validade -->
                 <div class="form-row">
                     <div class="form-group">
