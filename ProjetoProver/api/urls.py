@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/user/<int:id>/', User.as_view(), name='usuarioDetalhe'),
 
     # vai para o login
-    path('', tela_login, name="login"),
+    path('', tela_login, name="inicio"),
 
     path('login/', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),

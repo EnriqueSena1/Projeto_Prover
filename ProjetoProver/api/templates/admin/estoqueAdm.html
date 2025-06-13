@@ -14,9 +14,10 @@
 </head>
 <body>
     {% include "componentes/menus/menuAdmin.html" %}
+    {% include "componentes/popUps/popUpProduto.html" %}
     <div class="cabecalho_estoque">
     <h1 class="titulo_estoque">Estoque</h1>
-    <button class="botao_cadastrar_produto"><img src="" alt="">Cadastrar Produto</button>
+    <button class="botao_cadastrar_produto" id="openDialogButton"><img src="" alt="">Cadastrar Produto</button>
     </div>
     <div class="cabecalho_lista">
         <table>
