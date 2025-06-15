@@ -47,7 +47,7 @@ def carrinho_vend(request):
     return render(request, 'vendedor/carrinho.html', {"produtos": produtos, "clientes": clientes})
 
 def cadastroUsuario(request): # so pra teste rapazeada
-    usuarios = CustomUser.objects.filter(tipo='cliente', is_active=True)
+    usuarios = Produto.objects.filter(is_disponivel=True)
     
     # Filtrar apenas usuários ativos do tipo "cliente"
     # clientes_ativos = CustomUser.objects.filter(tipo='cliente', is_active=True)
