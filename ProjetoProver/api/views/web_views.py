@@ -17,12 +17,12 @@ def test1(request):
         return redirect('login')
     
 
-def test2(request):
+def SaldoUser(request):
     user_id = request.user.id  
 
     user = CustomUser.objects.filter(id=user_id).first()
     if user:
-        return render(request, 'user/test2.html', {'usuario': user})
+        return render(request, 'user/SaldoUser.html', {'usuario': user})
     else:
         return redirect('login')  # Se o usuário não for encontrado, volta pro login
     

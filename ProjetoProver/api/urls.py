@@ -29,7 +29,7 @@ urlpatterns = [
     path('login/', tela_login, name="login"),
     path('api/login/', LoginView.as_view(), name='api_login'),
 
-    path('HomeUser/', test2, name="home_user"),
+    path('HomeUser/', SaldoUser, name="home_user"),
     path('HomeAdm/', test1, name="home_adm"),
     path('HomeVend/', test3, name="home_vend"),
     path('CadastroUsuario/', cadastroUsuario, name="cadastro_user"),
