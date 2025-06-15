@@ -37,10 +37,12 @@ def test3(request):
         return redirect('login')
 
 def carrinho_vend(request):
-     return render(request, 'vendedor/carrinho.html')
+    produtos =  Produto.objects.filter(exibir_no_carrinho=True)
+    clientes = CustomUser.objects.filter(tipo='cliente', is_active=True)
+    return render(request, 'vendedor/carrinho.html', {"produtos": produtos, "clientes": clientes})
 
 def cadastroUsuario(request): # so pra teste rapazeada
-    usuarios = CustomUser.objects.filter(tipo='vendedor', is_active=True)
+    usuarios = CustomUser.objects.filter(tipo='cliente', is_active=True)
     
     # Filtrar apenas usuários ativos do tipo "cliente"
     # clientes_ativos = CustomUser.objects.filter(tipo='cliente', is_active=True)
@@ -62,3 +64,6 @@ def cadastroCliente(request):
 def estoque_adm(request):
     return render(request, 'admin/estoqueAdm.html')
 
+def produto(request):
+    produtos = Produto.objects.filter(is_disponivel=True)
+    return render(request, 'vendedor/produto.html', {"produtos": produtos})

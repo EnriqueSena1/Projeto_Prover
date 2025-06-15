@@ -102,6 +102,16 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         }
 
+        // Validar saldo
+        const saldo = document.getElementById('saldoCliente').value.trim();
+        if (!saldo) {
+            mostrarErro('saldoCliente', 'Saldo é obrigatório');
+            isValid = false;
+        } else if (isNaN(parseFloat(saldo.replace(',', '.')))) {
+            mostrarErro('saldoCliente', 'Saldo deve ser um número válido');
+            isValid = false;
+        }
+
         const imagemInput = document.getElementById('fotoCliente');
         const variavelControle = document.getElementById('clienteId')?.value;
 
@@ -119,6 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let nome_cliente = document.getElementById('nomeCliente').value;
                 let email_cliente = document.getElementById('emailCliente').value;
                 let senha_cliente = document.getElementById('senhaCliente').value;
+                let saldo_cliente = document.getElementById('saldoCliente').value;
                 let imagemInput = document.getElementById('fotoCliente');
                 let imagemFile = imagemInput.files[0];
 
@@ -129,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append("nome", nome_cliente);
                 formData.append("email", email_cliente);
                 formData.append("senha", senha_cliente);
+                formData.append("saldo", saldo_cliente);
                 formData.append("is_active", true);
 
                 if (imagemFile) {
@@ -241,6 +253,7 @@ async function editarCliente(idUsuario){
     document.getElementById('nomeCliente').value = dados.first_name
     document.getElementById('emailCliente').value = dados.email
     document.getElementById("confirmarEmail").value = dados.email
+    document.getElementById('saldoCliente').value = dados.saldo;
     
     if (dados.img) {
         const uploadBox = document.querySelector('.upload-label');
