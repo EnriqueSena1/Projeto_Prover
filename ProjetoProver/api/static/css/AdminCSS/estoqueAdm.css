@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-.container_principal_estoque {
-    padding: 20px;
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .titulo_estoque {
@@ -16,8 +20,10 @@
 
 .cabecalho_estoque {
     display: flex;
+    margin-top: 50px;
     justify-content: space-between;
     align-items: center;
+    width: 1000px;
     margin-bottom: 30px;
 }
 
@@ -25,9 +31,10 @@
     background-color: #7A162F;
     color: white;
     border: none;
+    font-size: 20px;
     border-radius: 15px;
     display: flex;
-    padding: 10px 15px;
+    padding: 16px 24px;
     align-items: center;
     gap: 10px;
     cursor: pointer;
@@ -45,6 +52,7 @@
 .container_estoque {
     background-color: #f8f8f8;
     padding: 20px;
+    width: 1000px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }

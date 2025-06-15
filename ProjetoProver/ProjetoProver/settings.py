@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bancoprover',
         'USER':'root',
-        'PASSWORD':'julia3105',
+        'PASSWORD':'',
         'HOST':'localhost',
         'PORT': '3306',
     }

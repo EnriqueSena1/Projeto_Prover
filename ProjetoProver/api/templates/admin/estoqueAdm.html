@@ -14,73 +14,73 @@
 </head>
 <body>
     {% include "componentes/menus/menuAdmin.html" %}
+    <div class="container">
+        <div class="cabecalho_estoque">
+            <h1 class="titulo_estoque">Estoque</h1>
+            <button class="botao_cadastrar_produto" onclick="abrirDialog()" id="openDialogButton">
+                <i class="fas fa-plus-circle"></i> Cadastrar Produto
+            </button>
+        </div>
 
-    <div class="cabecalho_estoque">
-        <h1 class="titulo_estoque">Estoque</h1>
-        <button class="botao_cadastrar_produto" onclick="abrirDialog()" id="openDialogButton">
-            <i class="fas fa-plus-circle"></i> Cadastrar Produto
-        </button>
-    </div>
-
-    <div class="container_estoque">
-        <table>
-            <thead>
-                <tr>
-                    <th>Img</th>
-                    <th>Class</th>
-                    <th>Tipo embalag</th>
-                    <th class="th_descricao">Descrição</th>
-                    <th>Validade</th>
-                    <th>Quantid</th>
-                    <th>Preço</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for produto in produtos %}
-                <tr class="produto_item_linha">
-                    <td>
-                        {% if produto.imagem %}
-                            <img src="{{ produto.imagem.url }}" alt="{{ produto.descricao }}" class="produto_img">
-                        {% else %}
-                            <img src="{% static 'img/placeholder.png' %}" alt="Sem Imagem" class="produto_img">
-                        {% endif %}
-                    </td>
-                    <td>{{ produto.classe }}</td>
-                    <td>{{ produto.tipo_produto }}</td>
-                    <td>{{ produto.descricao }}</td>
-                    <td>
-                        {% if produto.validade %}
-                            {{ produto.validade|date:"d/m/Y" }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>{{ produto.quantidade }}</td>
-                    <td>R${{ produto.valor|floatformat:2 }}</td>
-                    <td class="acoes-btns"> {# Nova classe para os botões de ação #}
-                        {# Botão de edição #}
-                        <a href="#" onclick="editarProduto({{ produto.id }})" class="btn_editar_produto">
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
-                        {# NOVO: Botão de exclusão #}
-                        <a href="#" onclick="deletarProduto({{ produto.id }})" class="btn_excluir_produto">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr class="no_products_message">
-                    <td colspan="8">Nenhum produto encontrado no estoque.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="container_estoque">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Class</th>
+                        <th>Tipo embalag</th>
+                        <th class="th_descricao">Descrição</th>
+                        <th>Validade</th>
+                        <th>Quantid</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr class="produto_item_linha">
+                        <td>
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" alt="{{ produto.descricao }}" class="produto_img">
+                            {% else %}
+                                <img src="{% static 'img/placeholder.png' %}" alt="Sem Imagem" class="produto_img">
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.classe }}</td>
+                        <td>{{ produto.tipo_produto }}</td>
+                        <td>{{ produto.descricao }}</td>
+                        <td>
+                            {% if produto.validade %}
+                                {{ produto.validade|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.quantidade }}</td>
+                        <td>R${{ produto.valor|floatformat:2 }}</td>
+                        <td class="acoes-btns"> {# Nova classe para os botões de ação #}
+                            {# Botão de edição #}
+                            <a href="#" onclick="editarProduto({{ produto.id }})" class="btn_editar_produto">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            {# NOVO: Botão de exclusão #}
+                            <a href="#" onclick="deletarProduto({{ produto.id }})" class="btn_excluir_produto">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr class="no_products_message">
+                        <td colspan="8">Nenhum produto encontrado no estoque.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {% include "componentes/popUps/popUpProduto.html" %}
 
-    <script src="{% static 'js/popUpJs/popUpProduto.js' %}"></script>
 </body>
 </html>
 
