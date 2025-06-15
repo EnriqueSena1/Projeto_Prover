@@ -21,8 +21,13 @@ def SaldoUser(request):
     user_id = request.user.id  
 
     user = CustomUser.objects.filter(id=user_id).first()
+
     if user:
-        return render(request, 'user/SaldoUser.html', {'usuario': user})
+        compras = Compra.objects.filter(cliente=user).order_by('-data')
+        return render(request, 'user/SaldoUser.html', {
+            'usuario': user,
+            'compras': compras
+        })
     else:
         return redirect('login')  # Se o usuário não for encontrado, volta pro login
     
@@ -67,3 +72,10 @@ def estoque_adm(request):
 def produto(request):
     produtos = Produto.objects.filter(is_disponivel=True)
     return render(request, 'vendedor/produto.html', {"produtos": produtos})
+
+def cadastroVendedor(request):
+    vendedores_list = CustomUser.objects.filter(tipo='vendedor')
+    paginator = Paginator(vendedores_list, 5)  # 5 por página
+    page_number = request.GET.get('page')
+    vendedores = paginator.get_page(page_number)
+    return  render(request, 'admin/cadastroVendedor.html', {"vendedores": vendedores})

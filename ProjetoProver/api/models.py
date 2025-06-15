@@ -50,11 +50,7 @@ class Produto(models.Model):
     def __str__(self):
         return self.descricao
 
-# Carrinho
-class Carrinho(models.Model):
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    qtd_carrinho = models.PositiveIntegerField()
-    valor_carrinho = models.DecimalField(max_digits=8, decimal_places=2)
+
 
 # compra
 class Compra(models.Model):
@@ -66,8 +62,11 @@ class Compra(models.Model):
     def __str__(self):
         return f"Compra de {self.cliente.username} em {self.data.strftime('%d/%m/%Y')}"
 
-# Itens da Compra
-class ItensCompra(models.Model):
-    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE)
-    compra = models.ForeignKey(Compra, on_delete=models.CASCADE, null=True)
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2)
+class ItemCompra(models.Model):
+    compra = models.ForeignKey(Compra, on_delete=models.CASCADE, related_name='itens_compra')
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    quantidade = models.PositiveIntegerField(default=1)
+    preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.quantidade} de {self.produto.descricao} em Compra {self.compra.id}'

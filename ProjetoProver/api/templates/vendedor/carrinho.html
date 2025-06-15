@@ -46,46 +46,89 @@
           </div>
         </div>
 
-        <div class="resumo-container" style="position: relative;">
-          <h3>Nome do Cliente</h3>
 
-          <!-- Input com autocomplete -->
-          <input type="text" id="clienteInput" placeholder="Fulano Junior Pereira" autocomplete="off">
-          <ul id="sugestoesClientes" class="sugestoes-lista"></ul>
-          <input type="hidden" id="clienteIdSelecionado">
+  <div class="resumo-container">
+    <h3>Nome do Cliente</h3>
 
-          <div class="info-row">
-            <span>Créditos restantes do cliente</span>
-            <span id="creditosRestantes">R$ 0</span>
-          </div>
-
-          <div class="info-row">
-            <span>Créditos após a compra</span>
-            <span id="creditosPosCompra">R$ 0</span>
-          </div>
-
-          <div class="linha"></div>
-
-          <div class="info-row">
-            <strong>Total da compra</strong>
-            <strong id="totalCompra">R$ 0</strong>
-          </div>
-
-          <button class="checkout-btn">Checkout</button>
-        </div>
-
-        <!-- Lista oculta com todos os clientes -->
-        <ul id="todosClientes" style="display: none;">
-          {% for cliente in clientes %}
-            <li data-id="{{ cliente.id }}" data-creditos="{{ cliente.saldo }}">{{ cliente.first_name }}</li>
-          {% endfor %}
-        </ul>
-
-
+    <!-- Bloco que envolve o input e a lista -->
+    <div class="input-autocomplete-wrapper">
+      <input type="text" id="clienteInput" placeholder="Fulano Junior Pereira" autocomplete="off">
+      <ul id="sugestoesClientes" class="sugestoes-lista"></ul>
+      <input type="hidden" id="clienteIdSelecionado">
     </div>
 
+    <div class="info-row">
+      <span>Créditos restantes do cliente</span>
+      <span id="creditosRestantes">R$ 0.00</span>
+    </div>
+
+    <div class="info-row">
+      <span>Créditos após a compra</span>
+      <span id="creditosPosCompra">R$ 0.00</span>
+    </div>
+
+    <div class="linha"></div>
+
+    <div class="info-row">
+      <strong>Total da compra</strong>
+      <strong id="totalCompra">R$ 0.00</strong>
+    </div>
+
+    <button class="checkout-btn">Checkout</button>
   </div>
-  <!-- <div class="ContainerTodo">
+
+  <!-- Lista oculta com todos os clientes -->
+  <ul id="todosClientes" style="display: none;">
+    {% for cliente in clientes %}
+      <li data-id="{{ cliente.id }}" data-creditos="{{ cliente.saldo }}">{{ cliente.first_name }}</li>
+    {% endfor %}
+  </ul>
+
+
+  <!-- Fundo escuro de overlay para foco -->
+  <div id="toast-overlay" class="hidden"></div>
+
+  <!-- Container de Toasters -->
+  <div id="toast-container">
+
+      <!-- Toast de Confirmação da Compra -->
+      <div id="toast-confirm-compra" class="toast hidden confirm fullscreen">
+          <div class="toast-body">
+              <span class="toast-message">Deseja finalizar a compra?</span>
+              <div class="toast-actions">
+                  <button class="btn btn-no">Não</button>
+                  <button class="btn btn-yes">Sim</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- Toast de Confirmação de Remoção de Produto -->
+      <div id="toast-confirm-remocao" class="toast hidden confirm fullscreen">
+          <div class="toast-body">
+              <span class="toast-message">Deseja remover o produto?</span>
+              <div class="toast-actions">
+                  <button class="btn btn-no">Não</button>
+                  <button class="btn btn-yes">Sim</button>
+              </div>
+          </div>
+      </div>
+
+      <!--  Toast de Sucesso da Compra -->
+      <div id="toast-compra-realizada" class="toast hidden success visible">
+          <img src="{% static 'img/CompraFinalizada.png' %}" alt="Ícone de Compra Realizada" class="toast-icon">
+          <span class="toast-message">Compra realizada com sucesso!</span>
+
+      </div>
+
+      <!-- Toast de Produto Removido -->
+      <div id="toast-produto-removido" class="toast hidden success visible">
+          <img src="{% static 'img/ProdutoRemovido.png' %}" alt="Ícone de Produto Removido" class="toast-icon">
+          <span class="toast-message">Produto removido do carrinho.</span>
+          
+      </div>
+
+  </div>
+    <!-- <div class="ContainerTodo">
     <div class="carrinho-scroll">
       <div class="carrinho-container">
         <div class="item-carrinho">
