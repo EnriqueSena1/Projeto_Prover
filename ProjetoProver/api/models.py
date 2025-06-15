@@ -71,3 +71,4 @@ class ItensCompra(models.Model):
     carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE)
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE, null=True)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)
+

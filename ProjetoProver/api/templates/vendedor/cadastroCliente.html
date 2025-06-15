@@ -18,29 +18,110 @@
 </head>
 <body>
     {% include 'componentes/menus/menuVendedor.html' %}
+
     <div class="principal">
-        <div class="detalhe">
-        
-            <div class="boxCliente">
-                <h3>Clientes</h3>
-                <button class="addCliente">
-                    <img src="{% static 'img/AdicionarCliente.png' %}" alt="Adicionar ícone">
-                    <span>Cadastrar cliente</span>
-                </button>
+
+        <div class="clientes-container">
+
+            <div class="clientes-header">
+              <h2>Clientes</h2>
+              <button id = "cadastrarCliente" class ="addCliente">
+                <img src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
+                Cadastrar cliente
+              </button>
             </div>
         </div>       
-        <div class = "listaClientes">
-            <ul>
-                <li>
-                    <div class = "cliente1">
-                        <img src = "{% static 'img/Usuario.png'%}" alt="usuario">"
-                        <span>Fulano Machado</span>
-                        <button class = "edit-btn"></button>
-                        
-                    </div>
-                </li>
-        </ul>
+
+        {%include 'componentes/popUps/popUpUsuario.html' %}
+
+        <div id="lista-clientes">
+            <div class="cliente-card">
+                <div class="cliente-info">
+                  <img src="{% static 'img/Usuario.png' %}" alt="Usuário" class="icon-usuario">
+                  <span class="cliente-nome">Fulano Machado</span>
+                </div>
+                
+                <div class="cliente-acoes">
+                  <img id = "editar" src="{% static 'img/Editar.png' %}" alt="Editar" class="icon-editar">
+                  <label id = "status" class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const form = document.getElementById("cadastroForm");
+              const nomeInput = document.getElementById("nomeCliente");
+              const dialog = document.getElementById("cadastroDialog");
+              const listaClientes = document.getElementById("lista-clientes");
+          
+              form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const nome = nomeInput.value.trim();
+                if (nome === "") {
+                    alert("Preencha o nome do cliente.");
+                    return;
+                }
+
+                const formData = new FormData(form);
+
+                fetch("/clientes/cadastrar/", {
+                    method: "POST",
+                    headers: {
+                    "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao cadastrar cliente.");
+                    return response.json();
+                })
+                .then(data => {
+                    
+                    listaClientes.style.display = "block";
+
+                    const novoCard = document.createElement("div");
+                    novoCard.className = "cliente-card";
+                    novoCard.innerHTML = `
+                    <div class="cliente-info">
+                        <img src="/static/img/Usuario.png" alt="Usuário" class="icon-usuario">
+                        <span class="cliente-nome">${data.nome}</span>
+                    </div>
+                    <div class="cliente-acoes">
+                        <img id="editar" src="/static/img/Editar.png" alt="Editar" class="icon-editar">
+                        <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        </label>
+                    </div>
+                    `;
+                    listaClientes.appendChild(novoCard);
+
+                    dialog.close();
+                    form.reset();
+                })
+                .catch(err => {
+                    alert("Erro ao salvar cliente.");
+                    console.error(err);
+                });
+                });
+
+          
+ 
+              document.getElementById("cadastrarCliente").addEventListener("click", function () {
+                dialog.showModal();
+              });
+          
+    
+              document.getElementById("closeButton").addEventListener("click", function () {
+                dialog.close();
+              });
+            });
+          </script>
+          
 </body>
 </html>
 
