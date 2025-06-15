@@ -67,7 +67,11 @@ def cadastroCliente(request):
     return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
     
 def estoque_adm(request):
-    return render(request, 'admin/estoqueAdm.html')
+    produtos = Produto.objects.filter(is_disponivel=True)
+    context = {
+        'produtos': produtos
+    }
+    return render(request, 'admin/estoqueAdm.html', context)
 
 def produto(request):
     produtos = Produto.objects.filter(is_disponivel=True)
