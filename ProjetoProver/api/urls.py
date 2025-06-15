@@ -42,6 +42,7 @@ urlpatterns = [
     #Carrinho
     path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
     path('CadastroCliente/', cadastroCliente, name="cadastro_cliente"),
+    path('CadastroVendedor/', cadastroVendedor, name="cadastro_vend"),
 
     #produto
     path('Produto/', produto, name="produto_vend"),
