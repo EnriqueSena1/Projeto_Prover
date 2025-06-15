@@ -5,10 +5,7 @@ from .views.web_views import *
 
 # ViewSets com Router
 router = DefaultRouter()
-router.register('usuarios', CustomUserViewSet)
 router.register('produtos', ProdutoViewSet)
-router.register('carrinhos', CarrinhoViewSet)
-router.register('compras', CompraViewSet)
 
 
 
@@ -35,6 +32,9 @@ urlpatterns = [
     path('CadastroUsuario/', cadastroUsuario, name="cadastro_user"),
 
     path('api/UsuarioLogado/', GetDadosUsuarioLogado.as_view(), name='dados_usuario_logado'),
+    
+    path('api/compras/', CompraCreateAPIView.as_view(), name='compra_create'),
+    path('api/compras/<int:id>/', CompraCreateAPIView.as_view(), name='compra'),
 
     #Web e API Views ADMINISTRADOR
     path('estoqueadm/',estoque_adm, name="estoque_adm"),

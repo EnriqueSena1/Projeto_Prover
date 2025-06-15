@@ -153,29 +153,198 @@ body {
     cursor: pointer;  
 }
 
+
+.input-autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .sugestoes-lista {
-    list-style: none;
-    margin: 0;
-    color: black;
-    padding: 0;
-    border: 1px solid #ccc;
-    max-height: 150px;
-    overflow-y: auto;
-    position: absolute;
-    background: white;
-    width: 100%;
-    z-index: 1000;
-    top: 95px; /* ajusta isso dependendo do padding do seu input */
-    border-radius: 5px;
+  position: absolute;
+  top: calc(100% - 2px); /* encosta no input */
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none; /* tira a borda duplicada com o input */
+  border-radius: 0 0 8px 8px;
+  max-height: 160px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 .sugestoes-lista li {
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  transition: background 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sugestoes-lista li:hover {
-    background-color: #f0f0f0;
-    color: black;
+  background-color: #f0f0f0;
+}
+
+/* Informações do cliente */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.linha {
+  border-top: 1px dashed #fff;
+  margin: 10px 0;
+}
+
+/* Botão de checkout */
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #00c600;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #00a800;
+}
+
+/* pare aqui */
+/* Overlay de fundo escurecido */
+#toast-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#toast-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Toast base */
+.toast {
+    display: flex;
+    align-items: center;
+    background-color: #8B001A; /* Vinho escuro */
+    color: white;
+    padding: 16px 24px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    margin: 10px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1000;
+}
+
+.toast.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(30px);
+}
+
+/* Toast tipo "fullscreen confirm" */
+.toast.confirm.fullscreen {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    bottom: auto;
+    right: auto;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    flex-direction: column;
+    padding: 30px 40px;
+    box-sizing: border-box;
+}
+
+/* Corpo do toast (área interna) */
+.toast-body {
+    width: 100%;
+}
+
+/* Mensagem de confirmação */
+.toast-message {
+    font-size: 22px;
+}
+
+/* Botões de ação */
+.toast-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.toast .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.toast .btn-yes {
+    background-color: #00C600; /* Verde */
+}
+
+.toast .btn-no {
+    background-color: #B00000; /* Vermelho escuro */
+}
+
+.toast .btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Toast de sucesso (canto inferior) */
+.toast.success {
+    bottom: 20px;
+    right: 20px;
+    flex-direction: row;
+}
+
+.toast-icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 12px;
+}
+
+.toast-close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    margin-left: auto;
+    cursor: pointer;
 }

@@ -21,6 +21,7 @@ def SaldoUser(request):
     user_id = request.user.id  
 
     user = CustomUser.objects.filter(id=user_id).first()
+
     if user:
         return render(request, 'user/SaldoUser.html', {'usuario': user})
     else:

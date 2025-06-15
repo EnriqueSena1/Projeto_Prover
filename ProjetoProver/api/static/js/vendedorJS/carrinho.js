@@ -1,3 +1,63 @@
+function showToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.classList.remove("hidden");
+        toast.classList.add("visible");
+
+        // Se for toast de confirmação, exibe o overlay
+        if (toast.classList.contains("confirm")) {
+            document.getElementById("toast-overlay").classList.add("visible");
+        }
+    }
+}
+
+function hideToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.classList.remove("visible");
+        toast.classList.add("hidden");
+
+        // Se for toast de confirmação, esconde o overlay
+        if (toast.classList.contains("confirm")) {
+            document.getElementById("toast-overlay").classList.remove("visible");
+        }
+    }
+}
+
+// Helper para toast de confirmação (genérico - agora no escopo global)
+function showConfirmToast(toastId, message) {
+    return new Promise(resolve => {
+        const toast = document.getElementById(toastId);
+        if (!toast) {
+            console.error(`Toast com ID ${toastId} não encontrado.`);
+            resolve(false);
+            return;
+        }
+        toast.querySelector(".toast-message").textContent = message;
+        showToast(toastId);
+
+        const btnYes = toast.querySelector(".btn-yes");
+        const btnNo = toast.querySelector(".btn-no");
+
+        const handleYes = () => {
+            hideToast(toastId);
+            btnYes.removeEventListener("click", handleYes);
+            btnNo.removeEventListener("click", handleNo);
+            resolve(true);
+        };
+
+        const handleNo = () => {
+            hideToast(toastId);
+            btnYes.removeEventListener("click", handleYes);
+            btnNo.removeEventListener("click", handleNo);
+            resolve(false);
+        };
+
+        btnYes.addEventListener("click", handleYes);
+        btnNo.addEventListener("click", handleNo);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.getElementById("clienteInput");
     const sugestoes = document.getElementById("sugestoesClientes");
@@ -7,10 +67,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const creditosPosCompra = document.getElementById("creditosPosCompra");
     const totalCompra = document.getElementById("totalCompra");
 
+    // Lógica para fechar toasts de sucesso/informação
+    document.querySelectorAll(".toast-close-button").forEach(button => {
+        button.addEventListener("click", function() {
+            const toast = this.closest(".toast");
+            if (toast) {
+                hideToast(toast.id);
+            }
+        });
+    });
+
     // Recupera cliente salvo no localStorage
-    const nomeSalvo = localStorage.getItem('clienteSelecionadoNome');
-    const idSalvo = localStorage.getItem('clienteSelecionadoId');
-    const creditoSalvo = localStorage.getItem('clienteSelecionadoCreditos');
+    const nomeSalvo = localStorage.getItem("clienteSelecionadoNome");
+    const idSalvo = localStorage.getItem("clienteSelecionadoId");
+    const creditoSalvo = localStorage.getItem("clienteSelecionadoCreditos");
 
     if (nomeSalvo && idSalvo && creditoSalvo) {
         input.value = nomeSalvo;
@@ -51,9 +121,9 @@ document.addEventListener("DOMContentLoaded", function () {
             creditosRestantes.textContent = `R$ ${creditos.toFixed(2)}`;
             atualizarCreditoPosCompra();
 
-            localStorage.setItem('clienteSelecionadoNome', e.target.textContent);
-            localStorage.setItem('clienteSelecionadoId', e.target.dataset.id);
-            localStorage.setItem('clienteSelecionadoCreditos', e.target.dataset.creditos);
+            localStorage.setItem("clienteSelecionadoNome", e.target.textContent);
+            localStorage.setItem("clienteSelecionadoId", e.target.dataset.id);
+            localStorage.setItem("clienteSelecionadoCreditos", e.target.dataset.creditos);
 
             sugestoes.innerHTML = "";
         }
@@ -67,24 +137,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Controle de quantidade (+ / -)
-    document.querySelectorAll('.mais').forEach(button => {
-        button.addEventListener('click', async function () {
-            const item = this.closest('.item-carrinho');
-            const span = item.querySelector('.quantidade span');
-            const inputId = item.querySelector('input[name="controleEstoque"]');
+    document.querySelectorAll(".mais").forEach(button => {
+        button.addEventListener("click", async function () {
+            const item = this.closest(".item-carrinho");
+            const span = item.querySelector(".quantidade span");
+            const inputId = item.querySelector("input[name=\"controleEstoque\"]");
             const idProduto = inputId.value;
-            const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const csrf = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
             const quantidadeAtual = parseInt(span.textContent);
 
             try {
-                const response = await apiRequest(`/api/produtos/${idProduto}/`, 'GET', null, {
-                    'X-CSRFToken': csrf
+                const response = await apiRequest(`/api/produtos/${idProduto}/`, "GET", null, {
+                    "X-CSRFToken": csrf
                 });
                 console.log(response)
 
                 if (!response) {
-                    alert('Erro ao buscar estoque');
+                    alert("Erro ao buscar estoque");
                     return;
                 }
 
@@ -104,74 +174,112 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+    document.querySelectorAll(".menos").forEach(button => {
+        button.addEventListener("click", function () {
+            const item = this.closest(".item-carrinho");
+            const span = item.querySelector(".quantidade span");
+            let quantidadeAtual = parseInt(span.textContent);
+
+            if (quantidadeAtual > 1) {
+                quantidadeAtual--;
+                span.textContent = quantidadeAtual;
+                atualizarCarrinho();
+            }
+        });
+    });
+
+
 
     // Limpar localStorage ao fazer checkout
     document.querySelector(".checkout-btn").addEventListener("click", async function () {
-        const clienteId = document.getElementById("clienteIdSelecionado").value;
-        const itens = [];
+        const confirmed = await showConfirmToast("toast-confirm-compra", "Deseja finalizar a compra?");
 
-        document.querySelectorAll('.item-carrinho').forEach(item => {
-            const idProduto = item.querySelector('input[name="controleEstoque"]').value;
-            const quantidade = parseInt(item.querySelector('.quantidade span').textContent);
-            const precoText = item.querySelector('.info p').textContent;
-            const precoUnitario = parseFloat(precoText.replace('R$', '').replace(',', '.').trim());
+        if (confirmed) {
+            const clienteId = document.getElementById("clienteIdSelecionado").value;
+            const itens = [];
 
-            itens.push({
-                produto_id: idProduto,
-                quantidade: quantidade,
-                preco_unitario: precoUnitario
+            document.querySelectorAll(".item-carrinho").forEach(item => {
+                const idProduto = item.querySelector("input[name=\"controleEstoque\"]").value;
+                const quantidade = parseInt(item.querySelector(".quantidade span").textContent);
+                const precoText = item.querySelector(".info p").textContent;
+                const precoUnitario = parseFloat(precoText.replace("R$", "").replace(",", ".").trim());
+
+                itens.push({
+                    produto_id: idProduto,
+                    quantidade: quantidade,
+                    preco_unitario: precoUnitario
+                });
             });
-        });
 
-        const totalCompra = parseFloat(document.getElementById("totalCompra").textContent.replace('R$', '').replace(',', '.').trim());
+            const totalCompra = parseFloat(document.getElementById("totalCompra").textContent.replace("R$", "").replace(",", ".").trim());
 
-        const dadosCompra = {
-            cliente_id: clienteId,
-            itens: itens,
-            total_preco: totalCompra
-        };
+            const dadosCompra = {
+                cliente_id: clienteId,
+                itens: itens,
+                total_preco: totalCompra
+            };
 
-        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const csrf = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-        const response = await apiRequest('/api/compras/', 'POST', dadosCompra, {
-            'X-CSRFToken': csrf
-        });
+            const response = await apiRequest("/api/compras/", "POST", dadosCompra, {
+                "X-CSRFToken": csrf
+            });
 
-        if (response) {
-            alert("Compra finalizada com sucesso!");
-            // Limpa localStorage e redireciona
-            localStorage.removeItem('clienteSelecionadoNome');
-            localStorage.removeItem('clienteSelecionadoId');
-            localStorage.removeItem('clienteSelecionadoCreditos');
-            window.location.reload()
-        } else {
-            alert("Erro ao finalizar a compra.");
+            if (response) {
+                showToast("toast-compra-realizada");
+                // Limpa localStorage e redireciona
+                localStorage.removeItem("clienteSelecionadoNome");
+                localStorage.removeItem("clienteSelecionadoId");
+                localStorage.removeItem("clienteSelecionadoCreditos");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500); // Atraso para o toast ser visível
+            } else {
+                alert("Erro ao finalizar a compra."); // Manter alert para erro de API
+            }
         }
     });
 });
 
-// Deletar item do carrinho
 async function deletarCarrinho(idProduto) {
-    const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // 1. Exibe o toast de confirmação e aguarda a resposta do usuário
+    const confirmed = await showConfirmToast("toast-confirm-remocao", "Deseja remover o produto?");
 
-    const formData = new FormData();
-    formData.append('exibir_no_carrinho', 'false');
+    // 2. Verifica se o usuário confirmou a ação
+    if (confirmed) {
+        const csrf = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-    try {
-        const response = await fetch(`/api/produtos/${idProduto}/`, {
-            method: 'PATCH',
-            headers: {
-                'X-CSRFToken': csrf
-            },
-            body: formData
-        });
+        const formData = new FormData();
+        formData.append("exibir_no_carrinho", "false");
 
-        if (!response.ok) throw new Error('Erro ao atualizar produto');
+        try {
+            // 3. Envia a requisição PATCH para atualizar o produto
+            const response = await fetch(`/api/produtos/${idProduto}/`, {
+                method: "PATCH",
+                headers: {
+                    "X-CSRFToken": csrf
+                },
+                body: formData
+            });
 
-        window.location.reload();
-    } catch (error) {
-        console.error(error);
-        alert("Erro ao remover do carrinho.");
+            if (!response.ok) throw new Error("Erro ao atualizar produto");
+
+            // 4. Exibe toast de sucesso após a remoção
+            showToast("toast-produto-removido");
+
+            // 5. Recarrega a página após um pequeno atraso para que o toast seja visível
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500); // Atraso de 1.5 segundos
+
+        } catch (error) {
+            console.error(error);
+            // 6. Exibe alert de erro em caso de falha (manter alert para erros de API)
+            alert("Erro ao remover do carrinho.");
+        }
+    } else {
+        // 7. Não faz nada se a remoção for cancelada, sem toast de erro.
+        console.log("Remoção cancelada pelo usuário.");
     }
 }
 
@@ -179,11 +287,11 @@ async function deletarCarrinho(idProduto) {
 function calcularTotalCompra() {
     let total = 0;
 
-    document.querySelectorAll('.item-carrinho').forEach(item => {
-        const precoText = item.querySelector('.info p').textContent;
-        const preco = parseFloat(precoText.replace('R$', '').replace(',', '.').trim()) || 0;
+    document.querySelectorAll(".item-carrinho").forEach(item => {
+        const precoText = item.querySelector(".info p").textContent;
+        const preco = parseFloat(precoText.replace("R$", "").replace(",", ".").trim()) || 0;
 
-        const quantidadeText = item.querySelector('.quantidade span').textContent;
+        const quantidadeText = item.querySelector(".quantidade span").textContent;
         const quantidade = parseInt(quantidadeText) || 0;
 
         total += preco * quantidade;
@@ -195,8 +303,8 @@ function calcularTotalCompra() {
 
 // Atualiza o campo "Créditos após a compra"
 function atualizarCreditoPosCompra() {
-    const total = parseFloat(document.getElementById("totalCompra").textContent.replace('R$', '').replace(',', '.').trim()) || 0;
-    const credito = parseFloat(document.getElementById("creditosRestantes").textContent.replace('R$', '').replace(',', '.').trim()) || 0;
+    const total = parseFloat(document.getElementById("totalCompra").textContent.replace("R$", "").replace(",", ".").trim()) || 0;
+    const credito = parseFloat(document.getElementById("creditosRestantes").textContent.replace("R$", "").replace(",", ".").trim()) || 0;
 
     document.getElementById("creditosPosCompra").textContent = `R$ ${(credito - total).toFixed(2)}`;
 }
@@ -205,5 +313,4 @@ function atualizarCreditoPosCompra() {
 function atualizarCarrinho() {
     calcularTotalCompra();
 }
-
 

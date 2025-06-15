@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from ..models import *
 from ..serializers import *
-
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -197,54 +197,64 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
 
-class CarrinhoViewSet(viewsets.ModelViewSet):
-    queryset = Carrinho.objects.all()
-    serializer_class = CarrinhoSerializer
 
 class CompraViewSet(viewsets.ModelViewSet):
     queryset = Compra.objects.all()
     serializer_class = CompraSerializer
 
-class ItensCompraViewSet(viewsets.ModelViewSet):
-    queryset = ItensCompra.objects.all()
-    serializer_class = ItensCompraSerializer
-
-
-class EstoqueAdmViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()
-    serializer_class = ProdutoSerializer
 
 
 
-# class CompraCreateAPIView(APIView):
-#     def post(self, request):
-#         data = request.data
+class CompraCreateAPIView(APIView):
+    def post(self, request):
+        data = request.data
 
-#         try:
-#             with transaction.atomic():
-#                 cliente = CustomUser.objects.get(id=data['cliente_id'])
-#                 total_preco = data['total_preco']
-#                 itens = data['itens']
+        try:
+            with transaction.atomic():
+                cliente = CustomUser.objects.get(id=data["cliente_id"])
+                total_preco = data["total_preco"]
+                itens_data = data["itens"]
+                
+                 # Verifica saldo do cliente
+                if cliente.saldo < total_preco:
+                    raise ValueError("Saldo insuficiente para realizar a compra.")
 
-#                 # Cria a compra
-#                 compra = Compra.objects.create(
-#                     cliente=cliente,
-#                     total_itens=len(itens),
-#                     total_preco=total_preco
-#                 )
+                # Debita o saldo do cliente
+                cliente.saldo -= total_preco
+                cliente.save()
 
-#                 for item in itens:
-#                     produto = Produto.objects.get(id=item['produto_id'])
+                # Cria a compra
+                compra = Compra.objects.create(
+                    cliente=cliente,
+                    total_itens=len(itens_data),
+                    total_preco=total_preco
+                )
 
-#                     if produto.quantidade < item['quantidade']:
-#                         raise ValueError(f'Estoque insuficiente para o produto {produto.descricao}')
+                for item_data in itens_data:
+                    produto = Produto.objects.get(id=item_data["produto_id"])
 
-#                     # Atualiza estoque e visibilidade
-#                     produto.quantidade -= item['quantidade']
-#                     produto.exibir_no_carrinho = True
-#                     produto.save()
+                    if produto.quantidade < item_data["quantidade"]:
+                        raise ValueError(f"Estoque insuficiente para o produto {produto.descricao}")
 
-#                 return Response({'mensagem': 'Compra finalizada com sucesso!'}, status=status.HTTP_201_CREATED)
+                    # Cria o ItemCompra para registrar o item na compra
+                    ItemCompra.objects.create(
+                        compra=compra,
+                        produto=produto,
+                        quantidade=item_data["quantidade"],
+                        preco_unitario=produto.valor 
+                    )
 
-#         except Exception as e:
-#             return Response({'erro': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                    # Atualiza estoque e visibilidade
+                    produto.quantidade -= item_data["quantidade"]
+                    produto.exibir_no_carrinho = False 
+                    produto.save()
+
+                return Response({"mensagem": "Compra finalizada com sucesso!"}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"erro": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def get(self, request):
+        compras = Compra.objects.all()
+        serializer = CompraSerializer(compras, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
