@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static%}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mercado Maranata</title>
+    <link rel="stylesheet" href="{% static 'CSS/userCSS/SaldoUser.css' %}">
+  
+</head>
+<body>
+    {% include "componentes/menus/menuUser.html" %}
+    {% comment %} {% for dados  in  usuario %} {% endcomment %}
+    <div class="conteiner">
+        <div class="card">
+            <div class="olausuario"><h1> Olá {{ usuario.first_name }}</h1> </div>
+
+            <div>
+                <div class="textosaldo"><h2>Seu Saldo Atual é:</h2></div>
+                <div class="saldousuario">R$: {{ usuario.saldo }}</div>
+            </div>
+
+            <div><h2>Historico de Compra</h2>
+            <div class="textomeio">
+                <div class="divdata"><p>Data</p></div>
+                <div><p>Quantidades </p></div>
+                <div><p>Preço</p></div>
+            </div>
+            <div class="ultimascompras">
+                <div class="divdata"><p>20/06/2025</p></div>
+                <div><p>20</p></div>
+                <div><p>R$ 230</p></div>
+            </div>
+            </div>
+        </div>
+        
+    </div>
+    {% comment %} {% endfor %} {% endcomment %}
+</body>
+</html>
+
+<script src="{%static 'js/script.js'%}"></script>
+
+{%endblock%}
