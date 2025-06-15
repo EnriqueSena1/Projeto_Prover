@@ -213,3 +213,38 @@ class ItensCompraViewSet(viewsets.ModelViewSet):
 class EstoqueAdmViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
+
+
+
+# class CompraCreateAPIView(APIView):
+#     def post(self, request):
+#         data = request.data
+
+#         try:
+#             with transaction.atomic():
+#                 cliente = CustomUser.objects.get(id=data['cliente_id'])
+#                 total_preco = data['total_preco']
+#                 itens = data['itens']
+
+#                 # Cria a compra
+#                 compra = Compra.objects.create(
+#                     cliente=cliente,
+#                     total_itens=len(itens),
+#                     total_preco=total_preco
+#                 )
+
+#                 for item in itens:
+#                     produto = Produto.objects.get(id=item['produto_id'])
+
+#                     if produto.quantidade < item['quantidade']:
+#                         raise ValueError(f'Estoque insuficiente para o produto {produto.descricao}')
+
+#                     # Atualiza estoque e visibilidade
+#                     produto.quantidade -= item['quantidade']
+#                     produto.exibir_no_carrinho = True
+#                     produto.save()
+
+#                 return Response({'mensagem': 'Compra finalizada com sucesso!'}, status=status.HTTP_201_CREATED)
+
+#         except Exception as e:
+#             return Response({'erro': str(e)}, status=status.HTTP_400_BAD_REQUEST)

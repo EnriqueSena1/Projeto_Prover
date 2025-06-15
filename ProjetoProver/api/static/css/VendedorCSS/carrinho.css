@@ -145,3 +145,37 @@ body {
 .checkout-btn:hover {
   background-color: #28a745;
 }
+
+
+
+/* aqui ta botao dele  */
+.deletar-icon {
+    cursor: pointer;  
+}
+
+.sugestoes-lista {
+    list-style: none;
+    margin: 0;
+    color: black;
+    padding: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    width: 100%;
+    z-index: 1000;
+    top: 95px; /* ajusta isso dependendo do padding do seu input */
+    border-radius: 5px;
+}
+
+.sugestoes-lista li {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.sugestoes-lista li:hover {
+    background-color: #f0f0f0;
+    color: black;
+}

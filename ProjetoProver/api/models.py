@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from django.db import models
 
 
@@ -34,6 +35,17 @@ class Produto(models.Model):
     tipo_produto = models.CharField(max_length=100, verbose_name="Tipo de Embalagem", default='Outro')
     classe = models.CharField(max_length=100, verbose_name="Classificação",  default="Alimento")
     imagem = models.ImageField(upload_to='produtos/', blank=True, null=True, verbose_name="Imagem do Produto")
+    is_disponivel = models.BooleanField(default=True, verbose_name="Disponível para Carrinho")
+
+    exibir_no_carrinho = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        hoje = timezone.now().date()
+        if self.quantidade <= 0 or (self.validade and self.validade < hoje):
+            self.is_disponivel = False
+        else:
+            self.is_disponivel = True
+        super().save(*args, **kwargs)  
 
     def __str__(self):
         return self.descricao
@@ -44,19 +56,15 @@ class Carrinho(models.Model):
     qtd_carrinho = models.PositiveIntegerField()
     valor_carrinho = models.DecimalField(max_digits=8, decimal_places=2)
 
-# Compra
+# compra
 class Compra(models.Model):
-    STATUS_CHOICES = [
-        ("Pendente", "Pendente"),
-        ("Concluido", "Concluído"),
-    ]
+    cliente = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="compras", null=True)
+    data = models.DateTimeField(auto_now_add=True)
+    total_itens = models.PositiveIntegerField(default=0)
+    total_preco = models.DecimalField(max_digits=10, decimal_places=2)
 
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-    pedido = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pendente')
-    data_compra = models.DateTimeField(auto_now_add=True)
-    cliente = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='compras_cliente', null=True)
-
-    vendedor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='compras_vendedor')
+    def __str__(self):
+        return f"Compra de {self.cliente.username} em {self.data.strftime('%d/%m/%Y')}"
 
 # Itens da Compra
 class ItensCompra(models.Model):

@@ -9,7 +9,7 @@ router.register('usuarios', CustomUserViewSet)
 router.register('produtos', ProdutoViewSet)
 router.register('carrinhos', CarrinhoViewSet)
 router.register('compras', CompraViewSet)
-router.register('itensCompras', ItensCompraViewSet)
+
 
 
 urlpatterns = [
@@ -40,9 +40,13 @@ urlpatterns = [
     path('estoqueadm/',estoque_adm, name="estoque_adm"),
 
     #Carrinho
-
     path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
     path('CadastroCliente/', cadastroCliente, name="cadastro_cliente"),
+
+    #produto
+    path('Produto/', produto, name="produto_vend"),
+
+
 
 
 
