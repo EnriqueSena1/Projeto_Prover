@@ -169,3 +169,111 @@ td {
     font-family: 'K2D', sans-serif;
     font-weight: 400;
 }
+
+
+/* Toast base */
+.toast {
+    display: flex;
+    align-items: center;
+    background-color: #8B001A; /* Vinho escuro */
+    color: white;
+    padding: 16px 24px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1000;
+}
+
+/* Exibir toast */
+.toast.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Esconder toast */
+.toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(30px);
+}
+
+/* Toast de confirmação centralizado */
+.toast.confirm.fullscreen {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    flex-direction: column;
+    padding: 30px 40px;
+    box-sizing: border-box;
+}
+
+/* Corpo do toast (área interna) */
+.toast-body {
+    width: 100%;
+}
+
+/* Mensagem */
+.toast-message {
+    font-size: 22px;
+}
+
+/* Botões da confirmação */
+.toast-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.toast .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.toast .btn-yes {
+    background-color: #00C600; /* Verde */
+}
+
+.toast .btn-no {
+    background-color: #B00000; /* Vermelho escuro */
+}
+
+.toast .btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Toast de sucesso no canto inferior direito */
+.toast.success {
+    bottom: 20px;
+    right: 20px;
+    flex-direction: row;
+}
+
+/* Ícone e botão de fechar (se quiser usar futuramente) */
+.toast-icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 12px;
+}
+
+.toast-close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    margin-left: auto;
+    cursor: pointer;
+}
