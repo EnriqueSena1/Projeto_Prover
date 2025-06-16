@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static%}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mercado Maranata</title>
+    <link rel="stylesheet" href="{% static 'CSS/userCSS/SaldoUser.css' %}">
+  
+</head>
+<body>
+    {% include "componentes/menus/menuUserSair.html" %}
+    {% comment %} {% for dados  in  usuario %} {% endcomment %}
+    <div class="conteiner">
+        <div class="card">
+            <div class="olausuario"><h1> Olá {{ usuario.first_name }}</h1> </div>
+
+            <div>
+                <div class="textosaldo"><h2>Seu Saldo Atual é:</h2></div>
+                <div class="saldousuario">R$: {{ usuario.saldo }}</div>
+            </div>
+
+            <div>
+                <h2>Historico de Compra</h2>
+                <div class="textomeio">
+                    <div class="divdata"><p>Data</p></div>
+                    <div><p>Quantidades </p></div>
+                    <div><p>Preço</p></div>
+                </div>
+                {% for compra in compras %}
+                <div class="ultimascompras">
+                    <div class="divdata"><p>{{ compra.data|date:"d/m/Y" }}</p></div>
+                    <div><p>{{ compra.total_itens }}</p></div>
+                    <div><p>R$ {{ compra.total_preco }}</p></div>
+                </div>
+                {% empty %}
+                <div><p>Nenhuma compra realizada ainda.</p></div>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+    {% comment %} {% endfor %} {% endcomment %}
+</body>
+</html>
+
+<script src="{%static 'js/script.js'%}"></script>
+
+{%endblock%}

@@ -1,0 +1,267 @@
+
+.main-container {
+    width: 100%;
+    max-width: 1000px; /* Largura máxima do container principal */
+    margin: 0 auto; /* Centraliza o container principal */
+    padding: 20px;
+}
+
+.content-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+/* Estilos do cabeçalho */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-section h2 {
+    font-size: 30px;
+    color: #333;
+    margin: 0;
+}
+
+.register-button {
+    background-color: #8B0000; /* Cor do botão de cadastro */
+    border-color: #8B0000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.register-button:hover {
+    background-color: #a00000;
+    border-color: #a00000;
+}
+
+.register-button i {
+    margin-right: 8px;
+}
+
+/* Estilos da lista de vendedores */
+.vendedores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaçamento entre os itens da lista */
+}
+
+.vendedor-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para cada item de vendedor */
+    transition: all 0.3s ease;
+}
+
+.vendedor-item:hover {
+    border-color: #c0c0c0;
+}
+
+.vendedor-item.inativo {
+    opacity: 0.6;
+    background-color: #f8f8f8;
+}
+
+.vendedor-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-icon {
+    font-size: 26px;
+    color: #555;
+    margin-right: 15px;
+}
+
+.vendedor-name {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.vendedor-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.edit-icon {
+    color: #6c757d; /* Cor do ícone de edição */
+    font-size: 22px;
+    text-decoration: none;
+}
+
+.edit-icon:hover {
+    color: #5a6268;
+}
+
+/* Estilos para o toggle (Bootstrap Switch) */
+.form-check-input.toggle-status {
+    width: 40px; /* Largura do switch */
+    height: 20px; /* Altura do switch */
+    margin-left: 0; /* Remove margem padrão do Bootstrap */
+    background-color: #dc3545; /* Cor de fundo quando desativado (vermelho) */
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'-4 -4 8 8\'%3e%3ccircle r=\'3\' fill=\'%23fff\'/\%3e%3c/svg%3e"); /* Círculo branco */
+    background-position: left center;
+    transition: background-position .15s ease-in-out;
+}
+
+.form-check-input.toggle-status:checked {
+    background-color: #28a745; /* Cor de fundo quando ativado (verde) */
+    border-color: #28a745;
+    background-position: right center;
+}
+
+.form-check-input.toggle-status:focus {
+    box-shadow: none; /* Remove o box-shadow padrão do focus do Bootstrap */
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .content-container {
+        padding: 20px;
+    }
+
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .header-section h2 {
+        margin-bottom: 15px;
+    }
+
+    .vendedor-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .vendedor-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+.vendedor-foto {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.vendedor-dados {
+    display: flex;
+    flex-direction: column;
+}
+
+.vendedor-nome {
+    font-weight: bold;
+}
+
+.vendedor-email,
+.vendedor-loja {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Switch estilo */
+.switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #faa;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 2.5px;
+    background-color: red;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #bfb;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+    background-color: green;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 6px 12px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination .current {
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.Cadastrar-icon-img{
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+}

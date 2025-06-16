@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.titulo_estoque {
+    color: #25282C;
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.cabecalho_estoque {
+    display: flex;
+    margin-top: 50px;
+    justify-content: space-between;
+    align-items: center;
+    width: 1000px;
+    margin-bottom: 30px;
+}
+
+.botao_cadastrar_produto {
+    background-color: #7A162F;
+    color: white;
+    border: none;
+    font-size: 20px;
+    border-radius: 15px;
+    display: flex;
+    padding: 16px 24px;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botao_cadastrar_produto:hover {
+    background-color: #5d1123;
+}
+
+.botao_cadastrar_produto .fas {
+    font-size: 1.1em;
+}
+
+.container_estoque {
+    background-color: #f8f8f8;
+    padding: 20px;
+    width: 1000px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'K2D', sans-serif;
+}
+
+th, td {
+    border: none;
+    text-align: left;
+    padding: 15px 20px;
+    color: #000;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+th {
+    background-color: white;
+    color: #555;
+    font-weight: 600;
+    font-size: 22px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    font-family: 'K2D', sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.th_descricao {
+    width: 250px;
+}
+
+.produto_item_linha {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.produto_item_linha td {
+    vertical-align: middle;
+    padding: 15px 20px;
+}
+
+.produto_item_linha:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.produto_img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+
+.acoes-btns {
+    text-align: center;
+    display: flex;
+    gap: 10px;   
+    justify-content: center; 
+    align-items: center; 
+}
+
+.btn_editar_produto,
+.btn_excluir_produto { 
+    font-size: 1.3em;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+    display: inline-block; 
+    padding: 5px; 
+    border-radius: 5px; 
+}
+
+.btn_editar_produto {
+    color: #888; 
+}
+
+.btn_editar_produto:hover {
+    color: #333;
+    transform: scale(1.1); 
+}
+
+.btn_excluir_produto {
+    color: #dc3545;
+}
+
+.btn_excluir_produto:hover {
+    color: #c82333;
+    transform: scale(1.1); 
+}
+
+.no_products_message td {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+    font-size: 18px;
+}
+
+th {
+    font-family: 'K2D', sans-serif;
+    font-weight: 600;
+}
+
+td {
+    font-family: 'K2D', sans-serif;
+    font-weight: 400;
+}

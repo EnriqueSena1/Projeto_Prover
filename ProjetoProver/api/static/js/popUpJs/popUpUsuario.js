@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cadastroForm = document.getElementById('cadastroForm');
     const uploadInput = document.getElementById('fotoCliente');
     const uploadPreview = document.getElementById('uploadPreview');
+    const clientesContainer = document.getElementById('lista-clientes');
 
     // Função para abrir o dialog
     function abrirDialog() {
@@ -40,10 +41,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Função para mostrar erro
     function mostrarErro(inputId, mensagem) {
         const input = document.getElementById(inputId);
-        const errorElement = document.getElementById(`error${inputId.charAt(0).toUpperCase() + inputId.slice(1).replace('Cliente', '')}`);
-        
-        input.classList.add('error');
-        errorElement.textContent = mensagem;
+        const errorId = `error${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`;
+        const errorElement = document.getElementById(errorId);
+
+        if (input) {
+            input.classList.add('error');
+        }
+
+        if (errorElement) {
+            errorElement.textContent = mensagem;
+        } 
     }
 
     // Validação de email
@@ -91,9 +98,39 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!senha) {
             mostrarErro('senhaCliente', 'Senha é obrigatória');
             isValid = false;
-        } else if (senha.length < 6) {
-            mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+        if (!senha) {
+        mostrarErro('senhaCliente', 'Senha é obrigatória');
+        isValid = false;
+            } else if (senha.length < 6) {
+                mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+                isValid = false;
+            }
+        } else { // se for edição
+            if (senha && senha.length < 6) {
+                mostrarErro('senhaCliente', 'Se desejar alterar a senha, ela deve ter pelo menos 6 caracteres');
+                isValid = false;
+            }
+        }
+
+        // Validar saldo
+        const saldo = document.getElementById('saldoCliente').value.trim();
+        if (!saldo) {
+            mostrarErro('saldoCliente', 'Saldo é obrigatório');
             isValid = false;
+        } else if (isNaN(parseFloat(saldo.replace(',', '.')))) {
+            mostrarErro('saldoCliente', 'Saldo deve ser um número válido');
+            isValid = false;
+        }
+
+        const imagemInput = document.getElementById('fotoCliente');
+        const variavelControle = document.getElementById('clienteId')?.value;
+
+        if (!imagemInput.files || imagemInput.files.length === 0) {
+            if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
+                mostrarErro('foto', 'Imagem é obrigatória');
+                isValid = false;
+            }
+            // se for edição e a imagem já existe no banco, não força nova imagem
         }
 
         // Se a validação passou, enviar os dados
@@ -102,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let nome_cliente = document.getElementById('nomeCliente').value;
                 let email_cliente = document.getElementById('emailCliente').value;
                 let senha_cliente = document.getElementById('senhaCliente').value;
+                let saldo_cliente = document.getElementById('saldoCliente').value;
                 let imagemInput = document.getElementById('fotoCliente');
                 let imagemFile = imagemInput.files[0];
 
@@ -112,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append("nome", nome_cliente);
                 formData.append("email", email_cliente);
                 formData.append("senha", senha_cliente);
+                formData.append("saldo", saldo_cliente);
                 formData.append("is_active", true);
 
                 if (imagemFile) {
@@ -180,6 +219,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listeners
     openDialogButton.addEventListener('click', abrirDialog);
     closeButton.addEventListener('click', fecharDialog);
+    clientesContainer.addEventListener('click', function(e) {
+    if (e.target.classList.contains('icon-editar')) {
+      const idCliente = e.target.getAttribute('data-id');
+      if (idCliente) {
+        editarCliente(idCliente);
+      }
+    }
+  });
     
     // Fechar dialog clicando no backdrop
     cadastroDialog.addEventListener('click', function(e) {
@@ -221,9 +268,10 @@ async function editarCliente(idUsuario){
     const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const dados = await apiRequest(`/api/user/${idUsuario}/`, 'GET', null, { 'X-CSRFToken': csrf });
 
-    let nome_cliente = document.getElementById('nomeCliente').value = dados.first_name
-    let email_cliente = document.getElementById('emailCliente').value = dados.email
-    let email_cliente_confirmado = document.getElementById("confirmarEmail").value = dados.email
+    document.getElementById('nomeCliente').value = dados.first_name
+    document.getElementById('emailCliente').value = dados.email
+    document.getElementById("confirmarEmail").value = dados.email
+    document.getElementById('saldoCliente').value = dados.saldo;
     
     if (dados.img) {
         const uploadBox = document.querySelector('.upload-label');

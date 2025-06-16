@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroCliente.css'%}">
+
+    {% include 'componentes/menus/menuVendedor.html' %}
+    {% include 'componentes/popUps/popUpUsuario.html' %}
+
+    <div class="principal">
+
+        <div class="clientes-container">
+
+            <div class="clientes-header">
+              <h2>Clientes</h2>
+              <button id = "openDialogButton" class ="addCliente">
+                <img id = "popup-dialog" src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
+                Cadastrar cliente
+              </button>
+            </div>
+        </div>       
+
+        
+
+        <div id="lista-clientes">
+          {% for cliente in usuarios %}
+            <div class="cliente-card">
+                <div class="cliente-info">
+                  <img src="{% static 'img/Usuario.png' %}" alt="Usuário" class="icon-usuario">
+                  <span class="cliente-nome">{{cliente.first_name}}</span>
+                </div>
+                
+                <div class="cliente-acoes">
+                  <img data-id= "{{ cliente.id }}" src="{% static 'img/Editar.png' %}" alt="Editar" class="icon-editar">
+                  <label id = "status" class="switch">
+                    <input type="checkbox" class="cliente-switch"data-id="{{ cliente.id }}"{% if cliente.is_active %}checked{% endif %}>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+          {% endfor %}
+        </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const switches = document.querySelectorAll(".cliente-switch");
+
+    switches.forEach(switchEl => {
+      switchEl.addEventListener("change", function () {
+        const clienteId = this.dataset.id;
+        const isActive = this.checked;
+
+        fetch(`/toggle_cliente/${clienteId}/`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({ is_active: isActive })
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro ao atualizar status.");
+          return response.json();
+        })
+        .then(data => {
+          console.log("Cliente atualizado:", data);
+        })
+        .catch(error => {
+          console.error("Erro:", error);
+          // Reverte o switch visualmente se der erro
+          this.checked = !isActive;
+        });
+      });
+    });
+
+    // Função para pegar o token CSRF
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Verifica se começa com o nome desejado
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  });
+</script>
+</body>
+</html>
+
+{%endblock%}

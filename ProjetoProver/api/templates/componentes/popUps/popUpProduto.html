@@ -1,0 +1,159 @@
+{% load static%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Vendedor</title>
+    <link rel="stylesheet" href="{%static 'css/vendedorCSS/popUpCadastro.css'%}">
+</head>
+
+<body>
+    
+    <dialog class="popup-dialog" id="cadastroDialog">
+        <!-- Container do Pop-up -->
+        <div class="popup-container">
+            <!-- Header do Pop-up -->
+            <header class="popup-header">
+                <h2 class="popup-title">cadastrar produto</h2>
+                <button type="button" class="close-button" onclick="document.getElementById(\'cadastroDialog\').close()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Formulário de Cadastro -->
+            <form class="popup-form" id="cadastroForm">
+                <input type="hidden" id="produtoId" name="produtoId" value="">
+                {% csrf_token %}
+                <!-- Descrição e Validade -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="descricaoProduto" class="form-label">Descrição</label>
+                        <input 
+                            type="text" 
+                            id="descricaoProduto" 
+                            name="descricaoProduto" 
+                            class="form-input" 
+                            placeholder="Feijão carioca"
+                            required
+                        >
+                        <span class="error-message" id="errorDescricao"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validadeProduto" class="form-label">Validade</label>
+                        <input 
+                            type="date" 
+                            id="validadeProduto" 
+                            name="validadeProduto" 
+                            class="form-input" 
+                            placeholder="10/09/2025"
+                            required
+                        >
+                        <span class="error-message" id="errorValidade"></span>
+                    </div>
+                </div>
+
+                <!-- Quantidade e Preço -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantidadeProduto" class="form-label">Quantidade</label>
+                        <input 
+                            type="number" 
+                            id="quantidadeProduto" 
+                            name="quantidadeProduto" 
+                            class="form-input" 
+                            placeholder="50"
+                            required
+                        >
+                        <span class="error-message" id="errorQuantidade"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precoProduto" class="form-label">Preço</label>
+                        <input 
+                            type="text" 
+                            id="precoProduto" 
+                            name="precoProduto" 
+                            class="form-input" 
+                            placeholder="R$10"
+                            required
+                        >
+                        <span class="error-message" id="errorPreco"></span>
+                    </div>
+                </div>
+
+                <!-- Tipo embalagem, Classificação e Foto -->
+                <div class="form-row">
+                    <div class="form-column-left">
+                        <div class="form-group">
+                            <label for="tipoEmbalagem" class="form-label">Tipo embalagem</label>
+                            <input 
+                                type="text" 
+                                id="tipoEmbalagem" 
+                                name="tipoEmbalagem" 
+                                class="form-input" 
+                                placeholder="Pacotes"
+                                required
+                            >
+                            <span class="error-message" id="errorTipoEmbalagem"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classificacaoProduto" class="form-label">Classificação</label>
+                            <input 
+                                type="text" 
+                                id="classificacaoProduto" 
+                                name="classificacaoProduto" 
+                                class="form-input" 
+                                placeholder="Alimento"
+                                required
+                            >
+                            <span class="error-message" id="errorClassificacao"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group photo-upload-group">
+                        <label class="form-label">Foto</label>
+                        <div class="upload-container">
+                            <input 
+                                type="file" 
+                                id="fotoProduto" 
+                                name="fotoProduto" 
+                                class="upload-input" 
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+                            <label for="fotoProduto" class="upload-label">
+                                <div class="upload-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="upload-text">
+                                    <span class="upload-main-text">Arraste e solte o arquivo de imagem aqui para realizar upload</span>
+                                    <span class="upload-sub-text">JPEG - PNG - WEBP</span>
+                                </div>
+                            </label>
+                            <div class="upload-preview" id="uploadPreview"></div>
+                        </div>
+                        <span class="error-message" id="errorFoto"></span>
+                    </div>
+                </div>
+
+                <!-- Botão de Conclusão -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        Concluído
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+
+</body>
+
+<script src="{% static 'js/popUpJs/popUpProduto.js' %}"></script>

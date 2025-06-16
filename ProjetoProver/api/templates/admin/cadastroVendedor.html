@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Vendedores</title>
+    <link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroVendedor.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    {% include 'componentes/menus/menuAdmin.html' %}
+    {% include "componentes/popUps/popUpVendedor.html" %}
+
+    <div class="main-container">
+        <div class="content-container">
+            <div class="header-section">
+                <h2>Vendedores</h2>
+                <a href="#" class="btn btn-primary register-button" id="openDialogButton">
+                    <img src="{% static 'img/AdicionarCliente.png' %}" alt="imagem" class="Cadastrar-icon-img"> Cadastrar vendedor
+                </a>
+            </div>
+
+            
+            <div class="vendedores-list">
+                {% csrf_token %}
+                {% for vendedor in vendedores %}
+                <div class="vendedor-item {% if not vendedor.is_active %}inativo{% endif %}" data-vendedor-id="{{ vendedor.id }}">
+                    <div class="vendedor-info">
+                        <img src="{{ vendedor.img.url }}" class="vendedor-foto" alt="Foto de {{ vendedor.first_name }}">
+                        <div class="vendedor-dados">
+                            <span class="vendedor-nome">{{ vendedor.first_name }}</span>
+                            <span class="vendedor-email">{{ vendedor.email }}</span>
+                            <span class="vendedor-loja">Loja: {{ vendedor.loja }}</span>
+                        </div>
+                    </div>
+                    <div class="vendedor-actions">
+                        <a onclick="editarVendedor({{ vendedor.id }})" class="edit-icon" data-vendedor-id="{{ vendedor.id }}">
+                            <img src="{% static 'img/Editar.png' %}" alt="imagem" class="edit-icon-img">
+                        </a>
+                        <div class="switch-wrapper">
+                            <label class="switch">
+                                <input type="checkbox" class="toggle-status" data-id="{{ vendedor.id }}" {% if vendedor.is_active %}checked{% endif %}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Nenhum vendedor cadastrado.</p>
+                {% endfor %}
+            </div>
+            
+            <!-- PAGINAÇÃO AQUI -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if vendedores.has_previous %}
+
+                        <a href="?page={{ vendedores.previous_page_number }}">Anterior</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Página {{ vendedores.number }} de {{ vendedores.paginator.num_pages }}
+                    </span>
+
+                    {% if vendedores.has_next %}
+                        <a href="?page={{ vendedores.next_page_number }}">Próxima</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/vendedorJS/cadastroVendedor.js' %}"></script>
+</body>
+</html>
+
+{% endblock %}

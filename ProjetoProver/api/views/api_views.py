@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from ..models import *
 from ..serializers import *
-
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -72,7 +72,8 @@ class User(APIView):
         is_adm = request.data.get('is_adm', False)
         tipo = request.data.get('tipo', 'cliente')
         saldo = request.data.get('saldo', 0.00)
-        imagem = request.FILES.get('img')  # Se vier imagem
+        imagem = request.FILES.get('img')  
+        loja = request.data.get('loja')  
 
         # Validação básica
         if not email or not senha or not nome:
@@ -97,7 +98,8 @@ class User(APIView):
             tipo=tipo,
             saldo=saldo,
             img=imagem,
-            is_active=True
+            is_active=True,
+            loja=loja if tipo == 'vendedor' else None  
         )
         
         return Response(
@@ -140,12 +142,12 @@ class User(APIView):
             data['password'] = make_password(data['senha'])
             del data['senha']
 
-            # Tratamento especial para nome (mapear para first_name)
+        # Tratamento especial para nome (mapear para first_name)
         if 'nome' in data:
             data['first_name'] = data['nome']
             del data['nome']
 
-            # Tratamento especial para email (atualizar username também)
+        # Tratamento especial para email (atualizar username também)
         if 'email' in data:
             email = data['email'].lower().strip()
                 # Verificar se o email já existe em outro usuário
@@ -154,11 +156,18 @@ class User(APIView):
             data['email'] = email
             data['username'] = email
 
-            # Tratamento para imagem
+        # Tratamento para imagem
         if 'img' in request.FILES:
             data['img'] = request.FILES['img']
 
-            # Usar o serializer para validação e atualização
+        # Tratamento para loja (somente se for vendedor)
+        if 'loja' in data:
+            if usuario.tipo == 'vendedor':
+                data['loja'] = data['loja']
+            else:
+                data['loja'] = None 
+
+        # Usar o serializer para validação e atualização
         serializer = CustomUserSerializer(usuario, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -188,14 +197,64 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
 
-class CarrinhoViewSet(viewsets.ModelViewSet):
-    queryset = Carrinho.objects.all()
-    serializer_class = CarrinhoSerializer
 
 class CompraViewSet(viewsets.ModelViewSet):
     queryset = Compra.objects.all()
     serializer_class = CompraSerializer
 
-class ItensCompraViewSet(viewsets.ModelViewSet):
-    queryset = ItensCompra.objects.all()
-    serializer_class = ItensCompraSerializer
+
+
+
+class CompraCreateAPIView(APIView):
+    def post(self, request):
+        data = request.data
+
+        try:
+            with transaction.atomic():
+                cliente = CustomUser.objects.get(id=data["cliente_id"])
+                total_preco = data["total_preco"]
+                itens_data = data["itens"]
+                
+                 # Verifica saldo do cliente
+                if cliente.saldo < total_preco:
+                    raise ValueError("Saldo insuficiente para realizar a compra.")
+
+                # Debita o saldo do cliente
+                cliente.saldo -= total_preco
+                cliente.save()
+
+                # Cria a compra
+                compra = Compra.objects.create(
+                    cliente=cliente,
+                    total_itens=len(itens_data),
+                    total_preco=total_preco
+                )
+
+                for item_data in itens_data:
+                    produto = Produto.objects.get(id=item_data["produto_id"])
+
+                    if produto.quantidade < item_data["quantidade"]:
+                        raise ValueError(f"Estoque insuficiente para o produto {produto.descricao}")
+
+                    # Cria o ItemCompra para registrar o item na compra
+                    ItemCompra.objects.create(
+                        compra=compra,
+                        produto=produto,
+                        quantidade=item_data["quantidade"],
+                        preco_unitario=produto.valor 
+                    )
+
+                    # Atualiza estoque e visibilidade
+                    produto.quantidade -= item_data["quantidade"]
+                    produto.exibir_no_carrinho = False 
+                    produto.save()
+
+                return Response({"mensagem": "Compra finalizada com sucesso!"}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"erro": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def get(self, request):
+        compras = Compra.objects.all()
+        serializer = CompraSerializer(compras, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
