@@ -77,6 +77,24 @@ def cadastroCliente(request):
 #     clientes = cadastroCliente.objects.all() 
 #     return render(request, 'cadastroCliente.html', {'clientes': clientes})
 
+def validarEmail(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        email = data.get('email')
+        cliente_id = data.get('clienteId') 
+
+        if not email:
+            return JsonResponse({'error': 'Email não informado'}, status=400)
+
+        query = CustomUser.objects.filter(email=email, tipo="cliente")
+        if cliente_id:
+            query = query.exclude(id=cliente_id)
+
+        existe = query.exists()
+        return JsonResponse({'existe': existe})
+    
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
 @csrf_exempt
 # @login_required
 def toggle_cliente(request, cliente_id):

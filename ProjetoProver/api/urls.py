@@ -45,6 +45,7 @@ urlpatterns = [
     # urls.py
     path('toggle_cliente/<int:cliente_id>/', toggle_cliente, name='toggle_cliente'),
     path('CadastroVendedor/', cadastroVendedor, name="cadastro_vend"),
+    path('validarEmail/', validarEmail, name='validarEmail'),
 
     #produto
     path('Produto/', produto, name="produto_vend"),
