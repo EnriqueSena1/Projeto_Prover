@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{%static 'css/vendedorCSS/popUpCadastro.css'%}">
 </head>
 <body>
-    {% include "componentes/popUps/popUpUsuario.html" %}
+    {% include "componentes/popUps/popUpProduto.html" %}
 
     <div class="main-page">
         <button type="button" class="open-dialog-button" id="openDialogButton" >
@@ -26,10 +26,9 @@
             
             <button type="button" class="open-dialog-button-editar" onclick="editarCliente({{ usuario.id }})">
                 Editar Cliente
-            </button>
-            input hiden que recebe um id para recever o valor do meu editar... 
+            </button> 
         </div>
-{% endfor %}
+        {% endfor %}
 
     </div>
 

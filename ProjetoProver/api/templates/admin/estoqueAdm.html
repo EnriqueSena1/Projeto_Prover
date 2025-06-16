@@ -1,53 +1,87 @@
 {% extends "base.html" %}
-
 {% load static %}
 
-{%block content%}
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../static/css/AdminCSS/estoqueAdm.css">
+    <link rel="stylesheet" href="{% static 'css/AdminCSS/estoqueAdm.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Controle de Estoque</title>
 </head>
 <body>
     {% include "componentes/menus/menuAdmin.html" %}
-    <div class="cabecalho_estoque">
-    <h1 class="titulo_estoque">Estoque</h1>
-    <button class="botao_cadastrar_produto"><img src="" alt="">Cadastrar Produto</button>
-    </div>
-    <div class="cabecalho_lista">
-        <table>
-            <thead>
-                <tr>
-                    <th>Img</th>
-                    <th>Classe</th>
-                    <th>Tipo embalagem</th>
-                    <th class="th_descricao">Descrição</th>
-                    <th>Validade</th>
-                    <th>Quantide</th>
-                    <th>Preço</th>
-                    <th>Editar</th>
-                </tr>
-            </thead>
+    <div class="container">
+        <div class="cabecalho_estoque">
+            <h1 class="titulo_estoque">Estoque</h1>
+            <button class="botao_cadastrar_produto" onclick="abrirDialog()" id="openDialogButton">
+                <i class="fas fa-plus-circle"></i> Cadastrar Produto
+            </button>
+        </div>
 
-        <tbody>
-            <tr>
-                <td></td>
-                <td>Alimento</td>
-                <td>Pacote</td>
-                <td>Arroz</td>
-                <td>10/09/25</td>
-                <td>500</td>
-                <td>R$10</td>
-                <td class="edit-btn">✓</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="container_estoque">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Class</th>
+                        <th>Tipo embalag</th>
+                        <th class="th_descricao">Descrição</th>
+                        <th>Validade</th>
+                        <th>Quantid</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr class="produto_item_linha">
+                        <td>
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" alt="{{ produto.descricao }}" class="produto_img">
+                            {% else %}
+                                <img src="{% static 'img/placeholder.png' %}" alt="Sem Imagem" class="produto_img">
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.classe }}</td>
+                        <td>{{ produto.tipo_produto }}</td>
+                        <td>{{ produto.descricao }}</td>
+                        <td>
+                            {% if produto.validade %}
+                                {{ produto.validade|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.quantidade }}</td>
+                        <td>R${{ produto.valor|floatformat:2 }}</td>
+                        <td class="acoes-btns"> {# Nova classe para os botões de ação #}
+                            {# Botão de edição #}
+                            <a href="#" onclick="editarProduto({{ produto.id }})" class="btn_editar_produto">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            {# NOVO: Botão de exclusão #}
+                            <a href="#" onclick="deletarProduto({{ produto.id }})" class="btn_excluir_produto">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr class="no_products_message">
+                        <td colspan="8">Nenhum produto encontrado no estoque.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    {% include "componentes/popUps/popUpProduto.html" %}
+
 </body>
 </html>
 
-{%endblock%}
+{% endblock %}

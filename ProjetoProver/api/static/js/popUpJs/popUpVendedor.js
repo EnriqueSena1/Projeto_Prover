@@ -1,34 +1,29 @@
-// Selecionando os elementos do popup e formulário
 document.addEventListener("DOMContentLoaded", function () {
-    // Elementos do DOM
-    const cadastroDialog = document.getElementById('cadastroDialog');
-    const openDialogButton = document.getElementById('openDialogButton');
-    const closeButton = document.getElementById('closeButton');
-    const cadastroForm = document.getElementById('cadastroForm');
-    const uploadInput = document.getElementById('fotoCliente');
-    const uploadPreview = document.getElementById('uploadPreview');
+    const cadastroDialog = document.getElementById("cadastroDialog");
+    const openDialogButton = document.getElementById("openDialogButton"); // Este botão pode não existir no HTML do vendedor, ajustar se necessário
+    const closeButton = document.querySelector(".close-button");
+    const cadastroForm = document.getElementById("cadastroForm");
+    const uploadInput = document.getElementById("fotoCliente");
+    const uploadPreview = document.getElementById("uploadPreview");
 
-    // Função para abrir o dialog
     function abrirDialog() {
         cadastroDialog.showModal();
         document.body.style.overflow = 'hidden';
     }
 
-    // Função para fechar o dialog
     function fecharDialog() {
         cadastroDialog.close();
         document.body.style.overflow = 'auto';
         limparFormulario();
     }
 
-    // Função para limpar o formulário
     function limparFormulario() {
         cadastroForm.reset();
         uploadPreview.innerHTML = '';
         limparErros();
+        removerImagem(); // Ensure image preview is cleared
     }
 
-    // Função para limpar mensagens de erro
     function limparErros() {
         const errorMessages = document.querySelectorAll('.error-message');
         errorMessages.forEach(error => error.textContent = '');
@@ -37,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         inputs.forEach(input => input.classList.remove('error'));
     }
 
-    // Função para mostrar erro
     function mostrarErro(inputId, mensagem) {
         const input = document.getElementById(inputId);
         const errorId = `error${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`;
@@ -52,68 +46,45 @@ document.addEventListener("DOMContentLoaded", function () {
         } 
     }
 
-    // Validação de email
-    function validarEmail(email) {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
-
-    // Função para processar o cadastro
     async function handleSubmit(event) {
         event.preventDefault();
         limparErros();
 
         let isValid = true;
         
-        // Validar nome
         const nome = document.getElementById('nomeCliente').value.trim();
         if (!nome) {
-            mostrarErro('nomeCliente', 'Nome é obrigatório');
+            mostrarErro('nomeCliente', 'Nome do vendedor é obrigatório');
             isValid = false;
         }
 
-        // Validar email
         const email = document.getElementById('emailCliente').value.trim();
-        if (!email) {
-            mostrarErro('emailCliente', 'Email é obrigatório');
-            isValid = false;
-        } else if (!validarEmail(email)) {
-            mostrarErro('emailCliente', 'Email inválido');
+        if (!email || !/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(email)) {
+            mostrarErro('emailCliente', 'Email inválido ou obrigatório');
             isValid = false;
         }
 
-        // Validar confirmação de email
         const confirmarEmail = document.getElementById('confirmarEmail').value.trim();
-        if (!confirmarEmail) {
-            mostrarErro('confirmarEmail', 'Confirmação de email é obrigatória');
-            isValid = false;
-        } else if (email !== confirmarEmail) {
-            mostrarErro('confirmarEmail', 'Emails não coincidem');
+        if (email !== confirmarEmail) {
+            mostrarErro('confirmarEmail', 'Os emails não coincidem');
             isValid = false;
         }
 
-        // Validar senha
-        const senha = document.getElementById('senhaCliente').value;
-        if (!senha) {
-            mostrarErro('senhaCliente', 'Senha é obrigatória');
-            isValid = false;
-        } else if (senha.length < 6) {
-            mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+        const loja = document.getElementById('lojaVendedor').value.trim();
+        if (!loja) {
+            mostrarErro('lojaVendedor', 'Nome da loja é obrigatório');
             isValid = false;
         }
 
-        // Validar saldo
-        const saldo = document.getElementById('saldoCliente').value.trim();
-        if (!saldo) {
-            mostrarErro('saldoCliente', 'Saldo é obrigatório');
-            isValid = false;
-        } else if (isNaN(parseFloat(saldo.replace(',', '.')))) {
-            mostrarErro('saldoCliente', 'Saldo deve ser um número válido');
+        const senha = document.getElementById('senhaCliente').value.trim();
+        if (!senha || senha.length < 6) {
+            mostrarErro('senhaCliente', 'A senha deve ter no mínimo 6 caracteres');
             isValid = false;
         }
 
+        // Verificação da imagem
         const imagemInput = document.getElementById('fotoCliente');
-        const variavelControle = document.getElementById('clienteId')?.value;
+        const variavelControle = document.getElementById('vendedorId')?.value;
 
         if (!imagemInput.files || imagemInput.files.length === 0) {
             if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
@@ -123,44 +94,37 @@ document.addEventListener("DOMContentLoaded", function () {
             // se for edição e a imagem já existe no banco, não força nova imagem
         }
 
-        // Se a validação passou, enviar os dados
+
         if (isValid) {
             try {
-                let nome_cliente = document.getElementById('nomeCliente').value;
-                let email_cliente = document.getElementById('emailCliente').value;
-                let senha_cliente = document.getElementById('senhaCliente').value;
-                let saldo_cliente = document.getElementById('saldoCliente').value;
-                let imagemInput = document.getElementById('fotoCliente');
-                let imagemFile = imagemInput.files[0];
-
-                const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                // Criação do formData para envio com imagem
                 const formData = new FormData();
-                formData.append("nome", nome_cliente);
-                formData.append("email", email_cliente);
-                formData.append("senha", senha_cliente);
-                formData.append("saldo", saldo_cliente);
+                formData.append("nome", nome);
+                formData.append("email", email);
+                formData.append("loja", loja);
+                formData.append("senha", senha);
+                formData.append("tipo", "vendedor");
                 formData.append("is_active", true);
 
+
+                const imagemFile = imagemInput.files[0];
                 if (imagemFile) {
                     formData.append("img", imagemFile);
                 }
                 
-                let editar_valor = null
-                editar_valor = document.getElementById('clienteId').value
-                let response ;
-                if (editar_valor){
-                    response = await fetch(`/api/user/${editar_valor}/`, {
+                const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                let vendedorId = document.getElementById('vendedorId') ? document.getElementById('vendedorId').value : null;
+                let response;
+
+                if (vendedorId) {
+                    response = await fetch(`/api/user/${vendedorId}/`, {
                         method: 'PUT',
                         headers: {
                             'X-CSRFToken': csrf
                         },
                         body: formData
                     });
-
-                    editar_valor = null
-                }else{
+                } else {
                     response = await fetch(`/api/user/`, {
                         method: 'POST',
                         headers: {
@@ -175,17 +139,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.reload(); 
                 } else {
                     const errorData = await response.json();
-                    console.error('Erro no cadastro:', errorData);
+                    console.error('Erro no cadastro/edição:', errorData);
                     // Aqui você pode mostrar mensagens de erro específicas
                 }
             } catch (error) {
                 console.error('Erro na requisição:', error);
-                
             }
         }
     }
 
-    // imagem 
     uploadInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
@@ -194,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const uploadLabel = document.querySelector('.upload-label');
                 uploadLabel.classList.add('has-image');
                 uploadLabel.style.backgroundImage = `url(${e.target.result})`;
-
                 uploadLabel.style.backgroundSize = "contain";
                 uploadLabel.style.backgroundRepeat = "no-repeat";
                 uploadLabel.style.backgroundPosition = "center";
@@ -206,31 +167,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Event listeners
-    openDialogButton.addEventListener('click', abrirDialog);
+    // Verifica se o botão openDialogButton existe antes de adicionar o event listener
+    if (openDialogButton) {
+        openDialogButton.addEventListener('click', abrirDialog);
+    }
     closeButton.addEventListener('click', fecharDialog);
     
-    // Fechar dialog clicando no backdrop
     cadastroDialog.addEventListener('click', function(e) {
         if (e.target === cadastroDialog) {
-            removerImagem();
             fecharDialog();
         }
     });
     
-    // CORREÇÃO: Registrar o event listener apenas uma vez
     cadastroForm.addEventListener('submit', handleSubmit);
 });
 
-// Função para remover imagem
 function removerImagem() {
-    let verificar = document.getElementById("openDialogButton").value
-
     const uploadLabel = document.querySelector('.upload-label');
     uploadLabel.classList.remove('has-image');
     uploadLabel.style.backgroundImage = '';
         
-    // Restaura o conteúdo original
     uploadLabel.innerHTML = `
         <div class="upload-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -246,30 +202,40 @@ function removerImagem() {
     `;
 }
 
-async function editarCliente(idUsuario){
+async function editarVendedor(idVendedor){
     const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    const dados = await apiRequest(`/api/user/${idUsuario}/`, 'GET', null, { 'X-CSRFToken': csrf });
+    // Assumindo que você tem uma API para buscar os dados do vendedor
+    const response = await fetch(`/api/user/${idVendedor}/`, {
+        method: 'GET',
+        headers: {
+            'X-CSRFToken': csrf
+        }
+    });
+    const dados = await response.json();
 
-    document.getElementById('nomeCliente').value = dados.first_name
-    document.getElementById('emailCliente').value = dados.email
-    document.getElementById("confirmarEmail").value = dados.email
-    document.getElementById('saldoCliente').value = dados.saldo;
+    document.getElementById('nomeCliente').value = dados.first_name;
+    document.getElementById('emailCliente').value = dados.email;
+    document.getElementById('confirmarEmail').value = dados.email;
+    document.getElementById('lojaVendedor').value = dados.loja;
+    // Senha não deve ser preenchida por segurança
     
     if (dados.img) {
-        const uploadBox = document.querySelector('.upload-label');
-        uploadBox.classList.add("has-image");
-        uploadBox.style.backgroundImage = `url(${dados.img})`;
-        uploadBox.style.backgroundSize = "contain";
-        uploadBox.style.backgroundRepeat = "no-repeat";
-        uploadBox.style.backgroundPosition = "center";
+        const uploadLabel = document.querySelector('.upload-label');
+        uploadLabel.classList.add("has-image");
+        uploadLabel.style.backgroundImage = `url(${dados.img})`;
+        uploadLabel.style.backgroundSize = "contain";
+        uploadLabel.style.backgroundRepeat = "no-repeat";
+        uploadLabel.style.backgroundPosition = "center";
 
-        uploadBox.innerHTML = `
+        uploadLabel.innerHTML = `
             <button type="button" class="remove-image" onclick="removerImagem()">×</button>
         `;
     }
 
-    document.getElementById('cadastroDialog').showModal()
+    document.getElementById('cadastroDialog').showModal();
 
-    document.getElementById('clienteId').value = idUsuario;
+    document.getElementById('vendedorId').value = idVendedor;
+    
 }
+
 

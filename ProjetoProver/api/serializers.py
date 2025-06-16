@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Produto, Carrinho, Compra, ItensCompra
+from .models import CustomUser, Produto, Compra
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,17 +12,10 @@ class ProdutoSerializer(serializers.ModelSerializer):
         model = Produto
         fields = '__all__'
 
-class CarrinhoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Carrinho
-        fields = '__all__'
+
 
 class CompraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compra
         fields = '__all__'
 
-class ItensCompraSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ItensCompra
-        fields = '__all__'

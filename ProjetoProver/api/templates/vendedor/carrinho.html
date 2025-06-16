@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {% load static%}
 
 {%block content%}
@@ -6,73 +7,198 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/carrinho.css' %}">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/carrinho.css' %}">
+  <title>Document</title>
 </head>
 
 <body>
 
-    <div class="carrinho-container">
-        <div class="carrinho-img">
-          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
-        </div>
-        <div class="item-details">
-          <div><strong>ARROZ</strong></div>
-          <div style="color: #800020;"><strong>R$10</strong></div>
-          <div class="item-actions">
-            <button class="icon-button"><span class="material-icons">remove</span></button>
-            <span>1</span>
-            <button class="icon-button"><span class="material-icons">add</span></button>
+  {% include "componentes/menus/menuVendedor.html" %}
+
+  <div class="cabecalho">
+    <div>
+      <h1>Carrinho</h1>
+      <div class="ContainerTodo">
+        <div class="carrinho-scroll">
+          <div class="carrinho-container">
+            {% csrf_token %}
+            {% for produto in produtos %}
+            <div class="item-carrinho">
+              <img src="{{ produto.imagem.url }}" class="produto-img" alt="Arroz" />
+              <div class="info">
+                <strong>{{ produto.descricao}}</strong>
+                <p id="valorUnitario">{{produto.valor}}</p>
+                <div class="quantidade">
+                  <button class="menos">−</button>
+                  <span>1</span>
+                  <button class="mais">+</button>
+                </div>
+                <input type="hidden" id="controleEstoque" name="controleEstoque" value="{{produto.id}}">
+              </div>
+              <button onclick="deletarCarrinho({{produto.id}})">
+                <img src="{% static 'img/DeletarCarrinho.png' %}" alt="Ícone de carrinho" class="deletar-icon">
+              </button>
+            </div>
+            {% endfor %}
           </div>
         </div>
-        <span class="material-icons delete-icon">delete</span>
+
+
+  <div class="resumo-container">
+    <h3>Nome do Cliente</h3>
+
+    <!-- Bloco que envolve o input e a lista -->
+    <div class="input-autocomplete-wrapper">
+      <input type="text" id="clienteInput" placeholder="Fulano Junior Pereira" autocomplete="off">
+      <ul id="sugestoesClientes" class="sugestoes-lista"></ul>
+      <input type="hidden" id="clienteIdSelecionado">
+    </div>
+
+    <div class="info-row">
+      <span>Créditos restantes do cliente</span>
+      <span id="creditosRestantes">R$ 0.00</span>
+    </div>
+
+    <div class="info-row">
+      <span>Créditos após a compra</span>
+      <span id="creditosPosCompra">R$ 0.00</span>
+    </div>
+
+    <div class="linha"></div>
+
+    <div class="info-row">
+      <strong>Total da compra</strong>
+      <strong id="totalCompra">R$ 0.00</strong>
+    </div>
+
+    <button class="checkout-btn">Checkout</button>
+  </div>
+
+  <!-- Lista oculta com todos os clientes -->
+  <ul id="todosClientes" style="display: none;">
+    {% for cliente in clientes %}
+      <li data-id="{{ cliente.id }}" data-creditos="{{ cliente.saldo }}">{{ cliente.first_name }}</li>
+    {% endfor %}
+  </ul>
+
+
+  <!-- Fundo escuro de overlay para foco -->
+  <div id="toast-overlay" class="hidden"></div>
+
+  <!-- Container de Toasters -->
+  <div id="toast-container">
+
+      <!-- Toast de Confirmação da Compra -->
+      <div id="toast-confirm-compra" class="toast hidden confirm fullscreen">
+          <div class="toast-body">
+              <span class="toast-message">Deseja finalizar a compra?</span>
+              <div class="toast-actions">
+                  <button class="btn btn-no">Não</button>
+                  <button class="btn btn-yes">Sim</button>
+              </div>
+          </div>
       </div>
 
+      <!-- Toast de Confirmação de Remoção de Produto -->
+      <div id="toast-confirm-remocao" class="toast hidden confirm fullscreen">
+          <div class="toast-body">
+              <span class="toast-message">Deseja remover o produto?</span>
+              <div class="toast-actions">
+                  <button class="btn btn-no">Não</button>
+                  <button class="btn btn-yes">Sim</button>
+              </div>
+          </div>
+      </div>
+
+      <!--  Toast de Sucesso da Compra -->
+      <div id="toast-compra-realizada" class="toast hidden success visible">
+          <img src="{% static 'img/CompraFinalizada.png' %}" alt="Ícone de Compra Realizada" class="toast-icon">
+          <span class="toast-message">Compra realizada com sucesso!</span>
+
+      </div>
+
+      <!-- Toast de Produto Removido -->
+      <div id="toast-produto-removido" class="toast hidden success visible">
+          <img src="{% static 'img/ProdutoRemovido.png' %}" alt="Ícone de Produto Removido" class="toast-icon">
+          <span class="toast-message">Produto removido do carrinho.</span>
+          
+      </div>
+
+  </div>
+    <!-- <div class="ContainerTodo">
+    <div class="carrinho-scroll">
       <div class="carrinho-container">
-        <div class="carrinho-img">
-          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz Camil">
-        </div>
-        <div class="item-details">
-          <div><strong>ARROZ</strong></div>
-          <div style="color: #800020;"><strong>R$10</strong></div>
-          <div class="item-actions">
-            <button class="icon-button"><span class="material-icons">remove</span></button>
-            <span>1</span>
-            <button class="icon-button"><span class="material-icons">add</span></button>
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" class="produto-img" alt="Arroz" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
           </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-        <span class="material-icons delete-icon">delete</span>
-      </div>
 
-      <div class="resumo-container">
-        <h3>Nome do Cliente</h3>
-        <input type="text" value="Fulano Junior Pereira" readonly>
-    
-        <div class="info-row">
-          <span>Créditos restantes do cliente</span>
-          <span>R$ 120</span>
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
+          </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-    
-        <div class="info-row">
-          <span>Créditos após a compra</span>
-          <span>R$ 100</span>
+
+        <div class="item-carrinho">
+          <img src="{% static 'imgteste/image 2.png' %}" alt="Arroz" class="produto-img" />
+          <div class="info">
+            <strong>ARROZ</strong>
+            <p>R$10</p>
+            <div class="quantidade">
+              <button class="menos">−</button>
+              <span>1</span>
+              <button class="mais">+</button>
+            </div>
+          </div>
+          <span class="material-icons delete-icon">delete</span>
         </div>
-    
-        <div class="linha"></div>
-    
-        <div class="info-row">
-          <strong>Total da compra</strong>
-          <strong>R$ 20</strong>
-        </div>
-    
-        <button class="checkout-btn">Checkout</button>
+
       </div>
+    </div> -->
+
+    <!-- <div class="resumo-container">
+      <h3>Nome do Cliente</h3>
+      <input type="text" placeholder="Fulano Junior Pereira">
+      <div class="info-row">
+        <span>Créditos restantes do cliente</span>
+        <span>R$ 120</span>
+      </div>
+      <div class="info-row">
+        <span>Créditos após a compra</span>
+        <span>R$ 100</span>
+      </div>
+      <div class="linha"></div>
+      <div class="info-row">
+        <strong>Total da compra</strong>
+        <strong>R$ 20</strong>
+      </div>
+      <button class="checkout-btn">Checkout</button>
+    </div> -->
+
+  </div>
+  <script src="{% static 'js/vendedorJS/carrinho.js' %}"></script>
 
 </body>
-
 </html>
 
 {%endblock%}

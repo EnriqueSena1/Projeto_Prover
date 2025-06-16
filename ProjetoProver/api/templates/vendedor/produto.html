@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static%}
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" href="{% static 'CSS/VendedorCSS/produto.css' %}">
+</head>
+<body>
+    {% include 'componentes/menus/menuVendedor.html' %}
+    <div class="container">
+        <div class="products-section">
+            <div>
+                <h2>Produtos</h2>
+            
+                <div class="product-grid">
+                    {% csrf_token %}
+                    {% for produto in produtos %}
+
+                    <div class="product-card">
+                        <div>
+                        <img src="{{ produto.imagem.url }}">
+                        <h3>{{ produto.descricao}}</h3>
+                        <p>{{produto.valor}}</p>
+                        </div>
+                        <div>
+                        <button class="add-to-cart-button" value="{{produto.id}}">+</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden">
+        <img src="{% static 'img/AdicionadoCarrinho.png' %}" alt="Ícone de carrinho" class="toast-icon">
+        <span>Adicionado ao carrinho</span>
+    </div>
+    <script src="{% static 'js/vendedorJS/produto.js' %}"></script>
+</body>
+</html>
+
+
+{%endblock%}
