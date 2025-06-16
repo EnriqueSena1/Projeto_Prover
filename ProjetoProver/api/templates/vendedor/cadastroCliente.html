@@ -5,15 +5,21 @@
 
 <link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroCliente.css'%}">
 
-    {% include 'componentes/menus/menuVendedor.html' %}
+    
+    {% if user.tipo == 'administrador' %}
+        {% include "componentes/menus/menuAdmin.html" %}
+    {% elif user.tipo == 'vendedor' %}
+        {% include "componentes/menus/menuVendedor.html" %}
+    {% endif %}
+
     {% include 'componentes/popUps/popUpUsuario.html' %}
 
     <div class="principal">
-
+      <div class="container">
         <div class="clientes-container">
 
             <div class="clientes-header">
-              <h2>Clientes</h2>
+              <div class="titulo"><h2>Clientes</h2></div>
               <button id = "openDialogButton" class ="addCliente">
                 <img id = "popup-dialog" src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
                 Cadastrar cliente
@@ -41,6 +47,8 @@
               </div>
           {% endfor %}
         </div>
+      </div>
+    </div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const switches = document.querySelectorAll(".cliente-switch");

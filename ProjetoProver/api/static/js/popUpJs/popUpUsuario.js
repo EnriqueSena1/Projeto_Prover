@@ -93,36 +93,35 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         } else {
         // Verificar se email já existe
-            try {
-                const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                const clienteId = document.getElementById('clienteId')?.value?.trim();
+        try {
+            const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const clienteId = document.getElementById('clienteId')?.value?.trim();
 
-                const response = await fetch('/validarEmail/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrf
-                    },
-                    body: JSON.stringify({ email, clienteId })
-                });
+            const response = await fetch('/validarEmail/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrf
+                },
+                body: JSON.stringify({ email, clienteId })
+            });
 
-                const data = await response.json();
-                if (data.existe) {
-                    mostrarErro('emailCliente', 'Este email já está em uso');
-                    isValid = false;
-                }
-            } catch (error) {
-                console.error('Erro ao verificar email:', error);
-                mostrarErro('emailCliente', 'Erro ao verificar email. Tente novamente.');
+            const data = await response.json();
+            if (data.existe) {
+                mostrarErro('emailCliente', 'Este email já está em uso');
                 isValid = false;
             }
+        } catch (error) {
+            console.error('Erro ao verificar email:', error);
+            mostrarErro('emailCliente', 'Erro ao verificar email. Tente novamente.');                isValid = false;
         }
+    }
 
-        // Validar senha
-        const senha = document.getElementById('senhaCliente').value;
-        const clienteId = document.getElementById('clienteId')?.value?.trim();
+    // Validar senha
+    const senha = document.getElementById('senhaCliente').value;
+    const clienteId = document.getElementById('clienteId')?.value?.trim();
 
-        if (!clienteId) {
+    if (!clienteId) {
         if (!senha) {
             mostrarErro('senhaCliente', 'Senha é obrigatória');
             isValid = false;
@@ -138,87 +137,87 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-        // Validar saldo
-        const saldo = document.getElementById('saldoCliente').value.trim();
-        if (!saldo) {
-            mostrarErro('saldoCliente', 'Saldo é obrigatório');
+    // Validar saldo
+    const saldo = document.getElementById('saldoCliente').value.trim();
+    if (!saldo) {
+        mostrarErro('saldoCliente', 'Saldo é obrigatório');
+        isValid = false;
+    } else if (isNaN(parseFloat(saldo.replace(',', '.')))) {
+        mostrarErro('saldoCliente', 'Saldo deve ser um número válido');
+        isValid = false;
+    }
+
+    const imagemInput = document.getElementById('fotoCliente');
+    const variavelControle = document.getElementById('clienteId')?.value;
+
+    if (!imagemInput.files || imagemInput.files.length === 0) {
+        if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
+            mostrarErro('foto', 'Imagem é obrigatória');
             isValid = false;
-        } else if (isNaN(parseFloat(saldo.replace(',', '.')))) {
-            mostrarErro('saldoCliente', 'Saldo deve ser um número válido');
-            isValid = false;
         }
+        // se for edição e a imagem já existe no banco, não força nova imagem
+    }
 
-        const imagemInput = document.getElementById('fotoCliente');
-        const variavelControle = document.getElementById('clienteId')?.value;
+    // Se a validação passou, enviar os dados
+    if (isValid) {
+        try {
+            let nome_cliente = document.getElementById('nomeCliente').value;
+            let email_cliente = document.getElementById('emailCliente').value;
+            let senha_cliente = document.getElementById('senhaCliente').value;
+            let saldo_cliente = document.getElementById('saldoCliente').value;
+            let imagemInput = document.getElementById('fotoCliente');
+            let imagemFile = imagemInput.files[0];
 
-        if (!imagemInput.files || imagemInput.files.length === 0) {
-            if (!variavelControle) { // se for um cadastro novo, a imagem é obrigatória
-                mostrarErro('foto', 'Imagem é obrigatória');
-                isValid = false;
+            const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            // Criação do formData para envio com imagem
+            const formData = new FormData();
+            formData.append("nome", nome_cliente);
+            formData.append("email", email_cliente);
+            formData.append("senha", senha_cliente);
+            formData.append("saldo", saldo_cliente);
+            formData.append("is_active", true);
+
+            if (imagemFile) {
+                formData.append("img", imagemFile);
             }
-            // se for edição e a imagem já existe no banco, não força nova imagem
-        }
-
-        // Se a validação passou, enviar os dados
-        if (isValid) {
-            try {
-                let nome_cliente = document.getElementById('nomeCliente').value;
-                let email_cliente = document.getElementById('emailCliente').value;
-                let senha_cliente = document.getElementById('senhaCliente').value;
-                let saldo_cliente = document.getElementById('saldoCliente').value;
-                let imagemInput = document.getElementById('fotoCliente');
-                let imagemFile = imagemInput.files[0];
-
-                const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                // Criação do formData para envio com imagem
-                const formData = new FormData();
-                formData.append("nome", nome_cliente);
-                formData.append("email", email_cliente);
-                formData.append("senha", senha_cliente);
-                formData.append("saldo", saldo_cliente);
-                formData.append("is_active", true);
-
-                if (imagemFile) {
-                    formData.append("img", imagemFile);
-                }
                 
-                let editar_valor = null
-                editar_valor = document.getElementById('clienteId').value
-                let response ;
-                if (editar_valor){
-                    response = await fetch(`/api/user/${editar_valor}/`, {
-                        method: 'PUT',
-                        headers: {
-                            'X-CSRFToken': csrf
-                        },
-                        body: formData
-                    });
+            let editar_valor = null
+            editar_valor = document.getElementById('clienteId').value
+            let response ;
+            if (editar_valor){
+                response = await fetch(`/api/user/${editar_valor}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRFToken': csrf
+                    },
+                    body: formData
+                });
 
-                    editar_valor = null
-                }else{
-                    response = await fetch(`/api/user/`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': csrf
-                        },
-                        body: formData
-                    });
-                }
-
-                if (response.ok) {
-                    fecharDialog();
-                    window.location.reload(); 
-                } else {
-                    const errorData = await response.json();
-                    console.error('Erro no cadastro:', errorData);
-                    // Aqui você pode mostrar mensagens de erro específicas
-                }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
-                
+                editar_valor = null
+            }else{
+                response = await fetch(`/api/user/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrf
+                    },
+                    body: formData
+                });
             }
+
+            if (response.ok) {
+                fecharDialog();
+                window.location.reload(); 
+            } else {
+                const errorData = await response.json();
+                console.error('Erro no cadastro:', errorData);
+                // Aqui você pode mostrar mensagens de erro específicas
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+                
         }
+    }
     }
 
     // imagem 

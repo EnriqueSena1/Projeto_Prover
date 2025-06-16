@@ -9,15 +9,13 @@ async function Login(evento) {
     
 
     try {
-        console.log("entrou")
+       
         const data = await apiRequest(
             '/api/login/',
             'POST',
             { email: email, senha: senha },
             { 'X-CSRFToken': csrf }
         );
-        console.log(data) // aqui me retorna none... o que errei? ainda fala credenciais invalidas
-
         if (!data) {
             throw new Error('Email ou senha inválidos.');
         }
@@ -25,10 +23,10 @@ async function Login(evento) {
         // Verificação baseada no campo "tipo" do CustomUser
         switch (data.tipo) {
             case 'administrador':
-                window.location.href = '/HomeAdm/';
+                window.location.href = '/relatorio/';
                 break;
             case 'vendedor':
-                window.location.href = '/HomeVend/';
+                window.location.href = '/Produto/';
                 break;
             case 'cliente':
                 window.location.href = '/HomeUser/';

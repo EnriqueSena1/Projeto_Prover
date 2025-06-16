@@ -37,6 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% csrf_token %}
                     {% for produto in produtos %}
                     <tr class="produto_item_linha">
                         <td>
@@ -58,13 +59,11 @@
                         </td>
                         <td>{{ produto.quantidade }}</td>
                         <td>R${{ produto.valor|floatformat:2 }}</td>
-                        <td class="acoes-btns"> {# Nova classe para os botões de ação #}
-                            {# Botão de edição #}
+                        <td class="acoes-btns">
                             <a href="#" onclick="editarProduto({{ produto.id }})" class="btn_editar_produto">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            {# NOVO: Botão de exclusão #}
-                            <a href="#" onclick="deletarProduto({{ produto.id }})" class="btn_excluir_produto">
+                            <a href="#" class="btn_excluir_produto" data-id="{{ produto.id }}">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>
@@ -76,10 +75,27 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Toast de Confirmação de Remoção de Produto -->
+            <div id="toast-confirm-remocao" class="toast hidden confirm fullscreen">
+                <div class="toast-body">
+                    <span class="toast-message">Deseja deletar o produto?</span>
+                    <div class="toast-actions">
+                        <button class="btn btn-no">Não</button>
+                        <button class="btn btn-yes">Sim</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast de Sucesso -->
+            <div id="toast-produto-removido" class="toast hidden success">
+                <span class="toast-message">Produto deletado com sucesso!</span>
+            </div>
         </div>
     </div>
 
     {% include "componentes/popUps/popUpProduto.html" %}
+    <script src="{% static 'js/adminJS/estoqueAdm.js' %}"></script>
 
 </body>
 </html>

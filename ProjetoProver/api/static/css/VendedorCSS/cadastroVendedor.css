@@ -1,9 +1,10 @@
 
 .main-container {
     width: 100%;
-    max-width: 1000px; /* Largura máxima do container principal */
+    width: 1000px; /* Largura máxima do container principal */
     margin: 0 auto; /* Centraliza o container principal */
     padding: 20px;
+    font-family: 'Roboto', sans-serif;  
 }
 
 .content-container {
@@ -30,7 +31,7 @@
     background-color: #8B0000; /* Cor do botão de cadastro */
     border-color: #8B0000;
     color: #fff;
-    padding: 10px 20px;
+    padding: 12px 18px;
     border-radius: 15px;
     text-decoration: none;
     font-size: 20px;

@@ -41,7 +41,7 @@ def test3(request):
 
     user = CustomUser.objects.filter(id=user_id).first()
     if user:
-        return render(request, 'user/test2.html', {'usuario': user})
+        return render(request, 'admin/estoqueAdm.html', {'usuario': user})
     else:
         return redirect('login')
 
@@ -70,12 +70,12 @@ def relatorio(request):
      return render(request, 'admin/relatorio.html')
 
 def cadastroCliente(request):
-    usuarios = CustomUser.objects.filter(is_active=True)
-    return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
-
-# def tela_clientes(request):
-#     clientes = cadastroCliente.objects.all() 
-#     return render(request, 'cadastroCliente.html', {'clientes': clientes})
+    user = request.user  # Usuário logado
+    usuarios = CustomUser.objects.filter(tipo='cliente')  # Lista de clientes
+    return render(request, 'vendedor/cadastroCliente.html', {
+        "usuarios": usuarios,
+        "user": user, 
+    })
 
 def validarEmail(request):
     if request.method == 'POST':
