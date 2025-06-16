@@ -66,6 +66,9 @@ def cadastroUsuario(request): # so pra teste rapazeada
 def tela_inicial(request):
     return  render(request, 'index.html')
 
+def relatorio(request):
+     return render(request, 'admin/relatorio.html')
+
 def cadastroCliente(request):
     usuarios = CustomUser.objects.filter(is_active=True)
     return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
@@ -114,3 +117,4 @@ def cadastroVendedor(request):
     page_number = request.GET.get('page')
     vendedores = paginator.get_page(page_number)
     return  render(request, 'admin/cadastroVendedor.html', {"vendedores": vendedores})
+

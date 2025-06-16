@@ -51,6 +51,14 @@ urlpatterns = [
 
 
 
+    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
+
+
+    #Relatorio ADM
+
+    path('relatorio/', relatorio, name="relatorio")
+
+
 
 
 
