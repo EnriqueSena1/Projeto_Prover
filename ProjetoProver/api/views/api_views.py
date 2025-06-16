@@ -8,7 +8,8 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
-
+from django.shortcuts import render
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 
 
 class LoginView(APIView):
@@ -258,3 +259,46 @@ class CompraCreateAPIView(APIView):
         compras = Compra.objects.all()
         serializer = CompraSerializer(compras, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+def relatorio(request):
+    total_itens_estoque = Produto.objects.aggregate(Sum('quantidade'))['quantidade__sum'] or 0
+    valor_estoque = Produto.objects.aggregate(
+        total=Sum(ExpressionWrapper(F('quantidade') * F('valor'), output_field=DecimalField()))
+    )['total'] or 0.00
+    total_itens_doados = ItemCompra.objects.aggregate(Sum('quantidade'))['quantidade__sum'] or 0
+    valor_itens_doados = ItemCompra.objects.aggregate(
+        total=Sum(ExpressionWrapper(F('quantidade') * F('preco_unitario'), output_field=DecimalField()))
+    )['total'] or 0.00
+    movimentacoes = Compra.objects.all().select_related('cliente')
+
+    compras_detalhes = []
+    for compra in movimentacoes:
+        itens = ItemCompra.objects.filter(compra=compra).select_related('produto')
+        compra_detalhes = {
+            'id': compra.id,
+            'cliente': f"{compra.cliente.first_name} {compra.cliente.last_name or ''}",
+            'data': compra.data.strftime('%d/%m/%Y'),
+            'gasto': f"R$ {compra.total_preco:.2f}",
+            'status': 'Completado',
+            'itens': [
+                {
+                    'classificacao': item.produto.classe,
+                    'tipo_embalagem': item.produto.tipo_produto,
+                    'descricao': item.produto.descricao,
+                    'quantidade': item.quantidade,
+                    'preco': f"R$ {item.preco_unitario:.2f}"
+                } for item in itens
+            ]
+        }
+        compras_detalhes.append(compra_detalhes)
+
+    context = {
+        'total_itens_estoque': total_itens_estoque,
+        'valor_estoque': f'R$ {valor_estoque:.2f}',
+        'total_itens_doados': total_itens_doados,
+        'valor_itens_doados': f'R$ {valor_itens_doados:.2f}',
+        'movimentacoes': movimentacoes,
+        'compras_detalhes_json': json.dumps(compras_detalhes),  # Serializa para JSON
+    }
+    return render(request, 'relatorio.html', context)

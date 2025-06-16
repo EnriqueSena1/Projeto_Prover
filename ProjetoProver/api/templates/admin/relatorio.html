@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" href="{%static 'css/AdminCSS/relatorio.css'%}">
-    {% include "componentes/menus/menuAdmin.html" %}
+<link rel="stylesheet" href="{% static 'css/AdminCSS/relatorio.css' %}">
+{% include "componentes/menus/menuAdmin.html" %}
 
-    <div class="container_relatorio">
+<div class="container_relatorio">
     <div class="relatorio_titulo">
         <h1>Relatório</h1>
     </div>
@@ -72,10 +72,10 @@
                 <tbody>
                     {% for compra in movimentacoes %}
                     <tr>
-                        <td><span class="avatar"></span> {{ compra.cliente.first_name }}</td>
-                        <td>{{ compra.data_compra|date:"d/m/Y" }}</td>
-                        <td>R$ {{ compra.total|floatformat:2 }}</td>
-                        <td><span class="status">{{ compra.pedido }}</span></td>
+                        <td><span class="avatar"></span> {{ compra.cliente.first_name }} {{ compra.cliente.last_name }}</td>
+                        <td>{{ compra.data|date:"d/m/Y" }}</td>
+                        <td>R$ {{ compra.total_preco|floatformat:2 }}</td>
+                        <td><span class="status">Completado</span></td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -88,7 +88,93 @@
     </div>
 </div>
 
-    <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-bundle.min.js"></script>
-    <script src="{% static 'js/AdminJS/grafico.js' %}"></script>
+<!-- Modal -->
+<div id="compraModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div class="modal-content" style="background: white; margin: 10% auto; padding: 20px; width: 80%; max-width: 500px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <span class="close-modal" style="float: right; font-size: 24px; cursor: pointer;">×</span>
+        <h2>Detalhes da Compra</h2>
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <span class="avatar" style="display: inline-block; width: 40px; height: 40px; background: #ddd; border-radius: 50%; margin-right: 10px;"></span>
+                <span id="modalClienteNome" style="font-weight: bold;"></span>
+            </div>
+            <div>
+                <span id="modalData"></span>
+                <span id="modalGasto" style="margin-left: 20px;"></span>
+            </div>
+        </div>
+        <div id="modalStatus" style="background: #e6ffe6; color: #2e7d32; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-bottom: 20px;"></div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f5f5f5;">
+                    <th style="padding: 10px; text-align: left;">Classificação</th>
+                    <th style="padding: 10px; text-align: left;">Tipo Embalagem</th>
+                    <th style="padding: 10px; text-align: left;">Descrição</th>
+                    <th style="padding: 10px; text-align: left;">Quantidade</th>
+                    <th style="padding: 10px; text-align: left;">Preço</th>
+                </tr>
+            </thead>
+            <tbody id="modalItens">
+                <!-- Itens serão preenchidos via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-bundle.min.js"></script>
+<script src="{% static 'js/AdminJS/grafico.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('.relatorio_movimentacao_conteudo tbody tr');
+        const modal = document.getElementById('compraModal');
+        const closeModal = document.querySelector('.close-modal');
+        const modalItens = document.getElementById('modalItens');
+        const comprasDetalhes = JSON.parse('{{ compras_detalhes_json|safe }}') || [];
+
+        function populateModal(compraId) {
+            const compra = comprasDetalhes.find(c => c.id === compraId);
+            if (compra) {
+                document.getElementById('modalClienteNome').textContent = compra.cliente;
+                document.getElementById('modalData').textContent = compra.data;
+                document.getElementById('modalGasto').textContent = compra.gasto;
+                document.getElementById('modalStatus').textContent = compra.status;
+
+                modalItens.innerHTML = '';
+                compra.itens.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="padding: 10px;">${item.classificacao}</td>
+                        <td style="padding: 10px;">${item.tipo_embalagem}</td>
+                        <td style="padding: 10px;">${item.descricao}</td>
+                        <td style="padding: 10px;">${item.quantidade}</td>
+                        <td style="padding: 10px;">${item.preco}</td>
+                    `;
+                    modalItens.appendChild(row);
+                });
+
+                modal.style.display = 'block';
+            }
+        }
+
+        rows.forEach((row, index) => {
+            const compraId = comprasDetalhes[index]?.id; // Adiciona verificação para evitar undefined
+            if (compraId) {
+                row.addEventListener('click', () => {
+                    populateModal(compraId);
+                });
+            }
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 {% endblock %}
