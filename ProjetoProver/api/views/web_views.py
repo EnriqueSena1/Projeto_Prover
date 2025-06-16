@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from api.models import *
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
 
 # View da página de login
 def tela_login(request):
@@ -65,6 +69,33 @@ def tela_inicial(request):
 def cadastroCliente(request):
     usuarios = CustomUser.objects.filter(is_active=True)
     return  render(request, 'vendedor/cadastroCliente.html', {"usuarios": usuarios})
+
+# def tela_clientes(request):
+#     clientes = cadastroCliente.objects.all() 
+#     return render(request, 'cadastroCliente.html', {'clientes': clientes})
+
+@csrf_exempt
+# @login_required
+def toggle_cliente(request, cliente_id):
+    if request.method != "PATCH":
+        return HttpResponseNotAllowed(["PATCH"])
+
+    try:
+        data = json.loads(request.body)
+        is_active = data.get("is_active")
+        if type(is_active) is not bool:
+            return HttpResponseBadRequest("is_active deve ser true/false")
+
+        user = CustomUser.objects.get(id=cliente_id, tipo="cliente")
+        user.is_active = is_active
+        user.save()
+
+        return JsonResponse({"id": user.id, "is_active": user.is_active})
+
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"error": "Cliente não encontrado."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "JSON inválido."}, status=400)
     
 def estoque_adm(request):
     produtos = Produto.objects.filter(is_disponivel=True)

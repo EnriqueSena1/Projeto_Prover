@@ -4,7 +4,7 @@
     padding: 40px;
     font-family: Arial, sans-serif;
     max-width: 800px;
-    margin-left: 50px;
+    margin-left: 70px;
     padding-left: 200px;
 }
 
@@ -112,7 +112,7 @@
     border-radius: 34px;
   }
   
-.slider:before {
+.slider:after {
     position: absolute;
     content: "";
     height: 14px;
@@ -128,7 +128,7 @@
     background-color: #90ee90;
   }
   
-.switch input:checked + .slider:before {
+.switch input:checked + .slider:after {
     transform: translateX(16px);
     background-color: #00cc00;
   }

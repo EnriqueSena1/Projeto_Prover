@@ -5,19 +5,8 @@
 
 <link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroCliente.css'%}">
 
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <title>Cadastro de Clientes</title>
-</head>
-<body>
     {% include 'componentes/menus/menuVendedor.html' %}
+    {% include 'componentes/popUps/popUpUsuario.html' %}
 
     <div class="principal">
 
@@ -25,103 +14,83 @@
 
             <div class="clientes-header">
               <h2>Clientes</h2>
-              <button id = "cadastrarCliente" class ="addCliente">
-                <img src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
+              <button id = "openDialogButton" class ="addCliente">
+                <img id = "popup-dialog" src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
                 Cadastrar cliente
               </button>
             </div>
         </div>       
 
-        {%include 'componentes/popUps/popUpUsuario.html' %}
+        
 
         <div id="lista-clientes">
+          {% for cliente in usuarios %}
             <div class="cliente-card">
                 <div class="cliente-info">
                   <img src="{% static 'img/Usuario.png' %}" alt="Usuário" class="icon-usuario">
-                  <span class="cliente-nome">Fulano Machado</span>
+                  <span class="cliente-nome">{{cliente.first_name}}</span>
                 </div>
                 
                 <div class="cliente-acoes">
-                  <img id = "editar" src="{% static 'img/Editar.png' %}" alt="Editar" class="icon-editar">
+                  <img data-id= "{{ cliente.id }}" src="{% static 'img/Editar.png' %}" alt="Editar" class="icon-editar">
                   <label id = "status" class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" class="cliente-switch"data-id="{{ cliente.id }}"{% if cliente.is_active %}checked{% endif %}>
                     <span class="slider"></span>
                   </label>
                 </div>
               </div>
+          {% endfor %}
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-              const form = document.getElementById("cadastroForm");
-              const nomeInput = document.getElementById("nomeCliente");
-              const dialog = document.getElementById("cadastroDialog");
-              const listaClientes = document.getElementById("lista-clientes");
-          
-              form.addEventListener("submit", function (e) {
-                e.preventDefault();
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const switches = document.querySelectorAll(".cliente-switch");
 
-                const nome = nomeInput.value.trim();
-                if (nome === "") {
-                    alert("Preencha o nome do cliente.");
-                    return;
-                }
+    switches.forEach(switchEl => {
+      switchEl.addEventListener("change", function () {
+        const clienteId = this.dataset.id;
+        const isActive = this.checked;
 
-                const formData = new FormData(form);
+        fetch(`/toggle_cliente/${clienteId}/`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({ is_active: isActive })
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro ao atualizar status.");
+          return response.json();
+        })
+        .then(data => {
+          console.log("Cliente atualizado:", data);
+        })
+        .catch(error => {
+          console.error("Erro:", error);
+          // Reverte o switch visualmente se der erro
+          this.checked = !isActive;
+        });
+      });
+    });
 
-                fetch("/clientes/cadastrar/", {
-                    method: "POST",
-                    headers: {
-                    "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value
-                    },
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Erro ao cadastrar cliente.");
-                    return response.json();
-                })
-                .then(data => {
-                    
-                    listaClientes.style.display = "block";
-
-                    const novoCard = document.createElement("div");
-                    novoCard.className = "cliente-card";
-                    novoCard.innerHTML = `
-                    <div class="cliente-info">
-                        <img src="/static/img/Usuario.png" alt="Usuário" class="icon-usuario">
-                        <span class="cliente-nome">${data.nome}</span>
-                    </div>
-                    <div class="cliente-acoes">
-                        <img id="editar" src="/static/img/Editar.png" alt="Editar" class="icon-editar">
-                        <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                        </label>
-                    </div>
-                    `;
-                    listaClientes.appendChild(novoCard);
-
-                    dialog.close();
-                    form.reset();
-                })
-                .catch(err => {
-                    alert("Erro ao salvar cliente.");
-                    console.error(err);
-                });
-                });
-
-          
- 
-              document.getElementById("cadastrarCliente").addEventListener("click", function () {
-                dialog.showModal();
-              });
-          
-    
-              document.getElementById("closeButton").addEventListener("click", function () {
-                dialog.close();
-              });
-            });
-          </script>
-          
+    // Função para pegar o token CSRF
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Verifica se começa com o nome desejado
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  });
+</script>
 </body>
 </html>
 

@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cadastroForm = document.getElementById('cadastroForm');
     const uploadInput = document.getElementById('fotoCliente');
     const uploadPreview = document.getElementById('uploadPreview');
+    const clientesContainer = document.getElementById('lista-clientes');
 
     // Função para abrir o dialog
     function abrirDialog() {
@@ -97,9 +98,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!senha) {
             mostrarErro('senhaCliente', 'Senha é obrigatória');
             isValid = false;
-        } else if (senha.length < 6) {
-            mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
-            isValid = false;
+        if (!senha) {
+        mostrarErro('senhaCliente', 'Senha é obrigatória');
+        isValid = false;
+            } else if (senha.length < 6) {
+                mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+                isValid = false;
+            }
+        } else { // se for edição
+            if (senha && senha.length < 6) {
+                mostrarErro('senhaCliente', 'Se desejar alterar a senha, ela deve ter pelo menos 6 caracteres');
+                isValid = false;
+            }
         }
 
         // Validar saldo
@@ -209,6 +219,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listeners
     openDialogButton.addEventListener('click', abrirDialog);
     closeButton.addEventListener('click', fecharDialog);
+    clientesContainer.addEventListener('click', function(e) {
+    if (e.target.classList.contains('icon-editar')) {
+      const idCliente = e.target.getAttribute('data-id');
+      if (idCliente) {
+        editarCliente(idCliente);
+      }
+    }
+  });
     
     // Fechar dialog clicando no backdrop
     cadastroDialog.addEventListener('click', function(e) {
