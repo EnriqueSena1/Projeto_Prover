@@ -91,26 +91,52 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (email !== confirmarEmail) {
             mostrarErro('confirmarEmail', 'Emails não coincidem');
             isValid = false;
+        } else {
+        // Verificar se email já existe
+            try {
+                const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const clienteId = document.getElementById('clienteId')?.value?.trim();
+
+                const response = await fetch('/validarEmail/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf
+                    },
+                    body: JSON.stringify({ email, clienteId })
+                });
+
+                const data = await response.json();
+                if (data.existe) {
+                    mostrarErro('emailCliente', 'Este email já está em uso');
+                    isValid = false;
+                }
+            } catch (error) {
+                console.error('Erro ao verificar email:', error);
+                mostrarErro('emailCliente', 'Erro ao verificar email. Tente novamente.');
+                isValid = false;
+            }
         }
 
         // Validar senha
         const senha = document.getElementById('senhaCliente').value;
+        const clienteId = document.getElementById('clienteId')?.value?.trim();
+
+        if (!clienteId) {
         if (!senha) {
             mostrarErro('senhaCliente', 'Senha é obrigatória');
             isValid = false;
-        if (!senha) {
-        mostrarErro('senhaCliente', 'Senha é obrigatória');
-        isValid = false;
-            } else if (senha.length < 6) {
-                mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
-                isValid = false;
-            }
-        } else { // se for edição
-            if (senha && senha.length < 6) {
-                mostrarErro('senhaCliente', 'Se desejar alterar a senha, ela deve ter pelo menos 6 caracteres');
-                isValid = false;
-            }
+        } else if (senha.length < 6) {
+            mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+            isValid = false;
         }
+    } else {
+        // Edição → senha opcional
+        if (senha && senha.length < 6) {
+            mostrarErro('senhaCliente', 'Senha deve ter pelo menos 6 caracteres');
+            isValid = false;
+        }
+    }
 
         // Validar saldo
         const saldo = document.getElementById('saldoCliente').value.trim();
