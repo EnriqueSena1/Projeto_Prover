@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const cadastroDialog = document.getElementById("cadastroDialog");
-    const openDialogButton = document.getElementById("openDialogButton"); // Este botão pode não existir no HTML do vendedor, ajustar se necessário
+    const openDialogButton = document.getElementById("openDialogButton"); 
     const closeButton = document.querySelector(".close-button");
     const cadastroForm = document.getElementById("cadastroForm");
     const uploadInput = document.getElementById("fotoCliente");
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cadastroForm.reset();
         uploadPreview.innerHTML = '';
         limparErros();
-        removerImagem(); // Ensure image preview is cleared
+        removerImagem(); 
     }
 
     function limparErros() {
@@ -58,16 +58,43 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         }
 
-        const email = document.getElementById('emailCliente').value.trim();
+        const email = document.getElementById("emailCliente").value.trim();
         if (!email || !/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(email)) {
-            mostrarErro('emailCliente', 'Email inválido ou obrigatório');
+            mostrarErro("emailCliente", "Email inválido ou obrigatório");
             isValid = false;
         }
 
-        const confirmarEmail = document.getElementById('confirmarEmail').value.trim();
+        const confirmarEmail = document.getElementById("confirmarEmail").value.trim();
         if (email !== confirmarEmail) {
-            mostrarErro('confirmarEmail', 'Os emails não coincidem');
+            mostrarErro("confirmarEmail", "Os emails não coincidem");
             isValid = false;
+        }
+
+        // Verificação de email existente (apenas se os emails coincidirem e forem válidos)
+        if (isValid && email === confirmarEmail) {
+            try {
+                const csrf = document.querySelector("[name=csrfmiddlewaretoken]").value;
+                const vendedorId = document.getElementById("vendedorId")?.value?.trim();
+
+                const response = await fetch("/validarEmail/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrf
+                    },
+                    body: JSON.stringify({ email, vendedorId })
+                });
+
+                const data = await response.json();
+                if (data.existe) {
+                    mostrarErro("emailCliente", "Este email já está em uso");
+                    isValid = false;
+                }
+            } catch (error) {
+                console.error("Erro ao verificar email:", error);
+                mostrarErro("emailCliente", "Erro ao verificar email. Tente novamente.");
+                isValid = false;
+            }
         }
 
         const loja = document.getElementById('lojaVendedor').value.trim();
@@ -77,9 +104,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const senha = document.getElementById('senhaCliente').value.trim();
-        if (!senha || senha.length < 6) {
-            mostrarErro('senhaCliente', 'A senha deve ter no mínimo 6 caracteres');
-            isValid = false;
+        const vendedorId = document.getElementById('vendedorId')?.value?.trim();
+
+        if (!vendedorId) {
+            // Cadastro novo: senha é obrigatória
+            if (!senha) {
+                mostrarErro('senhaCliente', 'A senha é obrigatória');
+                isValid = false;
+            } else if (senha.length < 6) {
+                mostrarErro('senhaCliente', 'A senha deve ter no mínimo 6 caracteres');
+                isValid = false;
+            }
+        } else {
+            // Edição: senha é opcional, mas se preenchida, deve ter no mínimo 6 caracteres
+            if (senha && senha.length < 6) {
+                mostrarErro('senhaCliente', 'A senha deve ter no mínimo 6 caracteres');
+                isValid = false;
+            }
         }
 
         // Verificação da imagem

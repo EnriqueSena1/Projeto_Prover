@@ -28,7 +28,7 @@
 }
 
 .botao_cadastrar_produto {
-    background-color: #7A162F;
+    background-color: #8B0000;
     color: white;
     border: none;
     font-size: 20px;
@@ -42,7 +42,7 @@
 }
 
 .botao_cadastrar_produto:hover {
-    background-color: #5d1123;
+    background-color:#a00000;
 }
 
 .botao_cadastrar_produto .fas {
