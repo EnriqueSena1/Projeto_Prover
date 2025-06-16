@@ -42,11 +42,21 @@ urlpatterns = [
     #Carrinho
     path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
     path('CadastroCliente/', cadastroCliente, name="cadastro_cliente"),
+    # urls.py
+    path('toggle_cliente/<int:cliente_id>/', toggle_cliente, name='toggle_cliente'),
     path('CadastroVendedor/', cadastroVendedor, name="cadastro_vend"),
 
     #produto
     path('Produto/', produto, name="produto_vend"),
 
+
+
+    path('CarrinhoVend/',carrinho_vend, name="carrinho_vend"),
+
+
+    #Relatorio ADM
+
+    path('relatorio/', relatorio, name="relatorio")
 
 
 
