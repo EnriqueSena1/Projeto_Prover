@@ -1,12 +1,16 @@
-.container_relatorio{
+body {
+    font-family: Roboto;
+}
+
+.container_relatorio {
     padding: 0 10vw;
-    margin: 80px 0 0 0;
+    margin: 80px 0;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.relatorio_titulo{
+.relatorio_titulo {
     color: #25282C;
     font-family: Roboto;
     font-size: 20px;
@@ -15,19 +19,19 @@
     line-height: normal;
 }
 
-.relatorio_analise{
+.relatorio_analise {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.relatorio_dados{
+.relatorio_dados {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.relatorio_dados_components{
+.relatorio_dados_components {
     width: 15.875rem;
     display: flex;
     flex-direction: column;
@@ -38,7 +42,7 @@
     gap: 5px;
 }
 
-.relatorio_dados_components_titulo{
+.relatorio_dados_components_titulo {
     color: #001733;
     font-family: Roboto;
     font-size: 24px;
@@ -49,7 +53,7 @@
     opacity: 0.5;
 }
 
-.relatorio_dados_components_result{
+.relatorio_dados_components_result {
     font-family: Roboto;
     font-size: 34px;
     font-style: normal;
@@ -58,23 +62,23 @@
     letter-spacing: 0.72px;
 }
 
-.relatorio_grafico{
+.relatorio_grafico {
     height: 28.125rem;
     display: flex;
     flex-direction: column;
     gap: 25px;
     border-radius: 14.817px;
     border: 1px solid #DDD;
-    padding: 25px 60px;
+    padding: 25px 35px;
 }
 
-.relatorio_grafico_cabecalho{
+.relatorio_grafico_cabecalho {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.relatorio_grafico_cabecalho_titulo{
+.relatorio_grafico_cabecalho_titulo {
     font-family: Roboto;
     font-size: 28px;
     font-style: normal;
@@ -82,21 +86,21 @@
     line-height: normal;
 }
 
-.relatorio_grafico_cabecalho_cores{
+.relatorio_grafico_cabecalho_cores {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 25px;
 }
 
-.relatorio_grafico_cabecalho_cores_dado{
+.relatorio_grafico_cabecalho_cores_dado {
     display: flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
 }
 
-.relatorio_grafico_cabecalho_cores_dado_text{
+.relatorio_grafico_cabecalho_cores_dado_text {
     font-family: Roboto;
     font-size: 15px;
     font-style: normal;
@@ -104,28 +108,54 @@
     line-height: normal;
 }
 
-
-#grafico{
+#grafico {
     width: 100%;
     height: 100%;
+}
+
+.relatorio_movimentacao {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 14.817px;
+    border: 1px solid #DDD;
+    padding: 25px 35px;
+}
+
+.relatorio_movimentacao_cabecalho_titulo {
+    color: #25282C;
+    font-family: Roboto;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
 }
+
 th, td {
     text-align: left;
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }
+
 th {
-    background: #f1f1f1;
+    background: #F7F7F7;
     color: #666;
 }
+
 td {
     vertical-align: middle;
 }
+
+tr {
+    cursor: pointer;
+}
+
 .avatar {
     width: 30px;
     height: 30px;
@@ -135,11 +165,146 @@ td {
     margin-right: 10px;
     vertical-align: middle;
 }
+
 .status {
-    background: #d4edda;
-    color: #155724;
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-align: center;
-    display: inline-block;
+    background: #E5FFF1;
+    color: #00AE4E;
+    display: flex;
+    width: 175px;
+    height: 20px;
+    padding: 7px 15px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.status.Pendente {
+    background-color: #f1c40f;
+    color: #fff;
+}
+
+.status.Concluído {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+/* Definição de largura para cada coluna */
+th:nth-child(1), td:nth-child(1) { width: 40%; min-width: 150px; } /* Nome */
+th:nth-child(2), td:nth-child(2) { width: 20%; min-width: 100px; } /* Data */
+th:nth-child(3), td:nth-child(3) { width: 20%; min-width: 100px; } /* Gasto */
+th:nth-child(4), td:nth-child(4) { width: 20%; min-width: 100px; } /* Status */
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .container_relatorio {
+        padding: 0 5vw;
+        margin: 40px 0;
+    }
+
+    .relatorio_dados {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .relatorio_dados_components {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .relatorio_dados_components_titulo {
+        font-size: 20px;
+    }
+
+    .relatorio_dados_components_result {
+        font-size: 28px;
+    }
+
+    .relatorio_grafico {
+        height: auto;
+        padding: 15px;
+    }
+
+    .relatorio_grafico_cabecalho {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .relatorio_grafico_cabecalho_titulo {
+        font-size: 24px;
+    }
+
+    .relatorio_grafico_cabecalho_cores {
+        gap: 15px;
+    }
+
+    .relatorio_movimentacao {
+        padding: 15px;
+    }
+
+    .relatorio_movimentacao_cabecalho_titulo {
+        font-size: 24px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .status {
+        width: 100px;
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    th:nth-child(1), td:nth-child(1) { min-width: 120px; }
+    th:nth-child(2), td:nth-child(2) { min-width: 80px; }
+    th:nth-child(3), td:nth-child(3) { min-width: 80px; }
+    th:nth-child(4), td:nth-child(4) { min-width: 80px; }
+}
+
+@media (max-width: 480px) {
+    .relatorio_titulo h1 {
+        font-size: 18px;
+    }
+
+    .relatorio_dados_components_titulo {
+        font-size: 18px;
+    }
+
+    .relatorio_dados_components_result {
+        font-size: 24px;
+    }
+
+    .relatorio_grafico_cabecalho_titulo {
+        font-size: 20px;
+    }
+
+    .relatorio_grafico_cabecalho_cores_dado_text {
+        font-size: 13px;
+    }
+
+    .relatorio_movimentacao_cabecalho_titulo {
+        font-size: 20px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    .avatar {
+        width: 24px;
+        height: 24px;
+    }
 }
