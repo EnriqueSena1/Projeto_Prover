@@ -26,7 +26,7 @@ async function Login(evento) {
                 window.location.href = '/relatorio/';
                 break;
             case 'vendedor':
-                window.location.href = '/Produto/';
+                window.location.href = '/CarrinhoVend/';
                 break;
             case 'cliente':
                 window.location.href = '/HomeUser/';

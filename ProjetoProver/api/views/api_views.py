@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from decimal import Decimal
 
 
 class LoginView(APIView):
@@ -213,7 +214,7 @@ class CompraCreateAPIView(APIView):
         try:
             with transaction.atomic():
                 cliente = CustomUser.objects.get(id=data["cliente_id"])
-                total_preco = data["total_preco"]
+                total_preco = Decimal(str(data["total_preco"])) 
                 itens_data = data["itens"]
                 
                  # Verifica saldo do cliente
