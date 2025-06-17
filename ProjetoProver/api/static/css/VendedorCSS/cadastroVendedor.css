@@ -1,13 +1,15 @@
-
 .main-container {
     width: 100%;
-    width: 1000px; /* Largura máxima do container principal */
-    margin: 0 auto; /* Centraliza o container principal */
-    padding: 20px;
-    font-family: 'Roboto', sans-serif;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
 }
 
 .content-container {
+    margin-top: 20px;
+    width: 1000px;
+    /* Largura máxima do container principal */
     background-color: #fff;
     border-radius: 8px;
     padding: 30px;
@@ -18,7 +20,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .header-section h2 {
@@ -28,7 +30,8 @@
 }
 
 .register-button {
-    background-color: #8B0000; /* Cor do botão de cadastro */
+    background-color: #8B0000;
+    /* Cor do botão de cadastro */
     border-color: #8B0000;
     color: #fff;
     padding: 12px 18px;
@@ -52,18 +55,19 @@
 .vendedores-list {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espaçamento entre os itens da lista */
+    gap: 15px;
+    /* Espaçamento entre os itens da lista */
 }
 
 .vendedor-item {
     background-color: #fff;
-    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 15px 20px;
+    padding: 20px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para cada item de vendedor */
+    box-shadow: 0 0 6px #7A162F80;
+    /* Sombra para cada item de vendedor */
     transition: all 0.3s ease;
 }
 
@@ -100,7 +104,8 @@
 }
 
 .edit-icon {
-    color: #6c757d; /* Cor do ícone de edição */
+    color: #6c757d;
+    /* Cor do ícone de edição */
     font-size: 22px;
     text-decoration: none;
 }
@@ -111,24 +116,31 @@
 
 /* Estilos para o toggle (Bootstrap Switch) */
 .form-check-input.toggle-status {
-    width: 40px; /* Largura do switch */
-    height: 20px; /* Altura do switch */
-    margin-left: 0; /* Remove margem padrão do Bootstrap */
-    background-color: #dc3545; /* Cor de fundo quando desativado (vermelho) */
+    width: 40px;
+    /* Largura do switch */
+    height: 20px;
+    /* Altura do switch */
+    margin-left: 0;
+    /* Remove margem padrão do Bootstrap */
+    background-color: #dc3545;
+    /* Cor de fundo quando desativado (vermelho) */
     border-color: #dc3545;
-    background-image: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'-4 -4 8 8\'%3e%3ccircle r=\'3\' fill=\'%23fff\'/\%3e%3c/svg%3e"); /* Círculo branco */
+    background-image: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'-4 -4 8 8\'%3e%3ccircle r=\'3\' fill=\'%23fff\'/\%3e%3c/svg%3e");
+    /* Círculo branco */
     background-position: left center;
     transition: background-position .15s ease-in-out;
 }
 
 .form-check-input.toggle-status:checked {
-    background-color: #28a745; /* Cor de fundo quando ativado (verde) */
+    background-color: #28a745;
+    /* Cor de fundo quando ativado (verde) */
     border-color: #28a745;
     background-position: right center;
 }
 
 .form-check-input.toggle-status:focus {
-    box-shadow: none; /* Remove o box-shadow padrão do focus do Bootstrap */
+    box-shadow: none;
+    /* Remove o box-shadow padrão do focus do Bootstrap */
 }
 
 .form-check-label {
@@ -229,11 +241,11 @@
     border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: #bfb;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
     transform: translateX(24px);
     background-color: green;
 }
@@ -261,7 +273,7 @@ input:checked + .slider:before {
     margin: 0 10px;
 }
 
-.Cadastrar-icon-img{
+.Cadastrar-icon-img {
     margin-right: 10px;
     width: 30px;
     height: 30px;
