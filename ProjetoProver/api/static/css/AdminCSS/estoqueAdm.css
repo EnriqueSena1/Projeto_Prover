@@ -15,16 +15,19 @@
     font-size: 32px;
     font-style: normal;
     font-weight: 500;
+    
     line-height: normal;
 }
 
 .cabecalho_estoque {
+    
     display: flex;
     margin-top: 50px;
     justify-content: space-between;
     align-items: center;
     width: 1000px;
     margin-bottom: 30px;
+
 }
 
 .botao_cadastrar_produto {
@@ -34,7 +37,7 @@
     font-size: 20px;
     border-radius: 15px;
     display: flex;
-    padding: 14px 24px;
+    padding: 12px 24px;
     align-items: center;
     gap: 10px;
     cursor: pointer;
@@ -277,23 +280,6 @@ td {
     margin-left: auto;
     cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
