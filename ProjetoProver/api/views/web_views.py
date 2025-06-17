@@ -95,31 +95,31 @@ def validarEmail(request):
     
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
-@csrf_exempt
-# @login_required
-def toggle_cliente(request, cliente_id):
-    if request.method != "PATCH":
-        return HttpResponseNotAllowed(["PATCH"])
+# @csrf_exempt
+# # @login_required
+# def toggle_cliente(request, cliente_id):
+#     if request.method != "PATCH":
+#         return HttpResponseNotAllowed(["PATCH"])
 
-    try:
-        data = json.loads(request.body)
-        is_active = data.get("is_active")
-        if type(is_active) is not bool:
-            return HttpResponseBadRequest("is_active deve ser true/false")
+#     try:
+#         data = json.loads(request.body)
+#         is_active = data.get("is_active")
+#         if type(is_active) is not bool:
+#             return HttpResponseBadRequest("is_active deve ser true/false")
 
-        user = CustomUser.objects.get(id=cliente_id, tipo="cliente")
-        user.is_active = is_active
-        user.save()
+#         user = CustomUser.objects.get(id=cliente_id, tipo="cliente")
+#         user.is_active = is_active
+#         user.save()
 
-        return JsonResponse({"id": user.id, "is_active": user.is_active})
+#         return JsonResponse({"id": user.id, "is_active": user.is_active})
 
-    except CustomUser.DoesNotExist:
-        return JsonResponse({"error": "Cliente não encontrado."}, status=404)
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "JSON inválido."}, status=400)
+#     except CustomUser.DoesNotExist:
+#         return JsonResponse({"error": "Cliente não encontrado."}, status=404)
+#     except json.JSONDecodeError:
+#         return JsonResponse({"error": "JSON inválido."}, status=400)
     
 def estoque_adm(request):
-    produtos = Produto.objects.filter(is_disponivel=True)
+    produtos = Produto.objects.all()
     context = {
         'produtos': produtos
     }
