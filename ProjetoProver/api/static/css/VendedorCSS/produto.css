@@ -1,6 +1,7 @@
 /* Estilos globais */
 body {
     font-family: Arial, sans-serif;
+    overflow-y: scroll;
 
 }
 
@@ -118,4 +119,66 @@ body {
     display: none;
 }
 
+/* Botão de limpar filtro - melhorado */
+#clear-filter-specific {
+    padding: 10px 16px;
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#clear-filter-specific:hover {
+    background-color: #5a6268;
+    transform: scale(1.02);
+}
+
+.classe-titulo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 30px 0 15px;
+    border-left: 5px solid  #dc3545;
+    padding-left: 12px;
+    text-transform: capitalize;
+    background-color: #f8f9fa;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-radius: 4px;
+}
+
+
+/* Título principal */
+.titulo-produtos {
+    font-size: 28px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+    margin-right: 5px;
+}
+#class-filter {
+    padding: 10px 14px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 180px;
+}
+
+#class-filter:hover {
+    border-color: #dc3545; /* vermelho bootstrap */
+}
+
+#class-filter:focus {
+    outline: none;
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.4); /* vermelho com transparência */
+}
 
