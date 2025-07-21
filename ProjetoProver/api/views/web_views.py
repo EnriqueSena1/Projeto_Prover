@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from collections import defaultdict
 import json
 
 # View da página de login
@@ -69,12 +70,17 @@ def tela_inicial(request):
 def relatorio(request):
      return render(request, 'admin/relatorio.html')
 
+
 def cadastroCliente(request):
-    user = request.user  # Usuário logado
-    usuarios = CustomUser.objects.filter(tipo='cliente')  # Lista de clientes
+    user = request.user
+    usuarios_list = CustomUser.objects.filter(tipo='cliente')
+    paginator = Paginator(usuarios_list, 5)
+    page_number = request.GET.get('page')
+    usuarios = paginator.get_page(page_number)
+
     return render(request, 'vendedor/cadastroCliente.html', {
         "usuarios": usuarios,
-        "user": user, 
+        "user": user,
     })
 
 def validarEmail(request):
@@ -119,15 +125,43 @@ def validarEmail(request):
 #         return JsonResponse({"error": "JSON inválido."}, status=400)
     
 def estoque_adm(request):
-    produtos = Produto.objects.all()
+    produtos_list = Produto.objects.all()  # Todos os produtos
+    paginator = Paginator(produtos_list, 5)  # 5 produtos por página
+    page_number = request.GET.get('page')  # Número da página na URL
+    produtos = paginator.get_page(page_number)  # Página atual paginada
+
     context = {
         'produtos': produtos
     }
     return render(request, 'admin/estoqueAdm.html', context)
 
 def produto(request):
+    # Pega o filtro de classe da URL (se houver)
+    classe_selecionada = request.GET.get('classe', None)
+    
+    # Filtra os produtos
     produtos = Produto.objects.filter(is_disponivel=True)
-    return render(request, 'vendedor/produto.html', {"produtos": produtos})
+    
+    if classe_selecionada and classe_selecionada != 'all':
+        produtos = produtos.filter(classe=classe_selecionada)
+
+    # Agrupar por classe
+    produtos_por_classe = defaultdict(list)
+    for produto in produtos:
+        produtos_por_classe[produto.classe].append(produto)
+
+    # Converter defaultdict para dict comum antes de passar para o template
+    produtos_por_classe_dict = dict(produtos_por_classe)
+
+    # Obter todas as classes disponíveis para o select
+    todas_as_classes = Produto.objects.filter(is_disponivel=True).values_list('classe', flat=True).distinct()
+    classes_disponiveis = [classe for classe in todas_as_classes if classe]  # Remove valores None
+
+    return render(request, 'vendedor/produto.html', {
+        "produtos_por_classe": produtos_por_classe_dict,
+        "classes_disponiveis": classes_disponiveis,
+        "classe_selecionada": classe_selecionada
+    })
 
 def cadastroVendedor(request):
     vendedores_list = CustomUser.objects.filter(tipo='vendedor')

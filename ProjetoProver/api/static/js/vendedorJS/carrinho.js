@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.removeItem("clienteSelecionadoCreditos");
                 setTimeout(() => {
                     window.location.reload();
-                }, 1500); // Atraso para o toast ser visível
+                }, 1000); // Atraso para o toast ser visível
             } else {
                 alert("Erro ao finalizar a compra."); // Manter alert para erro de API
             }
@@ -270,7 +270,7 @@ async function deletarCarrinho(idProduto) {
             // 5. Recarrega a página após um pequeno atraso para que o toast seja visível
             setTimeout(() => {
                 window.location.reload();
-            }, 1500); // Atraso de 1.5 segundos
+            }, 1000); // Atraso de 1 segundo
 
         } catch (error) {
             console.error(error);

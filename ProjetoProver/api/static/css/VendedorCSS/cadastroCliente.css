@@ -169,3 +169,37 @@ input:checked+.slider:before {
   opacity: 0.6;
   background-color: #f8f8f8;
 }
+
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 6px 12px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination .current {
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.Cadastrar-icon-img {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.cliente-card.vendedor-item{
+  margin-bottom: 12px;
+}

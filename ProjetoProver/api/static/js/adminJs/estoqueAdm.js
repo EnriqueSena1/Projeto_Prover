@@ -1,24 +1,42 @@
 let idProdutoParaExcluir = null;
 
+// Cache dos elementos
+const toastConfirmacao = document.getElementById("toast-confirm-remocao");
+const toastSucesso = document.getElementById("toast-produto-removido");
+const btnYes = document.querySelector(".btn-yes");
+
+// Função para alternar visibilidade de um elemento
+function alternarVisibilidade(elemento, mostrar) {
+    elemento.classList.toggle("hidden", !mostrar);
+    elemento.classList.toggle("visible", mostrar);
+}
+
 // Mostra o toast de confirmação
 function mostrarConfirmacaoRemocao(idProduto) {
     idProdutoParaExcluir = idProduto;
-
-    const toast = document.getElementById("toast-confirm-remocao");
-    toast.classList.remove("hidden");
-    toast.classList.add("visible");
+    alternarVisibilidade(toastConfirmacao, true);
 }
 
 // Esconde o toast de confirmação
 function esconderConfirmacaoRemocao() {
-    const toast = document.getElementById("toast-confirm-remocao");
-    toast.classList.remove("visible");
-    toast.classList.add("hidden");
-
+    alternarVisibilidade(toastConfirmacao, false);
     idProdutoParaExcluir = null;
 }
+
+// Toast de sucesso
+function mostrarToastSucesso() {
+    alternarVisibilidade(toastSucesso, true);
+
+    setTimeout(() => {
+        alternarVisibilidade(toastSucesso, false);
+    }, 1500);
+}
+
+// Confirma a exclusão via API
 async function confirmarExclusaoProduto() {
     if (!idProdutoParaExcluir) return;
+
+    btnYes.disabled = true; // Previne múltiplos cliques
 
     const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const url = `/api/produtos/${idProdutoParaExcluir}/`;
@@ -32,13 +50,15 @@ async function confirmarExclusaoProduto() {
             },
         });
 
-        esconderConfirmacaoRemocao();
-
         if (response.ok) {
             mostrarToastSucesso();
+
+            // Opcional: remover da DOM sem recarregar
+            // document.querySelector(`[data-id="${idProdutoParaExcluir}"]`).closest(".produto").remove();
+
             setTimeout(() => {
                 window.location.reload();
-            }, 1500);
+            }, 1000);
         } else {
             alert(`Erro ao excluir o produto. Código: ${response.status}`);
             console.error("Erro na exclusão:", response.statusText);
@@ -46,38 +66,29 @@ async function confirmarExclusaoProduto() {
     } catch (error) {
         alert("Erro ao excluir o produto.");
         console.error("Erro na requisição:", error);
+    } finally {
+        esconderConfirmacaoRemocao();
+        btnYes.disabled = false;
     }
-}
-
-// Toast de sucesso no canto inferior
-function mostrarToastSucesso() {
-    const toastSucesso = document.getElementById("toast-produto-removido");
-    toastSucesso.classList.remove("hidden");
-    toastSucesso.classList.add("visible");
-
-    setTimeout(() => {
-        toastSucesso.classList.remove("visible");
-        toastSucesso.classList.add("hidden");
-    }, 1500);
 }
 
 // Delegação de eventos
 document.addEventListener("click", function (e) {
-    // Botão "Sim"
-    if (e.target.closest(".btn-yes")) {
+    const target = e.target;
+
+    if (target.closest(".btn-yes")) {
         confirmarExclusaoProduto();
+        return;
     }
 
-    // Botão "Não"
-    if (e.target.closest(".btn-no")) {
+    if (target.closest(".btn-no")) {
         esconderConfirmacaoRemocao();
+        return;
     }
 
-    // Botão de excluir (ícone ou link)
-    if (e.target.closest(".btn_excluir_produto")) {
+    const btnExcluir = target.closest(".btn_excluir_produto");
+    if (btnExcluir) {
         e.preventDefault();
-        const btn = e.target.closest(".btn_excluir_produto");
-        const id = btn.getAttribute("data-id");
-        mostrarConfirmacaoRemocao(id);
+        mostrarConfirmacaoRemocao(btnExcluir.getAttribute("data-id"));
     }
 });
