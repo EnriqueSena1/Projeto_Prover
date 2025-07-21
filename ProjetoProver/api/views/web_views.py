@@ -70,12 +70,17 @@ def tela_inicial(request):
 def relatorio(request):
      return render(request, 'admin/relatorio.html')
 
+
 def cadastroCliente(request):
-    user = request.user  # Usuário logado
-    usuarios = CustomUser.objects.filter(tipo='cliente')  # Lista de clientes
+    user = request.user
+    usuarios_list = CustomUser.objects.filter(tipo='cliente')
+    paginator = Paginator(usuarios_list, 5)
+    page_number = request.GET.get('page')
+    usuarios = paginator.get_page(page_number)
+
     return render(request, 'vendedor/cadastroCliente.html', {
         "usuarios": usuarios,
-        "user": user, 
+        "user": user,
     })
 
 def validarEmail(request):
@@ -120,12 +125,15 @@ def validarEmail(request):
 #         return JsonResponse({"error": "JSON inválido."}, status=400)
     
 def estoque_adm(request):
-    produtos = Produto.objects.all()
+    produtos_list = Produto.objects.all()  # Todos os produtos
+    paginator = Paginator(produtos_list, 5)  # 5 produtos por página
+    page_number = request.GET.get('page')  # Número da página na URL
+    produtos = paginator.get_page(page_number)  # Página atual paginada
+
     context = {
         'produtos': produtos
     }
     return render(request, 'admin/estoqueAdm.html', context)
-
 
 def produto(request):
     # Pega o filtro de classe da URL (se houver)

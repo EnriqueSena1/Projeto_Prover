@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -28,7 +27,7 @@
                     <tr>
                         <th>Img</th>
                         <th>Class</th>
-                        <th>Tipo embalag</th>
+                        <th>Tipo embalagem</th>
                         <th class="th_descricao">Descrição</th>
                         <th>Validade</th>
                         <th>Quantid</th>
@@ -76,6 +75,23 @@
                 </tbody>
             </table>
 
+            <!-- PAGINAÇÃO -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if produtos.has_previous %}
+                        <a href="?page={{ produtos.previous_page_number }}">Anterior</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Página {{ produtos.number }} de {{ produtos.paginator.num_pages }}
+                    </span>
+
+                    {% if produtos.has_next %}
+                        <a href="?page={{ produtos.next_page_number }}">Próxima</a>
+                    {% endif %}
+                </span>
+            </div>
+
             <!-- Toast de Confirmação de Remoção de Produto -->
             <div id="toast-confirm-remocao" class="toast hidden confirm fullscreen">
                 <div class="toast-body">
@@ -96,8 +112,6 @@
 
     {% include "componentes/popUps/popUpProduto.html" %}
     <script src="{% static 'js/adminJS/estoqueAdm.js' %}"></script>
-
 </body>
 </html>
-
 {% endblock %}
