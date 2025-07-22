@@ -87,12 +87,12 @@ def validarEmail(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         email = data.get('email')
-        cliente_id = data.get('clienteId') 
+        cliente_id = data.get('clienteId') or data.get('vendedorId')
 
         if not email:
             return JsonResponse({'error': 'Email não informado'}, status=400)
 
-        query = CustomUser.objects.filter(email=email, tipo="cliente")
+        query = CustomUser.objects.filter(email=email)
         if cliente_id:
             query = query.exclude(id=cliente_id)
 

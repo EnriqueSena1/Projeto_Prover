@@ -38,3 +38,68 @@
     padding: 5px 25px;
 }
 
+
+
+/* Botão hamburguer escondido por padrão */
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* ============================
+   MOBILE RESPONSIVO
+   ============================ */
+@media (max-width: 480px) {
+    .menuCentral {
+        justify-content: space-between;
+        padding: 0 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: 80px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: #8b1a2a;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 0;
+        overflow: hidden;
+        z-index: 1000;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .menu.ativo {
+        height: auto;
+        padding: 20px;
+        z-index: 1000;
+    }
+
+    .button {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .button a {
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        font-size: 18px;
+        background: #ffffff;
+        border-radius: 8px;
+    }
+}

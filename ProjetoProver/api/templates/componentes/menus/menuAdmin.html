@@ -1,20 +1,27 @@
 {% load static%}
-<link rel="stylesheet" href="{%static 'css/menuVendedor.css'%}">
+<link rel="stylesheet" href="{%static 'css/menuAdmin.css'%}">
 
 <div class="menuCentral">
     <img src="{% static '../static/img/logo.svg' %}" alt="logo">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 </div>
-<div class="menu">
+
+<div class="menu" id="menu-lateral">
     <div class="button">
         <a href="{% url 'relatorio' %}">Relatório</a>
         <a href="{% url 'cadastro_vend' %}">Cadastro de vendedores</a>
         <a href="{% url 'cadastro_cliente' %}">Cadastro de clientes</a>
-
         <a href="{% url 'estoque_adm' %}">Estoque</a>
         <a href="{% url 'inicio' %}">Sair</a>
     </div>
 </div>
 
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('menu-lateral');
+        menu.classList.toggle('ativo');
+    }
+</script>
 
 <script src="{% static 'js/utils.js' %}"></script>
 
