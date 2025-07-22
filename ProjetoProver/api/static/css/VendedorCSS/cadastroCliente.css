@@ -3,17 +3,20 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+
+
 
   font-family: 'Roboto', sans-serif;
-  width: 100%;
-  margin: 0 auto;
-  /* Centraliza o container principal */
+  width: 100%
+  
 }
 
 .container {
   margin-top: 20px;
-  width: 1000px;
-  /* Largura máxima do container principal */
+  max-width: 1000px;
+  width: 100%;
   padding: 30px;
 }
 
@@ -167,7 +170,7 @@ input:checked+.slider:before {
 
 .vendedor-item.inativo {
   opacity: 0.6;
-  background-color: #f8f8f8;
+  background-color: hsl(0, 0%, 97%);
 }
 
 
@@ -202,4 +205,84 @@ input:checked+.slider:before {
 
 .cliente-card.vendedor-item{
   margin-bottom: 12px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .clientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .clientes-header .titulo {
+    font-size: 24px;
+  }
+
+  .addCliente {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .cliente-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .cliente-acoes {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .cliente-nome {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clientes-container, #lista-clientes{
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .clientes-container{
+    margin-bottom: 20px;
+  }
+  .addCliente {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .clientes-header .titulo h2 {
+    font-size: 20px;
+  }
+
+  .cliente-nome {
+    font-size: 14px;
+  }
+
+  .icon-usuario {
+    width: 35px;
+    height: 35px;
+  }
+
+  .icon-editar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .slider:before {
+    width: 16px;
+    height: 16px;
+  }
+
+  .switch {
+    width: 40px;
+    height: 20px;
+  }
 }

@@ -1,20 +1,27 @@
 {% load static%}
 <link rel="stylesheet" href="{%static 'css/menuVendedor.css'%}">
 
+
 <div class="menuCentral">
-    <img src="{% static '../static/img/logo.svg' %}" alt="logo">
+    <img src="{% static '../static/img/logo.svg' %}" alt="logo" />
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 </div>
-<div class="menu">
+
+<div class="menu" id="menu">
     <div class="button">
         <a href="{% url 'produto_vend' %}">Produtos</a>
         <a href="{% url 'cadastro_cliente' %}">Cadastro de Cliente</a>
-        <a  href="{% url 'carrinho_vend' %}">Carrinho</a>
-        <a  href="{% url 'inicio' %}">Sair</a>
-
+        <a href="{% url 'carrinho_vend' %}">Carrinho</a>
+        <a href="{% url 'inicio' %}">Sair</a>
     </div>
 </div>
 
-
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById("menu");
+        menu.classList.toggle("ativo");
+    }
+</script>
 
 <script src="{% static 'js/utils.js' %}"></script>
 
