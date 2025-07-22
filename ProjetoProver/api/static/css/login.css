@@ -20,8 +20,8 @@ body {
 .login-box {
     background-color: #e6e6e6; /* Cor de fundo cinza claro */
     border-radius: 8px;
-    padding: 30px;
-    width: 350px;
+    padding: 40px;
+    width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
@@ -29,7 +29,7 @@ body {
 .login-box h1 {
     color: #8b1a2a; /* Cor vinho/bordô para o título */
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 30px;
 }
 
 /* Estilo dos campos de formulário */
@@ -41,16 +41,16 @@ body {
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    font-size: 14px;
+    font-size: 20px;
     color: #333;
 }
 
 .input-group input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 /* Estilo do botão */
@@ -79,4 +79,16 @@ body {
     }
 
 
+}
+
+input.erro {
+    border: 1.5px solid red;
+    background-color: #ffe6e6;
+}
+
+.erro-mensagem {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    display: block;
 }
