@@ -103,3 +103,109 @@
         border-radius: 8px;
     }
 }
+
+
+/* ============================
+   TABLET: até 768px
+   ============================ */
+@media (max-width: 768px) {
+  .menuCentral {
+    justify-content: space-between;
+    padding: 0 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 80px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: #8b1a2a;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    z-index: 1000;
+  }
+
+  .menu.ativo {
+    height: auto;
+    padding: 20px;
+  }
+
+  .button {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .button a {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 18px;
+    background: #ffffff;
+    border-radius: 8px;
+  }
+}
+
+/* ============================
+   NOTEBOOK PEQUENO: até 1000px
+   ============================ */
+@media (max-width: 1000px) {
+  .menuCentral {
+    justify-content: space-between;
+    padding: 0 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 80px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: #8b1a2a;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    z-index: 1000;
+  }
+
+  .menu.ativo {
+    height: auto;
+    padding: 20px;
+  }
+
+  .button {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .button a {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 18px;
+    background: #ffffff;
+    border-radius: 8px;
+  }
+}
+

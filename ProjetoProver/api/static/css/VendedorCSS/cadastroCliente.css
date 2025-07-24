@@ -286,3 +286,150 @@ input:checked+.slider:before {
     height: 20px;
   }
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .clientes-container, #lista-clientes {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
+  .clientes-container {
+    margin-bottom: 30px;
+  }
+
+  .clientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .clientes-header .titulo h2,
+  .clientes-header .titulo {
+    font-size: 22px;
+  }
+
+  .addCliente {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .cliente-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .cliente-acoes {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .cliente-nome {
+    font-size: 16px;
+  }
+
+  .icon-usuario {
+    width: 38px;
+    height: 38px;
+  }
+
+  .icon-editar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .slider:before {
+    width: 18px;
+    height: 18px;
+  }
+
+  .switch {
+    width: 44px;
+    height: 22px;
+  }
+
+  .Cadastrar-icon-img {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    padding: 25px;
+  }
+
+  .clientes-container, #lista-clientes {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+
+  .clientes-container {
+    margin-bottom: 40px;
+  }
+
+  .clientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 25px;
+  }
+
+  .clientes-header .titulo h2,
+  .clientes-header .titulo {
+    font-size: 24px;
+  }
+
+  .addCliente {
+    font-size: 18px;
+    padding: 10px 16px;
+  }
+
+  .cliente-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px;
+  }
+
+  .cliente-acoes {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .cliente-nome {
+    font-size: 18px;
+  }
+
+  .icon-usuario {
+    width: 42px;
+    height: 42px;
+  }
+
+  .icon-editar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .slider:before {
+    width: 19px;
+    height: 19px;
+  }
+
+  .switch {
+    width: 48px;
+    height: 24px;
+  }
+
+  .Cadastrar-icon-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+}

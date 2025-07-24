@@ -1,20 +1,24 @@
-.conteiner{
+/* =========================
+   ESTILO BASE (DESKTOP)
+   ========================= */
+
+.conteiner {
     width: 100%;
-   
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.card{
+
+.card {
     width: 1000px;
     margin-top: 50px;
 }
 
-.olausuario{
+.olausuario {
     text-align: center;
 }
 
-.saldousuario{
+.saldousuario {
     width: 180px;
     height: 50px;
     font-size: 30px;
@@ -28,28 +32,158 @@
     margin: auto 0;
     background-color: brown;
 }
-.textomeio, .ultimascompras{
+
+.textomeio,
+.ultimascompras {
     display: flex;
     padding: 12px 18px;
     gap: 80px;
     width: 950px;
-
 }
-.divdata{
+
+.divdata {
     margin-right: 630px;
-    
 }
 
-.ultimascompras{
+.ultimascompras {
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     border-bottom: 1px solid #eee;
     margin-bottom: 20px;
     background-color: white;
     border-radius: 10px;
 }
-h1{
-    color: #8B2635 ;
+
+h1 {
+    color: #8B2635;
 }
-h2{
+
+h2 {
     margin-top: 20px;
+}
+
+/* ===== Telas até 1100px ===== */
+@media (max-width: 1100px) {
+    .card {
+        width: 95%;
+        padding: 0 30px;
+        box-sizing: border-box;
+    }
+
+    .textomeio,
+    .ultimascompras {
+        width: 100%;
+        padding: 12px 20px;
+        gap: 40px;
+        box-sizing: border-box;
+    }
+
+    .divdata {
+        margin-right: auto;
+    }
+}
+
+/* ===== Telas até 768px (tablets) ===== */
+@media (max-width: 768px) {
+    .card {
+        width: 95%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .textomeio,
+    .ultimascompras {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .saldousuario {
+        width: 100%;
+        font-size: 24px;
+    }
+
+    .divdata {
+        margin-right: 0;
+    }
+
+    .ultimascompras {
+        text-align: left;
+    }
+}
+
+/* ===== Telas até 480px (celulares pequenos) ===== */
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    .olausuario h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .textosaldo h2 {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .saldousuario {
+        width: 100%;
+        font-size: 20px;
+        height: auto;
+        padding: 12px 0;
+        margin: 10px auto;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .textomeio {
+        display: none;
+    }
+
+    .ultimascompras {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 5px;
+        width: 100%;
+        border-left: 5px solid brown;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+    }
+
+    .ultimascompras p {
+        font-size: 15px;
+        margin: 2px 0;
+    }
+
+    .ultimascompras .divdata p::before {
+        content: "Data: ";
+        font-weight: bold;
+    }
+
+    .ultimascompras div:nth-child(2) p::before {
+        content: "Qtd: ";
+        font-weight: bold;
+    }
+
+    .ultimascompras div:nth-child(3) p::before {
+        content: "Preço: ";
+        font-weight: bold;
+    }
+
+    h1, h2, p {
+        word-break: break-word;
+    }
 }
