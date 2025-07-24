@@ -348,3 +348,304 @@ body {
     margin-left: auto;
     cursor: pointer;
 }
+
+@media (max-width: 480px) {
+
+  .cabecalho {
+    margin: 30px 10px;
+    flex-direction: column;
+  }
+
+  .ContainerTodo {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .carrinho-scroll {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .carrinho-container {
+    max-width: 100%;
+    gap: 20px;
+  }
+
+  .item-carrinho {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+  }
+
+  .produto-img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-right: 0;
+    align-self: center;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .quantidade {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .resumo-container {
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 16px;
+  }
+
+  .resumo-container h3 {
+    font-size: 18px;
+  }
+
+  .resumo-container input {
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .info-row {
+    font-size: 16px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .checkout-btn {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .toast.confirm.fullscreen {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .toast.success {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    justify-content: center;
+  }
+
+  .toast .toast-message {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .toast .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .cabecalho {
+    margin: 40px 20px;
+    flex-direction: column;
+  }
+
+  .ContainerTodo {
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .carrinho-scroll {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .carrinho-container {
+    max-width: 100%;
+    gap: 20px;
+  }
+
+  .item-carrinho {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+  }
+
+  .produto-img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    margin-right: 0;
+    align-self: center;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .quantidade {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .resumo-container {
+    width: 100%;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 18px;
+  }
+
+  .resumo-container h3 {
+    font-size: 18px;
+  }
+
+  .resumo-container input {
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .info-row {
+    font-size: 17px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .checkout-btn {
+    font-size: 20px;
+    padding: 12px;
+  }
+
+  .toast.confirm.fullscreen {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .toast.success {
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    justify-content: center;
+  }
+
+  .toast .toast-message {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .toast .btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .cabecalho {
+    margin: 50px 30px;
+    flex-direction: column;
+  }
+
+  .ContainerTodo {
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    padding: 0 30px;
+  }
+
+  .carrinho-scroll {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .carrinho-container {
+    max-width: 100%;
+    gap: 24px;
+  }
+
+  .item-carrinho {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px;
+    border: 1px solid #ccc;
+  }
+
+  .produto-img {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    margin-right: 0;
+    align-self: center;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .quantidade {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .resumo-container {
+    width: 100%;
+    padding: 30px;
+    margin: 25px 0;
+    border-radius: 20px;
+  }
+
+  .resumo-container h3 {
+    font-size: 20px;
+  }
+
+  .resumo-container input {
+    font-size: 18px;
+    width: 100%;
+  }
+
+  .info-row {
+    font-size: 18px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .checkout-btn {
+    font-size: 22px;
+    padding: 14px;
+  }
+
+  .toast.confirm.fullscreen {
+    width: 85%;
+    padding: 30px;
+  }
+
+  .toast.success {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    justify-content: center;
+  }
+
+  .toast .toast-message {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .toast .btn {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}

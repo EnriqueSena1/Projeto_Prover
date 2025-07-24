@@ -9,12 +9,6 @@
     flex-direction: column;
 }
 
-/* Adiciona rolagem horizontal na tabela para telas pequenas */
-.container_estoque {
-    overflow-x: auto;
-}
-
-
 .titulo_estoque {
     color: #25282C;
     font-family: 'Roboto', sans-serif;
@@ -118,8 +112,8 @@ th {
 }
 
 .produto_img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     border-radius: 4px;
 }
@@ -323,74 +317,58 @@ td {
     width: 30px;
     height: 30px;
 }
-/* Garante que o container não fique fixo */
-.container,
-.container_estoque,
-.cabecalho_estoque {
-    width: 100%;
-    max-width: 1000px;
-    padding: 0 16px;
-    box-sizing: border-box;
+
+.cliente-card.vendedor-item{
+  margin-bottom: 12px;
 }
 
-/* Quebra a linha no cabeçalho e centraliza */
-@media (max-width: 768px) {
+/* ====== RESPONSIVIDADE PARA TELAS PEQUENAS ====== */
+@media (max-width: 1000px) {
     .cabecalho_estoque {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
-    .titulo_estoque {
-        font-size: 26px;
-        text-align: left;
+        align-items: center;
         width: 100%;
+        padding: 0 16px;
+        gap: 20px;
+        margin-top: 30px;
     }
 
     .botao_cadastrar_produto {
-        align-self: stretch;
+        width: 100%;
         justify-content: center;
-        font-size: 18px;
-        padding: 10px;
-    }
-
-    th, td {
         font-size: 16px;
-        padding: 10px;
-        white-space: nowrap; /* Evita quebra de linha nos dados */
+        padding: 10px 16px;
     }
 
-    .th_descricao {
-        width: auto;
+    .Cadastrar-icon-img {
+        width: 24px;
+        height: 24px;
+        margin-right: 6px;
+    }
+
+    .titulo_estoque {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .container_estoque {
+        width: 100%;
+        overflow-x: auto;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    table {
+        min-width: 700px; /* Garante que a tabela tenha rolagem horizontal se necessário */
+    }
+
+    .pagination {
+        font-size: 14px;
     }
 
     .toast.confirm.fullscreen {
-        width: 95%;
-    }
-
-    .produto_img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .btn_editar_produto, .btn_excluir_produto {
-        font-size: 1.1em;
-    }
-}
-
-@media (max-width: 480px) {
-    .titulo_estoque {
-        font-size: 22px;
-    }
-
-    .botao_cadastrar_produto {
-        font-size: 16px;
-        padding: 8px;
-    }
-
-    th, td {
-        font-size: 14px;
-        padding: 8px;
+        max-width: 95%;
+        padding: 24px;
     }
 
     .toast-message {
@@ -398,12 +376,65 @@ td {
     }
 
     .toast .btn {
+        font-size: 14px;
         padding: 10px 16px;
+    }
+
+    .toast.success {
+        bottom: 12px;
+        right: 12px;
         font-size: 14px;
     }
 
     .produto_img {
-        width: 35px;
-        height: 35px;
+        width: 50px;
+        height: 50px;
+    }
+
+    th, td {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .titulo_estoque {
+        font-size: 20px;
+    }
+
+    .botao_cadastrar_produto {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .Cadastrar-icon-img {
+        width: 20px;
+        height: 20px;
+    }
+
+    th, td {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .toast-message {
+        font-size: 16px;
+    }
+
+    .pagination a {
+        padding: 4px 8px;
+        font-size: 13px;
+    }
+
+    .acoes-btns {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .btn_editar_produto,
+    .btn_excluir_produto {
+        font-size: 1.1em;
+        padding: 4px;
     }
 }
