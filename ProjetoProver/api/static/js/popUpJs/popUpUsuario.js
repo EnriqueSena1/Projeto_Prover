@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 isValid = false;
             }
         } catch (error) {
-            console.error('Erro ao verificar email:', error);
+            // console.error('Erro ao verificar email:', error);
             mostrarErro('emailCliente', 'Erro ao verificar email. Tente novamente.');                isValid = false;
         }
     }
@@ -210,11 +210,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location.reload(); 
             } else {
                 const errorData = await response.json();
-                console.error('Erro no cadastro:', errorData);
+                // console.error('Erro no cadastro:', errorData);
                 // Aqui você pode mostrar mensagens de erro específicas
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
+            // console.error('Erro na requisição:', error);
                 
         }
     }

@@ -261,6 +261,7 @@
     .popup-dialog {
         width: 90%; /* Ajustado para ser responsivo */
         max-width: 550px; /* Mantém o tamanho máximo para esta breakpoint */
+        overflow-y: auto
     }
     
     .popup-header {
@@ -325,6 +326,7 @@
     .popup-dialog {
         width: 90%; /* Ajustado para ser responsivo */
         max-width: 400px; /* Menor em mobile, mas ainda centralizado */
+        overflow-y: auto
     }
     
     .popup-header {

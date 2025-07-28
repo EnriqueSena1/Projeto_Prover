@@ -57,10 +57,11 @@ urlpatterns = [
 
     #Relatorio ADM
 
-    path('relatorio/', relatorio, name="relatorio")
+    path('relatorio/', relatorio, name="relatorio"),
 
 
-
+    #sair
+    path('logout/', sair, name='logout')
 
 
 ]

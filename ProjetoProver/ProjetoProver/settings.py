@@ -150,3 +150,10 @@ import os
 
 MEDIA_URL = '/midia/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')
+
+LOGIN_URL = '/login/' # rota de redirecionamento
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # limpa quando deslogar 
+
+# DEBUG = False # evitar monstrar imagens de erros
+
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'meusite.com'] # somente conexões permitidas

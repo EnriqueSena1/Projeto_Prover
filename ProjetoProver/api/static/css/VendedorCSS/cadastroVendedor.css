@@ -1,4 +1,10 @@
+
+.boxContainer{
+    height: 100vh;
+}
+
 .main-container {
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -7,7 +13,8 @@
 }
 
 .content-container {
-    margin-top: 20px;
+
+    margin-top: 150px;
     width: 1000px;
     /* Largura máxima do container principal */
     background-color: #fff;
@@ -255,7 +262,12 @@ input:checked+.slider:before {
 
 /* Media Queries para responsividade */
 @media (max-width: 768px) {
+    .boxContainer{
+        height: 125vh;
+    }
+
     .content-container {
+        margin-top: 100px;
         padding: 20px;
     }
 

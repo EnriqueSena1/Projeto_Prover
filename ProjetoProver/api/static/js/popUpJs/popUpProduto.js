@@ -144,11 +144,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.reload(); 
                 } else {
                     const errorData = await response.json();
-                    console.error('Erro no cadastro/edição:', errorData);
+                    // console.error('Erro no cadastro/edição:', errorData);
                     // Aqui você pode mostrar mensagens de erro específicas
                 }
             } catch (error) {
-                console.error('Erro na requisição:', error);
+                // console.error('Erro na requisição:', error);
             }
         }
     }

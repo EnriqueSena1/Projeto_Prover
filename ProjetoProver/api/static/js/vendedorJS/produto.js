@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }, 300); 
                 }, 1000);
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 alert("Erro ao adicionar o produto ao carrinho.");
             }
         });

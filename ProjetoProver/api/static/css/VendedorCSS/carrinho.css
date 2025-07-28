@@ -1,15 +1,21 @@
-body {
+.cabecalhoGrande {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
 }
 
 .cabecalho {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 100px;
+  height: 100vh;
+}
+
+.cabecalho div h1{
+  margin-bottom: 20px;
 }
 
 .ContainerTodo {
@@ -350,11 +356,22 @@ body {
 }
 
 @media (max-width: 480px) {
-
-  .cabecalho {
-    margin: 30px 10px;
-    flex-direction: column;
+  .cabecalhoGrande{
+    height: 140vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+  .cabecalho {
+    flex-direction: column;
+    height: 90%;
+  
+  }
+
+  .cabecalhoMenor{
+    height: 80%;
+  }
+
 
   .ContainerTodo {
     flex-direction: column;
@@ -453,9 +470,18 @@ body {
 
 
 @media (max-width: 768px) {
+  .cabecalhoGrande{
+    height: 140vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .cabecalho {
-    margin: 40px 20px;
+    height: 90%;
     flex-direction: column;
+  }
+  .cabecalhoMenor{
+    height: 80%;
   }
 
   .ContainerTodo {
@@ -552,10 +578,17 @@ body {
 }
 
 @media (max-width: 1100px) {
+  .cabecalhoGrande{
+    height: 140vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .cabecalho {
-    margin: 50px 30px;
+    height: 90%;
     flex-direction: column;
   }
+  
 
   .ContainerTodo {
     flex-direction: column;
@@ -647,5 +680,12 @@ body {
   .toast .btn {
     padding: 12px 24px;
     font-size: 16px;
+  }
+}
+
+
+@media (min-width: 1100px) and (max-width: 1330px) {
+  .ContainerTodo {
+    gap: 20px;
   }
 }

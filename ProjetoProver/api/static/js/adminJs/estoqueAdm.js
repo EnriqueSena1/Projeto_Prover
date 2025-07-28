@@ -61,11 +61,11 @@ async function confirmarExclusaoProduto() {
             }, 1000);
         } else {
             alert(`Erro ao excluir o produto. Código: ${response.status}`);
-            console.error("Erro na exclusão:", response.statusText);
+            // console.error("Erro na exclusão:", response.statusText);
         }
     } catch (error) {
         alert("Erro ao excluir o produto.");
-        console.error("Erro na requisição:", error);
+        // console.error("Erro na requisição:", error);
     } finally {
         esconderConfirmacaoRemocao();
         btnYes.disabled = false;

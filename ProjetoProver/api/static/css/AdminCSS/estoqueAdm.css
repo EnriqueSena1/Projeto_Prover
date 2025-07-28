@@ -1,14 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+.boxContainer{
+    height: 100vh;
+}
+
 .container{
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    
 }
-
 .titulo_estoque {
     color: #25282C;
     font-family: 'Roboto', sans-serif;
@@ -22,7 +27,7 @@
 .cabecalho_estoque {
     
     display: flex;
-    margin-top: 50px;
+    margin-top: 150px;
     justify-content: space-between;
     align-items: center;
     width: 1000px;
@@ -324,6 +329,12 @@ td {
 
 /* ====== RESPONSIVIDADE PARA TELAS PEQUENAS ====== */
 @media (max-width: 1000px) {
+    .boxContainer{
+        height: 105vh;
+    }
+    .container{
+        height: 100%;
+    }
     .cabecalho_estoque {
         flex-direction: column;
         align-items: center;
@@ -399,6 +410,14 @@ td {
 
 
 @media (max-width: 480px) {
+
+    .boxContainer{
+        height: 105vh;
+    }
+    .container{
+        height: 100%;
+    }
+
     .titulo_estoque {
         font-size: 20px;
     }

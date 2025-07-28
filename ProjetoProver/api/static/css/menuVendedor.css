@@ -1,3 +1,9 @@
+.boxMenuCentral{
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
 .menuCentral {
     background-color: #8b1a2a;
     display: flex;
@@ -54,6 +60,9 @@
    MOBILE RESPONSIVO
    ============================ */
 @media (max-width: 480px) {
+    html, body {
+        overflow-x: hidden;
+    }
     .menuCentral {
         justify-content: space-between;
         padding: 0 20px;
@@ -63,10 +72,11 @@
     }
 
     .menu-toggle {
-        display: block;
+        display: block;    
     }
 
     .menu {
+        box-sizing: border-box;
         position: fixed;
         top: 80px;
         left: 0;
@@ -77,13 +87,14 @@
         align-items: flex-start;
         height: 0;
         overflow: hidden;
-        z-index: 1000;
         padding: 0;
         z-index: 1000;
+        
     }
 
     .menu.ativo {
         height: auto;
+        margin-top: 25px;
         padding: 20px;
         z-index: 1000;
     }
@@ -109,6 +120,9 @@
    TABLET: até 768px
    ============================ */
 @media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+    }
   .menuCentral {
     justify-content: space-between;
     padding: 0 30px;
@@ -123,7 +137,6 @@
 
   .menu {
     position: fixed;
-    top: 80px;
     left: 0;
     width: 100%;
     background-color: #8b1a2a;
@@ -134,6 +147,8 @@
     overflow: hidden;
     padding: 0;
     z-index: 1000;
+    position: fixed;         
+    top: 0;
   }
 
   .menu.ativo {
@@ -161,6 +176,9 @@
    NOTEBOOK PEQUENO: até 1000px
    ============================ */
 @media (max-width: 1000px) {
+    html, body {
+        overflow-x: hidden;
+    }
   .menuCentral {
     justify-content: space-between;
     padding: 0 40px;
