@@ -11,6 +11,7 @@ body {
 }
 
 .relatorio_titulo {
+    margin-top: 250px;
     color: #25282C;
     font-family: Roboto;
     font-size: 20px;

@@ -9,7 +9,7 @@
     height: 100%;
     width: 100%;
     display: flex;
-    justify-content: center;
+    
     align-items: center;
     flex-direction: column;
     
@@ -27,7 +27,7 @@
 .cabecalho_estoque {
     
     display: flex;
-    margin-top: 150px;
+    margin-top: 280px;
     justify-content: space-between;
     align-items: center;
     width: 1000px;
@@ -330,7 +330,7 @@ td {
 /* ====== RESPONSIVIDADE PARA TELAS PEQUENAS ====== */
 @media (max-width: 1000px) {
     .boxContainer{
-        height: 105vh;
+        height: 100vh;
     }
     .container{
         height: 100%;
@@ -341,7 +341,7 @@ td {
         width: 100%;
         padding: 0 16px;
         gap: 20px;
-        margin-top: 30px;
+        margin-top: 150px;
     }
 
     .botao_cadastrar_produto {
@@ -417,6 +417,10 @@ td {
     .container{
         height: 100%;
     }
+    .cabecalho_estoque {
+        
+        margin-top: 150px;
+    }
 
     .titulo_estoque {
         font-size: 20px;
@@ -455,5 +459,12 @@ td {
     .btn_excluir_produto {
         font-size: 1.1em;
         padding: 4px;
+    }
+}
+
+@media (max-width: 1330px) {
+    .cabecalho_estoque  {
+        margin-top: 150px;
+        
     }
 }

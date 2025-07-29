@@ -588,7 +588,9 @@
     height: 90%;
     flex-direction: column;
   }
-  
+  .cabecalhoMenor{
+    height: 80%;
+  }
 
   .ContainerTodo {
     flex-direction: column;

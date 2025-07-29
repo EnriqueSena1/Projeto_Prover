@@ -8,13 +8,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    
     font-family: 'Roboto', sans-serif;
 }
 
 .content-container {
 
-    margin-top: 150px;
+    margin-top: 250px;
     width: 1000px;
     /* Largura máxima do container principal */
     background-color: #fff;
@@ -263,11 +263,11 @@ input:checked+.slider:before {
 /* Media Queries para responsividade */
 @media (max-width: 768px) {
     .boxContainer{
-        height: 125vh;
+        height: 100vh;
     }
 
     .content-container {
-        margin-top: 100px;
+        margin-top: 150px;
         padding: 20px;
     }
 
@@ -290,5 +290,12 @@ input:checked+.slider:before {
     .vendedor-actions {
         width: 100%;
         justify-content: flex-end;
+    }
+}
+
+@media (max-width: 1330px) {
+    .content-container {
+        margin-top: 150px;
+        
     }
 }
