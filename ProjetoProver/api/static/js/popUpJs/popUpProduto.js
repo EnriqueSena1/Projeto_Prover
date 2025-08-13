@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadInput = document.getElementById("fotoProduto");
     const uploadPreview = document.getElementById("uploadPreview");
 
-    function abrirDialog() {
+    window.abrirDialog = function () {
         cadastroDialog.showModal();
         document.body.style.overflow = 'hidden';
     }
@@ -109,6 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append("quantidade", parseInt(quantidade));
                 formData.append("tipo_produto", tipoEmbalagem);
                 formData.append("classe", classificacao);
+                // Novo produto já começa como ativo
+                formData.append("ativo", true);
 
                 const imagemInput = document.getElementById('fotoProduto');
                 const imagemFile = imagemInput.files[0];

@@ -149,7 +149,7 @@ def validarEmail(request):
 
 @login_required(login_url='/login/')    
 def estoque_adm(request):
-    produtos_list = Produto.objects.all()  # Todos os produtos
+    produtos_list = Produto.objects.filter(ativo=True) # Todos os produtos ativos
     paginator = Paginator(produtos_list, 5)  # 5 produtos por página
     page_number = request.GET.get('page')  # Número da página na URL
     produtos = paginator.get_page(page_number)  # Página atual paginada

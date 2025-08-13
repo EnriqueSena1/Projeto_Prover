@@ -38,6 +38,7 @@ class Produto(models.Model):
     is_disponivel = models.BooleanField(default=True, verbose_name="Disponível para Carrinho")
 
     exibir_no_carrinho = models.BooleanField(default=False)
+    ativo = models.BooleanField(default=True, verbose_name="Produto Ativo") 
 
     def save(self, *args, **kwargs):
         hoje = timezone.now().date()
