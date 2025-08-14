@@ -9,7 +9,7 @@ from collections import defaultdict
 from django.contrib.auth import logout
 import json
 
-from django.contrib.auth.decorators import login_required
+
 
 
 # View da página de login
