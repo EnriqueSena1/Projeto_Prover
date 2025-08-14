@@ -42,12 +42,15 @@ async function confirmarExclusaoProduto() {
     const url = `/api/produtos/${idProdutoParaExcluir}/`;
 
     try {
-        const response = await fetch(url, {
-            method: 'DELETE',
+         const response = await fetch(url, {
+            method: 'PATCH', // ← PATCH no lugar de DELETE
             headers: {
                 'X-CSRFToken': csrf,
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                ativo: false // ← só atualiza o campo ativo
+            })
         });
 
         if (response.ok) {
@@ -61,11 +64,11 @@ async function confirmarExclusaoProduto() {
             }, 1000);
         } else {
             alert(`Erro ao excluir o produto. Código: ${response.status}`);
-            console.error("Erro na exclusão:", response.statusText);
+            // console.error("Erro na exclusão:", response.statusText);
         }
     } catch (error) {
         alert("Erro ao excluir o produto.");
-        console.error("Erro na requisição:", error);
+        // console.error("Erro na requisição:", error);
     } finally {
         esconderConfirmacaoRemocao();
         btnYes.disabled = false;

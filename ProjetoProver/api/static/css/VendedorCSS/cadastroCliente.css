@@ -1,3 +1,5 @@
+
+
 .principal {
   display: flex;
   justify-content: center;
@@ -5,6 +7,8 @@
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
+  height: 100vh;
+
 
 
 
@@ -17,6 +21,7 @@
   margin-top: 20px;
   max-width: 1000px;
   width: 100%;
+  height: 55%;
   padding: 30px;
 }
 
@@ -209,8 +214,15 @@ input:checked+.slider:before {
 
 /* RESPONSIVIDADE */
 @media (max-width: 768px) {
+
+  .principal{
+    height: 140vh;
+  }
   .container {
     padding: 20px;
+    
+    height: 75%;
+
   }
 
   .clientes-header {
@@ -246,6 +258,13 @@ input:checked+.slider:before {
 }
 
 @media (max-width: 480px) {
+  .principal{
+    height: 140vh;
+  }
+
+  .container{
+    height: 75%;
+  }
   .clientes-container, #lista-clientes{
     margin-left: 20px;
     margin-right: 20px;
@@ -361,8 +380,14 @@ input:checked+.slider:before {
 }
 
 @media (max-width: 1000px) {
+  .principal{
+    height: 140vh;
+  }
+
   .container {
     padding: 25px;
+    height: 75%;
+    
   }
 
   .clientes-container, #lista-clientes {

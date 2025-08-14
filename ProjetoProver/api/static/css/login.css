@@ -74,6 +74,9 @@ body {
 
 /* Responsivo apenas quando a tela for estreita */
 @media (max-width: 480px) {
+    html, body {
+        overflow-x: hidden;
+    }
     .login-box {
         width: 90%;
         padding: 25px;

@@ -29,7 +29,7 @@ function showConfirmToast(toastId, message) {
     return new Promise(resolve => {
         const toast = document.getElementById(toastId);
         if (!toast) {
-            console.error(`Toast com ID ${toastId} não encontrado.`);
+            // console.error(`Toast com ID ${toastId} não encontrado.`);
             resolve(false);
             return;
         }
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const response = await apiRequest(`/api/produtos/${idProduto}/`, "GET", null, {
                     "X-CSRFToken": csrf
                 });
-                console.log(response)
+                // console.log(response)
 
                 if (!response) {
                     alert("Erro ao buscar estoque");
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 alert("Erro ao verificar estoque.");
             }
         });
@@ -273,13 +273,13 @@ async function deletarCarrinho(idProduto) {
             }, 1000); // Atraso de 1 segundo
 
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             // 6. Exibe alert de erro em caso de falha (manter alert para erros de API)
             alert("Erro ao remover do carrinho.");
         }
     } else {
         // 7. Não faz nada se a remoção for cancelada, sem toast de erro.
-        console.log("Remoção cancelada pelo usuário.");
+        // console.log("Remoção cancelada pelo usuário.");
     }
 }
 

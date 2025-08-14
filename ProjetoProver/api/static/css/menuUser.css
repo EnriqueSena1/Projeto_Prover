@@ -21,6 +21,9 @@
 }
 
 @media screen and (max-width: 600px) {
+    html, body {
+        overflow-x: hidden;
+    }
     
     .menu {
         flex-direction: column;

@@ -1,7 +1,10 @@
 /* Estilos globais */
-body {
+.containerGrande {
     font-family: Arial, sans-serif;
     overflow-y: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -9,9 +12,15 @@ body {
 .container {
     background-color: white;
     padding: 20px;
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .products-section{
+    margin-top: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -187,7 +196,14 @@ body {
 @media (max-width: 480px) {
     .container {
         padding: 12px;
+        
+        
     }
+
+    .containerMenor{
+        margin-top: -70px;
+    }
+    
 
     .product-grid {
         grid-template-columns: 1fr !important; /* força 1 por linha */
@@ -243,7 +259,10 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 850px) {
+    .containerMenor{
+        margin-top: -70px;
+    }
   .container {
     padding: 15px;
   }
@@ -261,7 +280,7 @@ body {
   }
 
   .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
   }
 
@@ -306,3 +325,4 @@ body {
     height: 24px;
   }
 }
+

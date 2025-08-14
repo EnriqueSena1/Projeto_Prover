@@ -6,12 +6,22 @@ from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseBadReq
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from collections import defaultdict
+from django.contrib.auth import logout
 import json
+
+
+
 
 # View da página de login
 def tela_login(request):
     return render(request, 'login.html')
 
+def sair(request):
+    logout(request)  # encerra a sessão do usuário
+    return redirect('login')  # redireciona para a tela de login
+
+
+@login_required(login_url='/login/')
 def test1(request):
     user_id = request.user.id  
 
@@ -20,8 +30,9 @@ def test1(request):
         return render(request, 'user/test2.html', {'usuario': user})
     else:
         return redirect('login')
-    
 
+
+@login_required(login_url='/login/')
 def SaldoUser(request):
     user_id = request.user.id  
 
@@ -35,8 +46,9 @@ def SaldoUser(request):
         })
     else:
         return redirect('login')  # Se o usuário não for encontrado, volta pro login
-    
 
+
+@login_required(login_url='/login/')
 def test3(request):
     user_id = request.user.id  
 
@@ -46,11 +58,14 @@ def test3(request):
     else:
         return redirect('login')
 
+
+@login_required(login_url='/login/')
 def carrinho_vend(request):
     produtos =  Produto.objects.filter(exibir_no_carrinho=True)
     clientes = CustomUser.objects.filter(tipo='cliente', is_active=True)
     return render(request, 'vendedor/carrinho.html', {"produtos": produtos, "clientes": clientes})
 
+@login_required(login_url='/login/')
 def cadastroUsuario(request): # so pra teste rapazeada
     usuarios = Produto.objects.filter(is_disponivel=True)
     
@@ -64,13 +79,18 @@ def cadastroUsuario(request): # so pra teste rapazeada
     # administradores_ativos = CustomUser.objects.filter(tipo='administrador', is_active=True)
     return  render(request, 'componentes/TestpopUpUsuario.html', {"usuarios": usuarios})
 
+
+
 def tela_inicial(request):
     return  render(request, 'index.html')
 
+
+@login_required(login_url='/login/')
 def relatorio(request):
      return render(request, 'admin/relatorio.html')
 
 
+@login_required(login_url='/login/')
 def cadastroCliente(request):
     user = request.user
     usuarios_list = CustomUser.objects.filter(tipo='cliente')
@@ -83,6 +103,8 @@ def cadastroCliente(request):
         "user": user,
     })
 
+
+@login_required(login_url='/login/')
 def validarEmail(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -124,8 +146,10 @@ def validarEmail(request):
 #     except json.JSONDecodeError:
 #         return JsonResponse({"error": "JSON inválido."}, status=400)
     
+
+@login_required(login_url='/login/')    
 def estoque_adm(request):
-    produtos_list = Produto.objects.all()  # Todos os produtos
+    produtos_list = Produto.objects.filter(ativo=True) # Todos os produtos ativos
     paginator = Paginator(produtos_list, 5)  # 5 produtos por página
     page_number = request.GET.get('page')  # Número da página na URL
     produtos = paginator.get_page(page_number)  # Página atual paginada
@@ -135,6 +159,8 @@ def estoque_adm(request):
     }
     return render(request, 'admin/estoqueAdm.html', context)
 
+
+@login_required(login_url='/login/')
 def produto(request):
     # Pega o filtro de classe da URL (se houver)
     classe_selecionada = request.GET.get('classe', None)
@@ -163,6 +189,8 @@ def produto(request):
         "classe_selecionada": classe_selecionada
     })
 
+
+@login_required(login_url='/login/')
 def cadastroVendedor(request):
     vendedores_list = CustomUser.objects.filter(tipo='vendedor')
     paginator = Paginator(vendedores_list, 5)  # 5 por página
