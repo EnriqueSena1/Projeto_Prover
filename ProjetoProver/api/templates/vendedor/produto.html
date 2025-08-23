@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/VendedorCSS/produto.css' %}">
+
+{% include 'componentes/menus/menuVendedor.html' %}
+<div class="containerGrande">
+<div class="container">
+    <div class="products-section">
+        <div class="containerMenor">
+            <h2 style="display: inline-block; margin-right: 10px;" id="titulo-produtos">Produtos</h2>
+            <select id="class-filter" onchange="filterProducts()">
+                <option value="all">Todas as Classes</option>
+                {% for classe in classes_disponiveis %}
+                    <option value="{{ classe }}" {% if classe_selecionada == classe %}selected{% endif %}>{{ classe|capfirst }}</option>
+                {% endfor %}
+            </select>
+
+            {% csrf_token %}
+
+            {% for classe, lista_produtos in produtos_por_classe.items %}
+                <div class="class-section" data-class="{{ classe }}">
+                    <h3 class="classe-titulo">{{ classe|capfirst }}</h3>
+
+                    {% if lista_produtos %}
+                        <div class="product-grid">
+                            {% for produto in lista_produtos %}
+                                <div class="product-card">
+                                    <div>
+                                        <img src="{{ produto.imagem.url }}" alt="Imagem de {{ produto.descricao }}">
+                                        <h3>{{ produto.descricao }}</h3>
+                                        <p>R$ {{ produto.valor }}</p>
+                                    </div>
+                                    <div>
+                                        <button class="add-to-cart-button" value="{{ produto.id }}">+</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Nenhum produto na classe "{{ classe }}".</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>Nenhum produto disponível em nenhuma classe.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast hidden">
+    <img src="{% static 'img/AdicionadoCarrinho.png' %}" alt="Ícone de carrinho" class="toast-icon">
+    <span>Adicionado ao carrinho</span>
+</div>
+</div>
+<script src="{% static 'js/vendedorJS/produto.js' %}"></script>
+<script>
+    function filterProducts() {
+        const selectedClass = document.getElementById('class-filter').value;
+        const classSections = document.querySelectorAll('.class-section');
+
+        classSections.forEach(section => {
+            if (selectedClass === 'all' || section.dataset.class === selectedClass) {
+                section.style.display = '';
+            } else {
+                section.style.display = 'none';
+            }
+        });
+    }
+
+    // Chama a função de filtro ao carregar a página para aplicar o filtro inicial, se houver
+    document.addEventListener('DOMContentLoaded', filterProducts);
+</script>
+{% endblock %}
+

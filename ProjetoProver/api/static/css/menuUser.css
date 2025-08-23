@@ -4,25 +4,42 @@
     align-items: center;
     justify-content: space-between;
     height: 100px;
-    padding-right: 10vw;
-    padding-left: 10vw;
+    padding: 0 10vw;
 }
 
 .login {
     display: flex;
-    width: 178px;
-    height: 51px;
-    padding: 6px 32px;
+    padding: 8px 24px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    border-radius: 5px;
+    border-radius: 15px;
     background: #FFF;
     color: #7A162F;
-    font-family: Roboto;
-    font-size: 32px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+    font-family: Roboto, sans-serif;
+    font-size: 28px;
     text-decoration: none;
+}
+
+@media screen and (max-width: 600px) {
+    html, body {
+        overflow-x: hidden;
+    }
+    
+    .menu {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: auto;
+        padding: 10px 5vw;
+    }
+
+    .login {
+        font-size: 18px;
+        width: 90%;
+        max-width: 300px;
+        padding: 10px;
+        margin-top: 10px;
+        text-align: center;
+        
+    }
 }

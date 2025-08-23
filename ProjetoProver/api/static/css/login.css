@@ -1,0 +1,117 @@
+
+
+body {
+    background-color: #8b1a2a; 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo do box de login */
+.login-box {
+    background-color: #e6e6e6; /* Cor de fundo cinza claro */
+    border-radius: 8px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.login-box h1 {
+    color: #8b1a2a; /* Cor vinho/bordô para o título */
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+/* Estilo dos campos de formulário */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+/* Estilo do botão */
+.btn-entrar {
+    background-color: #8b1a2a; /* Cor vinho/bordô para o botão */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.btn-entrar:hover {
+    background-color: #7a1724; /* Cor um pouco mais escura ao passar o mouse */
+}
+
+
+/* Responsivo apenas quando a tela for estreita */
+@media (max-width: 480px) {
+    html, body {
+        overflow-x: hidden;
+    }
+    .login-box {
+        width: 90%;
+        padding: 25px;
+        border-radius: 6px;
+    }
+
+    .login-box h1 {
+        font-size: 24px;
+    }
+
+    .input-group label {
+        font-size: 18px;
+    }
+
+    .input-group input {
+        font-size: 16px;
+        width: 100%;
+        height: 30px;
+    }
+
+    .btn-entrar {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+input.erro {
+    border: 1.5px solid red;
+    background-color: #ffe6e6;
+}
+
+.erro-mensagem {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    display: block;
+}

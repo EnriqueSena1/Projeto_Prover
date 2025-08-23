@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/VendedorCSS/cadastroCliente.css'%}">
+
+{% if user.tipo == 'administrador' %}
+    {% include "componentes/menus/menuAdmin.html" %}
+{% elif user.tipo == 'vendedor' %}
+    {% include "componentes/menus/menuVendedor.html" %}
+{% endif %}
+
+{% include 'componentes/popUps/popUpUsuario.html' %}
+
+<div class="principal">
+  <div class="container">
+    <div class="clientes-container">
+
+      <div class="clientes-header">
+        <div class="titulo"><h2>Clientes</h2></div>
+        <button id="openDialogButton" class="addCliente">
+          <img id="popup-dialog" src="{% static '/img/AdicionarCliente.png' %}" alt="Cadastrar" class="icon-cadastrar">
+          Cadastrar cliente
+        </button>
+      </div>
+    </div>
+    <div>
+    <div id="lista-clientes">
+      {% csrf_token %}
+      {% for cliente in usuarios %}
+        <div class="cliente-card vendedor-item" data-vendedor-id="{{ cliente.id }}">
+          <div class="cliente-info">
+            <img src="{{ cliente.img.url }}" alt="Usuário" class="icon-usuario">
+            <span class="cliente-nome">{{ cliente.first_name }}</span>
+          </div>
+
+          <div class="cliente-acoes">
+            <img data-id="{{ cliente.id }}" src="{% static 'img/Editar.png' %}" alt="Editar" class="icon-editar">
+            <label class="switch">
+              <input type="checkbox" class="toggle-status" {% if cliente.is_active %}checked{% endif %}>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      {% empty %}
+        <p>Nenhum cliente cadastrado.</p>
+      {% endfor %}
+    </div>
+
+    <!-- PAGINAÇÃO -->
+    <div class="pagination">
+      <span class="step-links">
+        {% if usuarios.has_previous %}
+          <a href="?page={{ usuarios.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span class="current">
+          Página {{ usuarios.number }} de {{ usuarios.paginator.num_pages }}
+        </span>
+
+        {% if usuarios.has_next %}
+          <a href="?page={{ usuarios.next_page_number }}">Próxima</a>
+        {% endif %}
+      </span>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/vendedorJS/cadastrarCliente.js' %}"></script>
+
+{% endblock %}

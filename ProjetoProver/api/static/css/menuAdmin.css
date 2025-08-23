@@ -1,3 +1,9 @@
+.boxMenuCentral{
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
 .menuCentral {
     background-color: #8b1a2a;
     display: flex;
@@ -36,5 +42,179 @@
     border-radius: 15px;
     background: #FFF;
     padding: 5px 25px;
+}
+
+
+/* Botão de menu hamburguer escondido por padrão */
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* ============================
+   MOBILE (responsivo)
+   ============================ */
+@media (max-width: 480px) {
+    html, body {
+        overflow-x: hidden;
+    }
+    .menuCentral {
+        justify-content: space-between;
+        padding: 0 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: 80px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        box-sizing: border-box;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: #8b1a2a;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 0;
+        overflow: hidden;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .menu.ativo {
+        height: auto;
+        margin-top: 25px;
+        padding: 20px;
+        z-index: 1000;
+    }
+
+   
+    .button {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .button a {
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        font-size: 18px;
+        background: #ffffff;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+    }
+    .menuCentral {
+        justify-content: space-between;
+        padding: 0 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: 80px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #8b1a2a;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 0;
+        overflow: hidden;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .menu.ativo {
+        height: auto;
+        padding: 20px;
+    }
+
+    .button {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .button a {
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        font-size: 18px;
+        background: #ffffff;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 1330px) {
+    html, body {
+        overflow-x: hidden;
+    }
+    .menuCentral {
+        justify-content: space-between;
+        padding: 0 40px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: 90px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        position: fixed;
+        top: 90px;
+        left: 0;
+        width: 100%;
+        background-color: #8b1a2a;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 0;
+        overflow: hidden;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .menu.ativo {
+        height: auto;
+        padding: 20px;
+    }
+
+    .button {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .button a {
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        font-size: 18px;
+        background: #ffffff;
+        border-radius: 8px;
+    }
 }
 

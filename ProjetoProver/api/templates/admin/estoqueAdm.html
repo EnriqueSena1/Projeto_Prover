@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/AdminCSS/estoqueAdm.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Controle de Estoque</title>
+</head>
+<body>
+    {% include "componentes/menus/menuAdmin.html" %}
+    <div class="boxContainer">
+    <div class="container">
+        <div class="cabecalho_estoque">
+            <h1 class="titulo_estoque">Estoque</h1>
+            <button class="botao_cadastrar_produto" onclick="abrirDialog()" id="openDialogButton">
+                <img src="{% static 'img/AdicionarCliente.png' %}" alt="imagem" class="Cadastrar-icon-img"> Cadastrar Produto
+            </button>
+        </div>
+
+        <div class="container_estoque">
+            <table class="table_estoque">
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Class</th>
+                        <th>Tipo embalagem</th>
+                        <th class="th_descricao">Descrição</th>
+                        <th>Validade</th>
+                        <th>Quantid</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% csrf_token %}
+                    {% for produto in produtos %}
+                    <tr class="produto_item_linha">
+                        <td>
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" alt="{{ produto.descricao }}" class="produto_img">
+                            {% else %}
+                                <img src="{% static 'img/placeholder.png' %}" alt="Sem Imagem" class="produto_img">
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.classe }}</td>
+                        <td>{{ produto.tipo_produto }}</td>
+                        <td>{{ produto.descricao }}</td>
+                        <td>
+                            {% if produto.validade %}
+                                {{ produto.validade|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.quantidade }}</td>
+                        <td>R${{ produto.valor|floatformat:2 }}</td>
+                        <td class="acoes-btns">
+                            <a href="#" onclick="editarProduto({{ produto.id }})" class="btn_editar_produto">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a href="#" class="btn_excluir_produto" data-id="{{ produto.id }}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr class="no_products_message">
+                        <td colspan="8">Nenhum produto encontrado no estoque.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- PAGINAÇÃO -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if produtos.has_previous %}
+                        <a href="?page={{ produtos.previous_page_number }}">Anterior</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Página {{ produtos.number }} de {{ produtos.paginator.num_pages }}
+                    </span>
+
+                    {% if produtos.has_next %}
+                        <a href="?page={{ produtos.next_page_number }}">Próxima</a>
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- Toast de Confirmação de Remoção de Produto -->
+            <div id="toast-confirm-remocao" class="toast hidden confirm fullscreen">
+                <div class="toast-body">
+                    <span class="toast-message">Deseja deletar o produto?</span>
+                    <div class="toast-actions">
+                        <button class="btn btn-no">Não</button>
+                        <button class="btn btn-yes">Sim</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast de Sucesso -->
+            <div id="toast-produto-removido" class="toast hidden success">
+                <span class="toast-message">Produto deletado com sucesso!</span>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% include "componentes/popUps/popUpProduto.html" %}
+    <script src="{% static 'js/adminJS/estoqueAdm.js' %}"></script>
+</body>
+</html>
+{% endblock %}

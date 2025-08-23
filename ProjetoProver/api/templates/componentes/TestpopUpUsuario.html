@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static%}
+
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <link rel="stylesheet" href="{%static 'css/vendedorCSS/popUpCadastro.css'%}">
+</head>
+<body>
+    {% include "componentes/popUps/popUpProduto.html" %}
+
+    <div class="main-page">
+        <button type="button" class="open-dialog-button" id="openDialogButton" >
+            Cadastrar Cliente
+        </button>
+
+        {% for usuario in usuarios %}
+        <div class="usuario-card">
+            <h3>{{ usuario.first_name }} - {{ usuario.email }}</h3>
+            
+            <button type="button" class="open-dialog-button-editar" onclick="editarCliente({{ usuario.id }})">
+                Editar Cliente
+            </button> 
+        </div>
+        {% endfor %}
+
+    </div>
+
+
+</body>
+</html>
+
+{%endblock%}

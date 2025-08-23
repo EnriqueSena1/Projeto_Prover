@@ -19,7 +19,8 @@ async function apiRequest(url, method = 'GET', body = null, headers = {}) {
 
         return await response.json();
     } catch (error) {
-        console.error('Erro na requisição:', error);
+        alert('Não foi possível completar a ação. Tente novamente.');
+        // console.error('Erro na requisição:', error);
         return null;
     }
 }

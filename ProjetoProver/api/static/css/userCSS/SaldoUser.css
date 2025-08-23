@@ -1,0 +1,205 @@
+/* ========== RESET GLOBAL ========== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, p {
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+/* ========== LAYOUT BASE ========== */
+.conteiner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.card {
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 50px;
+}
+
+/* ========== CABEÇALHO USUÁRIO ========== */
+.olausuario {
+    text-align: center;
+}
+
+.saldousuario {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    padding: 12px 0;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+ 
+    border-radius: 20px;
+    background-color: brown;
+}
+
+/* ========== CONTEÚDO PRINCIPAL ========== */
+.textomeio {
+    display: flex;
+    padding: 12px 18px;
+    gap: 300px;
+    width: 100%;
+    max-width: 950px;
+}
+
+.ultimascompras {
+    display: flex;
+    padding: 12px 18px;
+    gap: 80px;
+    width: 100%;
+    max-width: 950px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+/* Conteúdo interno de cada compra */
+.ultimascompras > div {
+    width: 100%;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.ultimascompras p {
+    margin: 2px 0;
+    font-size: 16px;
+}
+
+/* Marcadores automáticos */
+.ultimascompras .divdata p::before {
+    content: "Data: ";
+    font-weight: bold;
+}
+
+.ultimascompras div:nth-child(2) p::before {
+    content: "Qtd: ";
+    font-weight: bold;
+}
+
+.ultimascompras div:nth-child(3) p::before {
+    content: "Preço: ";
+    font-weight: bold;
+}
+
+/* ========== TIPOGRAFIA ========== */
+h1 {
+    color: #8B2635;
+    font-size: 32px;
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+/* ========== RESPONSIVO 1100px ========== */
+@media (max-width: 1100px) {
+    .olausuario h1 {
+        font-size: 28px;
+    }
+
+    .textosaldo h2 {
+        font-size: 22px;
+    }
+
+    .saldousuario {
+        font-size: 26px;
+        border-radius: 16px;
+    }
+
+    .textomeio {
+        display: none;
+    }
+
+    .ultimascompras {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px;
+        gap: 8px;
+        border-left: 5px solid brown;
+    }
+
+    .ultimascompras p {
+        font-size: 17px;
+    }
+}
+
+/* ========== RESPONSIVO 768px ========== */
+@media (max-width: 768px) {
+    .olausuario h1 {
+        font-size: 24px;
+    }
+
+    .textosaldo h2 {
+        font-size: 20px;
+    }
+
+    .saldousuario {
+        font-size: 24px;
+        border-radius: 14px;
+    }
+
+    .ultimascompras {
+        padding: 16px;
+        gap: 6px;
+    }
+
+    .ultimascompras p {
+        font-size: 16px;
+    }
+}
+
+/* ========== RESPONSIVO 480px ========== */
+@media (max-width: 480px) {
+    .olausuario h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .textosaldo h2 {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .saldousuario {
+        font-size: 20px;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .ultimascompras {
+        padding: 15px;
+        gap: 5px;
+        margin-bottom: 12px;
+        border-left: 5px solid brown;
+    }
+
+    .ultimascompras p {
+        font-size: 15px;
+    }
+}
+
