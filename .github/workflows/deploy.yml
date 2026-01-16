@@ -1,0 +1,39 @@
+name: Deploy Local Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-via-ssh:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Executar comandos no servidor via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          # 1. Entra na pasta onde você clonou o projeto.
+          # Ajuste este caminho se você clonou em outro lugar
+          cd /home/${{ secrets.SSH_USER }}/projeto_prover/ProjetoProver
+
+          # 2. Atualiza o código
+          git reset --hard
+          git pull origin main
+
+          # 3. Cria o .env com as senhas
+          echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+
+          # 4. Build da imagem (agora funciona pois o Dockerfile está na mesma pasta)
+          docker build -t app-prover:latest .
+
+          # 5. Deploy no Swarm
+          docker stack deploy -c docker-compose.yml stack_prover
+          
+          # 6. Força atualização
+          docker service update --force stack_prover_web
