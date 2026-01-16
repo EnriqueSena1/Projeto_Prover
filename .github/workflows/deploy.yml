@@ -15,25 +15,38 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          # 1. Entra na pasta onde você clonou o projeto.
-          # Ajuste este caminho se você clonou em outro lugar
-          cd /home/${{ secrets.SSH_USER }}/projeto_prover/ProjetoProver
+          # 1. Define o nome da pasta com o seu domínio
+          DOMAIN_DIR="mercadomaranataipi.com.br"
+          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
-          # 2. Atualiza o código
+          # 2. Verifica se a pasta existe. Se não, cria e clona.
+          if [ ! -d "$TARGET_PATH" ]; then
+            echo "Pasta não encontrada. Criando diretório e clonando projeto..."
+            mkdir -p "$TARGET_PATH"
+            cd /home/${{ secrets.SSH_USER }}
+            git clone git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git "$DOMAIN_DIR"
+          fi
+
+          # 3. Entra na subpasta onde está o manage.py e docker-compose.yml
+          # Ajustado para a estrutura: mercadomaranataipi.com.br/ProjetoProver
+          cd "$TARGET_PATH/ProjetoProver" || { echo "Erro: Subpasta ProjetoProver não encontrada"; exit 1; }
+
+          # 4. Atualiza o código fonte
           git reset --hard
           git pull origin main
 
-          # 3. Cria o .env com as senhas
+          # 5. Cria o .env com as suas secrets
           echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-          # 4. Build da imagem (agora funciona pois o Dockerfile está na mesma pasta)
+          # 6. Build da imagem local
           docker build -t app-prover:latest .
 
-          # 5. Deploy no Swarm
+          # 7. Deploy no Swarm
+          # Garanta que rodou 'docker swarm init' no servidor antes
           docker stack deploy -c docker-compose.yml stack_prover
           
-          # 6. Força atualização
+          # 8. Força atualização do serviço para aplicar o novo código
           docker service update --force stack_prover_web
