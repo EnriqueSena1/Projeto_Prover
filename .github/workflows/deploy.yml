@@ -38,7 +38,7 @@ jobs:
             echo "--> Diretório limpo. Realizando clone inicial..."
             # Clona o conteúdo da pasta atual (.)
             # Mantive SSH (git@) pois é mais seguro para automação que HTTPS
-            git clone git@github.com:EnriqueSena1/Projeto_Prover.git .
+            git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           else
             echo "--> Repositório existente. Atualizando código..."
             git fetch origin main
