@@ -1,4 +1,4 @@
-name: Deploy Local Build
+name: Deploy Projeto Prover
 
 on:
   push:
@@ -8,47 +8,58 @@ jobs:
   deploy-via-ssh:
     runs-on: ubuntu-latest
     steps:
-    - name: Executar comandos no servidor via SSH
+    - name: Executar Deploy no Servidor
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
+        username: ${{ secrets.SSH_USER }} # Certifique-se que este usuário é o mesmo que funcionou (ex: deployer)
         key: ${{ secrets.SSH_KEY }}
+        port: 22
         script: |
+          # Para o script imediatamente se qualquer comando der erro
           set -e
+
+          # --- 1. DEFINIÇÃO DE CAMINHOS ---
+          # Estrutura: ~/mercadomaranataipi.com.br/ProjetoProver
           DOMAIN_DIR="mercadomaranataipi.com.br"
           PROJECT_SUBDIR="ProjetoProver"
-          BASE_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
-          TARGET_PATH="$BASE_PATH/$PROJECT_SUBDIR"
+          # Usa o caminho absoluto para evitar ambiguidades
+          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR/$PROJECT_SUBDIR"
 
-          # 1. Cria a pasta do domínio se não existir
-          mkdir -p "$BASE_PATH"
+          echo "--> Garantindo que a pasta do projeto existe..."
+          # O comando -p cria toda a árvore de diretórios necessária
+          mkdir -p "$TARGET_PATH"
+          
+          # Entra na pasta FINAL onde o código deve ficar
+          cd "$TARGET_PATH"
 
-          # 2. Verifica se a subpasta do projeto existe. Se não, clona lá dentro.
-          if [ ! -d "$TARGET_PATH/.git" ]; then
-            echo "Clonando projeto dentro de $TARGET_PATH..."
-            # O comando abaixo clona o conteúdo para dentro da subpasta ProjetoProver
-            git clone git@github.com:EnriqueSena1/Projeto_Prover.git "$TARGET_PATH"
+          # --- 2. CLONE OU UPDATE (Lógica do seu script funcional) ---
+          if [ ! -d ".git" ]; then
+            echo "--> Diretório limpo. Realizando clone inicial..."
+            # Clona o conteúdo da pasta atual (.)
+            # Mantive SSH (git@) pois é mais seguro para automação que HTTPS
+            git clone git@github.com:EnriqueSena1/Projeto_Prover.git .
+          else
+            echo "--> Repositório existente. Atualizando código..."
+            git fetch origin main
+            git reset --hard origin/main
           fi
 
-          # 3. Entra na pasta onde o código foi clonado
-          cd "$TARGET_PATH" || { echo "Erro: Pasta $TARGET_PATH não encontrada"; exit 1; }
-
-          # 4. Atualiza o código fonte
-          git reset --hard
-          git pull origin main
-
-          # 5. Cria o .env com as suas secrets
+          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
+          echo "--> Criando arquivo .env..."
           echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-          # 6. Build da imagem local
+          # --- 4. BUILD E DEPLOY (Docker Swarm) ---
+          echo "--> Iniciando Build do Docker..."
           docker build -t app-prover:latest .
 
-          # 7. Deploy no Swarm
+          echo "--> Realizando Deploy no Swarm..."
+          # Nota: Usamos 'docker stack' em vez de 'docker compose up' 
+          # porque configuramos o Traefik para rodar em modo Swarm.
           docker stack deploy -c docker-compose.yml stack_prover
           
-          # 8. Força atualização do serviço
+          echo "--> Forçando atualização do serviço..."
           docker service update --force stack_prover_web
