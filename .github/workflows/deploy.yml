@@ -15,21 +15,24 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          # 1. Define o nome da pasta com o seu domínio
+          set -e
           DOMAIN_DIR="mercadomaranataipi.com.br"
-          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
+          PROJECT_SUBDIR="ProjetoProver"
+          BASE_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
+          TARGET_PATH="$BASE_PATH/$PROJECT_SUBDIR"
 
-          # 2. Verifica se a pasta existe. Se não, cria e clona.
-          if [ ! -d "$TARGET_PATH" ]; then
-            echo "Pasta não encontrada. Criando diretório e clonando projeto..."
-            mkdir -p "$TARGET_PATH"
-            cd /home/${{ secrets.SSH_USER }}
-            git clone git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git "$DOMAIN_DIR"
+          # 1. Cria a pasta do domínio se não existir
+          mkdir -p "$BASE_PATH"
+
+          # 2. Verifica se a subpasta do projeto existe. Se não, clona lá dentro.
+          if [ ! -d "$TARGET_PATH/.git" ]; then
+            echo "Clonando projeto dentro de $TARGET_PATH..."
+            # O comando abaixo clona o conteúdo para dentro da subpasta ProjetoProver
+            git clone git@github.com:EnriqueSena1/Projeto_Prover.git "$TARGET_PATH"
           fi
 
-          # 3. Entra na subpasta onde está o manage.py e docker-compose.yml
-          # Ajustado para a estrutura: mercadomaranataipi.com.br/ProjetoProver
-          cd "$TARGET_PATH/ProjetoProver" || { echo "Erro: Subpasta ProjetoProver não encontrada"; exit 1; }
+          # 3. Entra na pasta onde o código foi clonado
+          cd "$TARGET_PATH" || { echo "Erro: Pasta $TARGET_PATH não encontrada"; exit 1; }
 
           # 4. Atualiza o código fonte
           git reset --hard
@@ -45,8 +48,7 @@ jobs:
           docker build -t app-prover:latest .
 
           # 7. Deploy no Swarm
-          # Garanta que rodou 'docker swarm init' no servidor antes
           docker stack deploy -c docker-compose.yml stack_prover
           
-          # 8. Força atualização do serviço para aplicar o novo código
+          # 8. Força atualização do serviço
           docker service update --force stack_prover_web
