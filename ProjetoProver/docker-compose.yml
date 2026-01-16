@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  web:
+    image: app-prover:latest
+    # O comando abaixo aguarda o banco subir antes de rodar o migrate
+    command: sh -c "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 ProjetoProver.wsgi:application"
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        # Ajuste o Host abaixo para o seu domínio real
+        - "traefik.http.routers.prover.rule=Host(`www.mercadomaranataipi.com.br`) || Host(`mercadomaranataipi.com.br`)"
+        - "traefik.http.routers.prover.entrypoints=websecure"
+        - "traefik.http.routers.prover.tls.certresolver=myresolver"
+        - "traefik.http.services.prover.loadbalancer.server.port=8000"
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DEBUG=False
+      - SECRET_KEY=sua_chave_secreta_super_segura_aqui_ou_via_secret
+    networks:
+      - traefik-public
+      - internal-net
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - internal-net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  mysql_data:
+
+networks:
+  traefik-public:
+    external: true
+  internal-net:
