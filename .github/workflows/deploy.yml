@@ -22,9 +22,8 @@ jobs:
           # --- 1. DEFINIÇÃO DE CAMINHOS ---
           # Estrutura: ~/mercadomaranataipi.com.br/ProjetoProver
           DOMAIN_DIR="mercadomaranataipi.com.br"
-          PROJECT_SUBDIR="ProjetoProver"
           # Usa o caminho absoluto para evitar ambiguidades
-          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR/$PROJECT_SUBDIR"
+          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
           echo "--> Garantindo que a pasta do projeto existe..."
           # O comando -p cria toda a árvore de diretórios necessária
@@ -44,6 +43,9 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
           fi
+
+          # entra na pasta do projeto clonado/atualizado
+          cd "Projeto_Prover/ProjetoProver"
 
           # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
