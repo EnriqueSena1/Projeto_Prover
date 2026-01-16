@@ -20,7 +20,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=db
       - DEBUG=False
-      - SECRET_KEY=sua_chave_secreta_super_segura_aqui_ou_via_secret
+      - SECRET_KEY=${SECRET_KEY}
     networks:
       - traefik-public
       - internal-net
