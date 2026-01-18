@@ -29,7 +29,6 @@ jobs:
           # --- 2. CLONE OU UPDATE ---
           if [ ! -d ".git" ]; then
             echo "--> Diretório limpo. Realizando clone inicial..."
-            # Clona o conteúdo da pasta atual (.)
             git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           else
             echo "--> Repositório existente. Atualizando código..."
@@ -37,34 +36,42 @@ jobs:
             git reset --hard origin/main
           fi
 
-          # --- DEBUG (Mostra os arquivos baixados) ---
-          echo "--> Listando arquivos na raiz (Debug):"
-          ls -la
-
           # --- 3. ENTRAR NA PASTA DO CÓDIGO ---
-          # Baseado na sua imagem, o manage.py está dentro de 'ProjetoProver'
           echo "--> Entrando na subpasta do código..."
           cd "ProjetoProver" 
 
-          # --- DEBUG (Mostra os arquivos baixados) ---
-          echo "--> Listando arquivos na raiz ProjetoProver (Debug):"
-          ls -la
+          # --- 4. EXPORTAR VARIÁVEIS (A CORREÇÃO MÁGICA) ---
+          # Exportamos para o Shell para garantir que o 'docker stack' as enxergue
+          echo "--> Carregando segredos no ambiente..."
+          export DB_NAME="${{ secrets.DB_NAME }}"
+          export DB_USER="${{ secrets.DB_USER }}"
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+          export SECRET_KEY="${{ secrets.SECRET_KEY }}"
 
-          # --- 4. CONFIGURAÇÃO DE AMBIENTE ---
-          # O .env será criado ao lado do manage.py
-          echo "--> Criando arquivo .env..."
-          echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          # Cria o .env apenas para garantia (uso local ou debug), mas o export acima é quem resolve o deploy
+          echo "DB_NAME=$DB_NAME" > .env
+          echo "DB_USER=$DB_USER" >> .env
+          echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+          echo "SECRET_KEY=$SECRET_KEY" >> .env
 
-          # --- 5. BUILD E DEPLOY ---
+          # --- 5. LIMPEZA PREVENTIVA (Opcional mas recomendado agora) ---
+          # Como o banco falhou várias vezes, vamos remover o serviço antigo para ele recriar do zero
+          if docker service ls | grep -q stack_prover_db; then
+            echo "--> Removendo serviço de banco travado..."
+            docker service rm stack_prover_db
+            sleep 5
+          fi
+          
+          # Se quiser apagar o volume para garantir um banco limpo (CUIDADO: APAGA DADOS):
+          # docker volume rm stack_prover_mysql_data || true
+
+          # --- 6. BUILD E DEPLOY ---
           echo "--> Iniciando Build do Docker..."
-          # O Dockerfile precisa estar nesta mesma pasta (junto com manage.py)
           docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
+          # Agora o docker stack vai pegar as variáveis que exportamos acima
           docker stack deploy -c docker-compose.yml stack_prover
           
-          echo "--> Forçando atualização do serviço..."
+          echo "--> Forçando atualização do serviço web..."
           docker service update --force stack_prover_web
