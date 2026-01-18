@@ -56,16 +56,24 @@ jobs:
           fi
 
           # --- 3. A MÁGICA: INTERPOLAÇÃO ---
-          # O comando abaixo lê o .env e cria um arquivo temporário 'deploy-final.yml'
-          # com todas as senhas já escritas nele.
           echo "--> Gerando arquivo final de deploy..."
           docker compose config > deploy-final.yml
+          
+          # --- CORREÇÃO DO ERRO 'name not allowed' ---
+          # Remove a linha 'name: ...' que causa erro no Swarm
+          sed -i '/^name:/d' deploy-final.yml
+
+          # --- DEBUG: MOSTRAR ARQUIVO NO LOG ---
+          # ATENÇÃO: Isso vai expor suas senhas no log!
+          echo "--> Conteúdo FINAL do deploy-final.yml:"
+          cat deploy-final.yml
+          echo "----------------------------------------"
 
           # --- 4. DEPLOY USANDO O ARQUIVO JÁ PREENCHIDO ---
           echo "--> Build e Deploy..."
           docker build -t app-prover:latest .
           
-          # Usamos o arquivo gerado (deploy-final.yml) em vez do docker-compose.yml
+          # Usamos o arquivo gerado (deploy-final.yml)
           docker stack deploy -c deploy-final.yml stack_prover
           
           # Limpeza do arquivo com senhas
