@@ -45,7 +45,7 @@ jobs:
           fi
 
           # entra na pasta do projeto clonado/atualizado
-          cd "Projeto_Prover/ProjetoProver"
+          cd ProjetoProver
 
           # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
