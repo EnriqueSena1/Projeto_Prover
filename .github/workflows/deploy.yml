@@ -18,6 +18,7 @@ jobs:
         script: |
           set -e
 
+          # --- 1. DEFINIÇÃO DE CAMINHOS ---
           DOMAIN_DIR="mercadomaranataipi.com.br"
           TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
@@ -25,20 +26,22 @@ jobs:
           mkdir -p "$TARGET_PATH"
           cd "$TARGET_PATH"
 
+          # --- 2. ATUALIZAÇÃO DO CÓDIGO ---
           if [ -d ".git" ]; then
-            echo "--> Atualizando código existente..."
+            echo "--> Repositório existente. Atualizando código..."
             git fetch origin main
             git reset --hard origin/main
           else
-            echo "--> Clonando repositório..."
-            # Limpa a pasta antes de clonar para evitar conflitos
+            echo "--> Diretório sem repositório. Limpando e clonando..."
             find . -maxdepth 1 ! -name '.' -exec rm -rf {} +
             git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           fi
 
-          # Remova o 'cd ProjetoProver' se o Dockerfile estiver na raiz do repositório
-          # Se o projeto estiver em uma subpasta, mantenha o cd, mas verifique o nome exato.
+          # ENTRA NA PASTA ONDE ESTÁ O DOCKERFILE
+          echo "--> Entrando na pasta do projeto..."
+          cd ProjetoProver
 
+          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
           cat <<EOF > .env
           DB_NAME=${{ secrets.DB_NAME }}
@@ -47,12 +50,13 @@ jobs:
           SECRET_KEY=${{ secrets.SECRET_KEY }}
           EOF
 
+          # --- 4. BUILD E DEPLOY ---
           echo "--> Iniciando Build do Docker..."
           docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
+          # Se o docker-compose.yml estiver na raiz de ProjetoProver, o comando abaixo funciona:
           docker stack deploy -c docker-compose.yml stack_prover
 
           echo "--> Forçando atualização do serviço..."
-          # Verifique se o nome do serviço é realmente stack_prover_web
           docker service update --force stack_prover_web
