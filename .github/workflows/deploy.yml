@@ -37,20 +37,30 @@ jobs:
             git reset --hard origin/main
           fi
 
-          # --- CORREÇÃO AQUI ---
-          # Como clonamos com ponto (.), a pasta 'Projeto_Prover' do repo não é criada.
-          # Entramos direto na pasta onde está o manage.py
+          # --- DEBUG (Mostra os arquivos baixados) ---
+          echo "--> Listando arquivos na raiz (Debug):"
+          ls -la
+
+          # --- 3. ENTRAR NA PASTA DO CÓDIGO ---
+          # Baseado na sua imagem, o manage.py está dentro de 'ProjetoProver'
+          echo "--> Entrando na subpasta do código..."
           cd "ProjetoProver" 
 
-          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
+          # --- DEBUG (Mostra os arquivos baixados) ---
+          echo "--> Listando arquivos na raiz ProjetoProver (Debug):"
+          ls -la
+
+          # --- 4. CONFIGURAÇÃO DE AMBIENTE ---
+          # O .env será criado ao lado do manage.py
           echo "--> Criando arquivo .env..."
           echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-          # --- 4. BUILD E DEPLOY (Docker Swarm) ---
+          # --- 5. BUILD E DEPLOY ---
           echo "--> Iniciando Build do Docker..."
+          # O Dockerfile precisa estar nesta mesma pasta (junto com manage.py)
           docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
