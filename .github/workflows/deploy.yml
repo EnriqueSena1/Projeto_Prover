@@ -16,10 +16,8 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          # Para o script imediatamente se qualquer comando der erro
           set -e
 
-          # --- 1. DEFINIÇÃO DE CAMINHOS ---
           DOMAIN_DIR="mercadomaranataipi.com.br"
           TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
@@ -27,28 +25,28 @@ jobs:
           mkdir -p "$TARGET_PATH"
           cd "$TARGET_PATH"
 
-          # --- 2. CLONE OU UPDATE (AJUSTE REAL DO ERRO) ---
           if [ -d ".git" ]; then
-            echo "--> Repositório existente. Atualizando código..."
+            echo "--> Atualizando código existente..."
             git fetch origin main
             git reset --hard origin/main
           else
-            echo "--> Diretório sem repositório. Limpando e clonando..."
-            rm -rf ./* .[^.] .??*
+            echo "--> Clonando repositório..."
+            # Limpa a pasta antes de clonar para evitar conflitos
+            find . -maxdepth 1 ! -name '.' -exec rm -rf {} +
             git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           fi
 
-          # entra na pasta correta do projeto
-          cd ProjetoProver
+          # Remova o 'cd ProjetoProver' se o Dockerfile estiver na raiz do repositório
+          # Se o projeto estiver em uma subpasta, mantenha o cd, mas verifique o nome exato.
 
-          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
-          echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          cat <<EOF > .env
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          EOF
 
-          # --- 4. BUILD E DEPLOY (Docker Swarm) ---
           echo "--> Iniciando Build do Docker..."
           docker build -t app-prover:latest .
 
@@ -56,4 +54,5 @@ jobs:
           docker stack deploy -c docker-compose.yml stack_prover
 
           echo "--> Forçando atualização do serviço..."
+          # Verifique se o nome do serviço é realmente stack_prover_web
           docker service update --force stack_prover_web
