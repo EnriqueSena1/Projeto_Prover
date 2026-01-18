@@ -12,31 +12,24 @@ jobs:
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }} # Certifique-se que este usuário é o mesmo que funcionou (ex: deployer)
+        username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          # Para o script imediatamente se qualquer comando der erro
           set -e
 
           # --- 1. DEFINIÇÃO DE CAMINHOS ---
-          # Estrutura: ~/mercadomaranataipi.com.br/ProjetoProver
           DOMAIN_DIR="mercadomaranataipi.com.br"
-          # Usa o caminho absoluto para evitar ambiguidades
           TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
           echo "--> Garantindo que a pasta do projeto existe..."
-          # O comando -p cria toda a árvore de diretórios necessária
           mkdir -p "$TARGET_PATH"
-          
-          # Entra na pasta FINAL onde o código deve ficar
           cd "$TARGET_PATH"
 
-          # --- 2. CLONE OU UPDATE (Lógica do seu script funcional) ---
+          # --- 2. CLONE OU UPDATE ---
           if [ ! -d ".git" ]; then
             echo "--> Diretório limpo. Realizando clone inicial..."
             # Clona o conteúdo da pasta atual (.)
-            # Mantive SSH (git@) pois é mais seguro para automação que HTTPS
             git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           else
             echo "--> Repositório existente. Atualizando código..."
@@ -44,8 +37,10 @@ jobs:
             git reset --hard origin/main
           fi
 
-          # entra na pasta do projeto clonado/atualizado
-          cd "Projeto_Prover/ProjetoProver"
+          # --- CORREÇÃO AQUI ---
+          # Como clonamos com ponto (.), a pasta 'Projeto_Prover' do repo não é criada.
+          # Entramos direto na pasta onde está o manage.py
+          cd "ProjetoProver" 
 
           # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
@@ -59,8 +54,6 @@ jobs:
           docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
-          # Nota: Usamos 'docker stack' em vez de 'docker compose up' 
-          # porque configuramos o Traefik para rodar em modo Swarm.
           docker stack deploy -c docker-compose.yml stack_prover
           
           echo "--> Forçando atualização do serviço..."
