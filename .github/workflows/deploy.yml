@@ -12,41 +12,56 @@ jobs:
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
+        username: ${{ secrets.SSH_USER }} # Certifique-se que este usuário é o mesmo que funcionou (ex: deployer)
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
+          # Para o script imediatamente se qualquer comando der erro
           set -e
 
+          # --- 1. DEFINIÇÃO DE CAMINHOS ---
+          # Estrutura: ~/mercadomaranataipi.com.br/ProjetoProver
           DOMAIN_DIR="mercadomaranataipi.com.br"
+          # Usa o caminho absoluto para evitar ambiguidades
           TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
+          echo "--> Garantindo que a pasta do projeto existe..."
+          # O comando -p cria toda a árvore de diretórios necessária
+          mkdir -p "$TARGET_PATH"
+          
+          # Entra na pasta FINAL onde o código deve ficar
           cd "$TARGET_PATH"
 
-          if [ -d ".git" ]; then
+          # --- 2. CLONE OU UPDATE (Lógica do seu script funcional) ---
+          if [ ! -d ".git" ]; then
+            echo "--> Diretório limpo. Realizando clone inicial..."
+            # Clona o conteúdo da pasta atual (.)
+            # Mantive SSH (git@) pois é mais seguro para automação que HTTPS
+            git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
+          else
+            echo "--> Repositório existente. Atualizando código..."
             git fetch origin main
             git reset --hard origin/main
-          else
-            find . -maxdepth 1 ! -name '.' -exec rm -rf {} +
-            git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
           fi
 
-          cd ProjetoProver
+          # entra na pasta do projeto clonado/atualizado
+          cd "Projeto_Prover/ProjetoProver"
 
+          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
           echo "--> Criando arquivo .env..."
-          cat <<EOF > .env
-          DB_NAME=${{ secrets.DB_NAME }}
-          DB_USER=${{ secrets.DB_USER }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          SECRET_KEY=${{ secrets.SECRET_KEY }}
-          EOF
+          echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-          echo "--> Iniciando Build do Docker (sem cache para atualizar dependências )..."
-          # ADICIONADO --no-cache AQUI:
-          docker build --no-cache -t app-prover:latest .
+          # --- 4. BUILD E DEPLOY (Docker Swarm) ---
+          echo "--> Iniciando Build do Docker..."
+          docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
+          # Nota: Usamos 'docker stack' em vez de 'docker compose up' 
+          # porque configuramos o Traefik para rodar em modo Swarm.
           docker stack deploy -c docker-compose.yml stack_prover
-
+          
           echo "--> Forçando atualização do serviço..."
           docker service update --force stack_prover_web
