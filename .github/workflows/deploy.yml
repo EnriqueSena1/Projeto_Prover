@@ -1,66 +1,59 @@
-name: Deploy via SSH (Docker Swarm)
+name: Deploy Projeto Prover
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   deploy-via-ssh:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v4
+    - name: Executar Deploy no Servidor
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: |
+          # Para o script imediatamente se qualquer comando der erro
+          set -e
 
-      - name: Deploy no servidor via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            set -e
+          # --- 1. DEFINIÇÃO DE CAMINHOS ---
+          DOMAIN_DIR="mercadomaranataipi.com.br"
+          TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
 
-            # --- 1. DEFINIÇÃO DE CAMINHOS ---
-            DOMAIN_DIR="mercadomaranataipi.com.br"
-            TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
-            REPO_URL="https://github.com/EnriqueSena1/Projeto_Prover.git"
+          echo "--> Garantindo que a pasta do projeto existe..."
+          mkdir -p "$TARGET_PATH"
+          cd "$TARGET_PATH"
 
-            echo "--> Garantindo que a pasta do projeto existe..."
-            mkdir -p "$TARGET_PATH"
-            cd "$TARGET_PATH"
+          # --- 2. CLONE OU UPDATE (AJUSTE REAL DO ERRO) ---
+          if [ -d ".git" ]; then
+            echo "--> Repositório existente. Atualizando código..."
+            git fetch origin main
+            git reset --hard origin/main
+          else
+            echo "--> Diretório sem repositório. Limpando e clonando..."
+            rm -rf ./* .[^.] .??*
+            git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
+          fi
 
-            # --- 2. CLONE OU UPDATE (CORRETO E SEGURO) ---
-            if [ -d ".git" ]; then
-              echo "--> Repositório já existe. Atualizando código..."
-              git fetch origin main
-              git reset --hard origin/main
-            else
-              echo "--> Inicializando repositório..."
-              rm -rf ./*
-              git clone "$REPO_URL" .
-            fi
+          # entra na pasta correta do projeto
+          cd ProjetoProver
 
-            # entra na pasta do projeto
-            cd ProjetoProver
+          # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
+          echo "--> Criando arquivo .env..."
+          echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-            # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
-            echo "--> Criando arquivo .env..."
-            cat <<EOF > .env
-            DB_NAME=${{ secrets.DB_NAME }}
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            SECRET_KEY=${{ secrets.SECRET_KEY }}
-            EOF
+          # --- 4. BUILD E DEPLOY (Docker Swarm) ---
+          echo "--> Iniciando Build do Docker..."
+          docker build -t app-prover:latest .
 
-            # --- 4. BUILD E DEPLOY (Docker Swarm) ---
-            echo "--> Build da imagem..."
-            docker build -t app-prover:latest .
+          echo "--> Realizando Deploy no Swarm..."
+          docker stack deploy -c docker-compose.yml stack_prover
 
-            echo "--> Deploy no Docker Swarm..."
-            docker stack deploy -c docker-compose.yml stack_prover
-
-            echo "--> Forçando atualização do serviço..."
-            docker service update --force stack_prover_web
+          echo "--> Forçando atualização do serviço..."
+          docker service update --force stack_prover_web
