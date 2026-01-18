@@ -12,39 +12,39 @@ jobs:
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }} # Certifique-se que este usuário é o mesmo que funcionou (ex: deployer)
+        username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          # Para o script imediatamente se qualquer comando der erro
           set -e
 
           # --- 1. DEFINIÇÃO DE CAMINHOS ---
-          # Estrutura: ~/mercadomaranataipi.com.br/ProjetoProver
           DOMAIN_DIR="mercadomaranataipi.com.br"
-          # Usa o caminho absoluto para evitar ambiguidades
           TARGET_PATH="/home/${{ secrets.SSH_USER }}/$DOMAIN_DIR"
+          REPO_URL="https://github.com/EnriqueSena1/Projeto_Prover.git"
 
           echo "--> Garantindo que a pasta do projeto existe..."
-          # O comando -p cria toda a árvore de diretórios necessária
           mkdir -p "$TARGET_PATH"
-          
-          # Entra na pasta FINAL onde o código deve ficar
           cd "$TARGET_PATH"
 
-          # --- 2. CLONE OU UPDATE (Lógica do seu script funcional) ---
-          if [ ! -d ".git" ]; then
-            echo "--> Diretório limpo. Realizando clone inicial..."
-            # Clona o conteúdo da pasta atual (.)
-            # Mantive SSH (git@) pois é mais seguro para automação que HTTPS
-            git clone https://github.com/EnriqueSena1/Projeto_Prover.git .
+          # --- 2. CLONE OU UPDATE (CORRIGIDO) ---
+          if [ -d ".git" ]; then
+            CURRENT_REPO=$(git config --get remote.origin.url || echo "")
+            if [ "$CURRENT_REPO" != "$REPO_URL" ]; then
+              echo "--> Repositório incorreto detectado. Recriando..."
+              rm -rf .git *
+              git clone "$REPO_URL" .
+            else
+              echo "--> Repositório correto. Atualizando código..."
+              git fetch origin main
+              git reset --hard origin/main
+            fi
           else
-            echo "--> Repositório existente. Atualizando código..."
-            git fetch origin main
-            git reset --hard origin/main
+            echo "--> Diretório limpo. Realizando clone inicial..."
+            git clone "$REPO_URL" .
           fi
 
-          # entra na pasta do projeto clonado/atualizado
+          # entra na pasta do projeto
           cd ProjetoProver
 
           # --- 3. CONFIGURAÇÃO DE AMBIENTE ---
@@ -59,9 +59,7 @@ jobs:
           docker build -t app-prover:latest .
 
           echo "--> Realizando Deploy no Swarm..."
-          # Nota: Usamos 'docker stack' em vez de 'docker compose up' 
-          # porque configuramos o Traefik para rodar em modo Swarm.
           docker stack deploy -c docker-compose.yml stack_prover
-          
+
           echo "--> Forçando atualização do serviço..."
           docker service update --force stack_prover_web
