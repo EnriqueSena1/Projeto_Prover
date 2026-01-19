@@ -72,56 +72,104 @@ class User(APIView):
         
         else:
             return redirect('/login/')
-
+        
     def post(self, request):
-        if request.user.is_authenticated:
+        # 🚀 LIBERA APENAS SE NÃO EXISTIR ADMIN AINDA
+        existe_admin = CustomUser.objects.filter(is_adm=True).exists()
 
-            # Dados obrigatórios
-            nome = request.data.get('nome')# ← usado como first_name
-            email = request.data.get('email')
-            senha = request.data.get('senha')
-
-            # Dados opcionais
-            is_adm = request.data.get('is_adm', False)
-            tipo = request.data.get('tipo', 'cliente')
-            saldo = request.data.get('saldo', 0.00)
-            imagem = request.FILES.get('img')  
-            loja = request.data.get('loja')  
-
-            # Validação básica
-            if not email or not senha or not nome:
-                return Response(
-                    {"error": "Campos obrigatórios: nome, email, senha"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            username = email.lower()
-
-            # Evita duplicidade
-            if CustomUser.objects.filter(username=username).exists():
-                return Response({"error": "Email já está em uso."}, status=400)
-
-            # Criação do usuário
-            usuario = CustomUser.objects.create(
-                username=username,
-                password=make_password(senha),
-                email=email,
-                first_name=nome,
-                is_adm=is_adm,
-                tipo=tipo,
-                saldo=saldo,
-                img=imagem,
-                is_active=True,
-                loja=loja if tipo == 'vendedor' else None  
-            )
-            
+        if existe_admin and not request.user.is_authenticated:
             return Response(
-                {"message": "Usuário criado com sucesso!", "id": usuario.id},
-                status=status.HTTP_201_CREATED
+                {"error": "Login necessário"},
+                status=status.HTTP_401_UNAUTHORIZED
             )
 
-        else:
-            return redirect('/login/')
+        # Dados obrigatórios
+        nome = request.data.get('nome')
+        email = request.data.get('email')
+        senha = request.data.get('senha')
+
+        if not nome or not email or not senha:
+            return Response(
+                {"error": "Campos obrigatórios: nome, email, senha"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        email = email.lower().strip()
+
+        if CustomUser.objects.filter(username=email).exists():
+            return Response(
+                {"error": "Email já cadastrado"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        usuario = CustomUser.objects.create(
+            username=email,
+            password=make_password(senha),
+            email=email,
+            first_name=nome,
+            tipo='administrador',
+            is_adm=True,
+            is_active=True
+        )
+
+        return Response(
+            {
+                "message": "Administrador criado com sucesso",
+                "id": usuario.id
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+
+    # def post(self, request):
+    #     if request.user.is_authenticated:
+
+    #         # Dados obrigatórios
+    #         nome = request.data.get('nome')# ← usado como first_name
+    #         email = request.data.get('email')
+    #         senha = request.data.get('senha')
+
+    #         # Dados opcionais
+    #         is_adm = request.data.get('is_adm', False)
+    #         tipo = request.data.get('tipo', 'cliente')
+    #         saldo = request.data.get('saldo', 0.00)
+    #         imagem = request.FILES.get('img')  
+    #         loja = request.data.get('loja')  
+
+    #         # Validação básica
+    #         if not email or not senha or not nome:
+    #             return Response(
+    #                 {"error": "Campos obrigatórios: nome, email, senha"},
+    #                 status=status.HTTP_400_BAD_REQUEST
+    #             )
+
+    #         username = email.lower()
+
+    #         # Evita duplicidade
+    #         if CustomUser.objects.filter(username=username).exists():
+    #             return Response({"error": "Email já está em uso."}, status=400)
+
+    #         # Criação do usuário
+    #         usuario = CustomUser.objects.create(
+    #             username=username,
+    #             password=make_password(senha),
+    #             email=email,
+    #             first_name=nome,
+    #             is_adm=is_adm,
+    #             tipo=tipo,
+    #             saldo=saldo,
+    #             img=imagem,
+    #             is_active=True,
+    #             loja=loja if tipo == 'vendedor' else None  
+    #         )
+            
+    #         return Response(
+    #             {"message": "Usuário criado com sucesso!", "id": usuario.id},
+    #             status=status.HTTP_201_CREATED
+    #         )
+
+    #     else:
+    #         return redirect('/login/')
 
 
     def put(self, request, id):
