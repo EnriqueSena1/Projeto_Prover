@@ -65,7 +65,7 @@ def carrinho_vend(request):
     clientes = CustomUser.objects.filter(tipo='cliente', is_active=True)
     return render(request, 'vendedor/carrinho.html', {"produtos": produtos, "clientes": clientes})
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def cadastroUsuario(request): # so pra teste rapazeada
     usuarios = Produto.objects.filter(is_disponivel=True)
     
