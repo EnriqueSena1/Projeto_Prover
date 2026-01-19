@@ -11,7 +11,7 @@ router.register('produtos', ProdutoViewSet)
 
 urlpatterns = [
     # Rotas automáticas dos ViewSets
-    # path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
 
     # Rota para tela inicial de login
     path('', tela_inicial, name="inicio"),
