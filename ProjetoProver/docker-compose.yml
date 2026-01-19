@@ -14,6 +14,7 @@ services:
         - "traefik.http.routers.prover.entrypoints=websecure"
         - "traefik.http.routers.prover.tls.certresolver=myresolver"
         - "traefik.http.services.prover.loadbalancer.server.port=8000"
+        - "traefik.docker.network=traefik-public"
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
