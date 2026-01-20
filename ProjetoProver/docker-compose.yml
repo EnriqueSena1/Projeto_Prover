@@ -40,16 +40,6 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
-  adminer:
-    image: adminer
-    container_name: digicoin_adminer
-    restart: unless-stopped
-    ports:
-      - "8081:8080"
-    networks:
-      - internal-net
-    deploy:
-      replicas: 1
 
 volumes:
   mysql_data:
