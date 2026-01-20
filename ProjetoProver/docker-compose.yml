@@ -4,7 +4,7 @@ services:
   web:
     image: app-prover:latest
     # O comando abaixo aguarda o banco subir antes de rodar o migrate
-    command: sh -c "echo 'Aguardando 20seg o Banco...' && sleep 20 && python manage.py migrate && python manage.py init_admin && gunicorn --bind 0.0.0.0:8000 ProjetoProver.wsgi:application"
+    command: sh -c "echo 'Aguardando 20seg o Banco...' && sleep 20 && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 ProjetoProver.wsgi:application"
     deploy:
       replicas: 1
       labels:
