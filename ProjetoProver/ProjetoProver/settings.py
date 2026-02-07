@@ -94,7 +94,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Onde o Django procura seus arquivos CSS personalizados (api/static/css/...)
-STATICFILES_DIRS = [ BASE_DIR / "api/static" ]
+# STATICFILES_DIRS = [ BASE_DIR / "api/static" ]
+STATICFILES_DIRS = [
+    BASE_DIR / "ProjetoProver" / "api" / "static",
+]
 
 # Onde o collectstatic vai juntar tudo (dentro do container)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
